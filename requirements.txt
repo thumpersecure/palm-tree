@@ -1,0 +1,7 @@
+# Traffic Noise Generator - Python Dependencies
+# Install with: pip install -r requirements.txt
+
+httpx>=0.25.0          # Async HTTP client (faster than requests, modern)
+beautifulsoup4>=4.12.0 # HTML parsing for headline extraction
+lxml>=4.9.0            # Fast HTML parser backend for BeautifulSoup
+rich>=13.0.0           # Beautiful terminal UI with live updates
