@@ -314,8 +314,6 @@ python3 -m unittest test_random_packet.py
 
 ---
 
-## Combined Requirements
-
 ## Notes
 
 - Press Ctrl+C to stop gracefully
