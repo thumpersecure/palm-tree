@@ -191,14 +191,14 @@ graph TB
 ### Quick Install (One-liner)
 
 ```bash
-pip install httpx beautifulsoup4 lxml rich && curl -O https://raw.githubusercontent.com/yourusername/upgraded-palm-tree/main/traffic_noise.py && chmod +x traffic_noise.py
+pip install httpx beautifulsoup4 lxml rich && curl -O https://raw.githubusercontent.com/thumpersecure/upgraded-palm-tree/main/traffic_noise.py && chmod +x traffic_noise.py
 ```
 
 ### Standard Install
 
 ```bash
 # Clone the repo
-git clone https://github.com/yourusername/upgraded-palm-tree.git
+git clone https://github.com/thumpersecure/upgraded-palm-tree.git
 cd upgraded-palm-tree
 
 # Install dependencies
@@ -225,14 +225,14 @@ python traffic_noise.py --help
 ### Quick Install (One-liner)
 
 ```bash
-curl -O https://raw.githubusercontent.com/yourusername/upgraded-palm-tree/main/traffic-noise.sh && chmod +x traffic-noise.sh && sudo apt install -y curl netcat macchanger
+curl -O https://raw.githubusercontent.com/thumpersecure/upgraded-palm-tree/main/traffic-noise.sh && chmod +x traffic-noise.sh && sudo apt install -y curl netcat macchanger
 ```
 
 ### Standard Install
 
 ```bash
 # Clone the repo
-git clone https://github.com/yourusername/upgraded-palm-tree.git
+git clone https://github.com/thumpersecure/upgraded-palm-tree.git
 cd upgraded-palm-tree
 
 # Make executable
