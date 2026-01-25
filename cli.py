@@ -122,7 +122,11 @@ Examples:
             print(format_packet(packet))
             
             if args.verbose:
-                print(f"\nPayload (hex): {packet['payload'].hex()[:100]}...")
+                payload_hex = packet['payload'].hex()
+                if len(payload_hex) > 100:
+                    print(f"\nPayload (hex): {payload_hex[:100]}...")
+                else:
+                    print(f"\nPayload (hex): {payload_hex}")
     
     return 0
 

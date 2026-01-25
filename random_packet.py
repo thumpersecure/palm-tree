@@ -7,8 +7,6 @@ for testing and simulation purposes.
 """
 
 import random
-import struct
-import socket
 from typing import Dict, List, Optional
 
 
@@ -36,7 +34,12 @@ class RandomPacket:
             random.seed(seed)
     
     def generate_random_ip(self) -> str:
-        """Generate a random IP address."""
+        """
+        Generate a random IP address.
+        
+        Note: Excludes certain reserved addresses by using 1-254 range for
+        first and last octets to avoid network/broadcast addresses.
+        """
         return f"{random.randint(1, 254)}.{random.randint(0, 255)}.{random.randint(0, 255)}.{random.randint(1, 254)}"
     
     def generate_random_port(self) -> int:
