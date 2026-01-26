@@ -1,8 +1,20 @@
 #!/usr/bin/env python3
 """
 Traffic Noise Generator - Python Version with Dynamic Terminal UI
+
+"I'm not paranoid, I'm just really popular with advertisers."
+    - Every user of this tool
+
 Generates randomized network traffic to obscure browsing patterns.
 Features live headline display using Rich terminal library.
+
+Side effects may include:
+- Confused ad algorithms
+- Data brokers questioning their career choices
+- A sudden increase in ads for PlayStation 5s and Samsung Smart Fridges
+- The warm fuzzy feeling of digital privacy
+
+Not responsible for any existential crises caused to tracking scripts.
 """
 
 import asyncio
@@ -90,13 +102,18 @@ USER_AGENTS = [
     "Mozilla/5.0 (compatible; Bingbot/2.0; +http://www.bing.com/bingbot.htm)",
     "facebookexternalhit/1.1 (+http://www.facebook.com/externalhit_uatext.php)",
     "Twitterbot/1.0",
-    # Exotic
-    "Mozilla/5.0 (PlayStation; PlayStation 5/1.0) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.0 Safari/605.1.15",
-    "Mozilla/5.0 (Nintendo Switch; WifiWebAuthApplet) AppleWebKit/609.4 (KHTML, like Gecko) NF/6.0.2.21.3 NintendoBrowser/5.1.0.22474",
-    "Mozilla/5.0 (SMART-TV; Linux; Tizen 6.5) AppleWebKit/537.36 (KHTML, like Gecko) SamsungBrowser/5.0 Chrome/85.0.4183.93 TV Safari/537.36",
-    # Old browsers
+    # Exotic - The Hall of Fame 🏆
+    "Mozilla/5.0 (PlayStation; PlayStation 5/1.0) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.0 Safari/605.1.15",  # Gaming at 3am
+    "Mozilla/5.0 (Nintendo Switch; WifiWebAuthApplet) AppleWebKit/609.4 (KHTML, like Gecko) NF/6.0.2.21.3 NintendoBrowser/5.1.0.22474",  # Mario needs news too
+    "Mozilla/5.0 (SMART-TV; Linux; Tizen 6.5) AppleWebKit/537.36 (KHTML, like Gecko) SamsungBrowser/5.0 Chrome/85.0.4183.93 TV Safari/537.36",  # Couch surfing
+    "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Tesla/2021.44.25.2",  # Stuck in traffic, browsing traffic
+    "Mozilla/5.0 (SmartFridge; Linux) AppleWebKit/537.36 LG/1.0",  # Your fridge judging your browsing
+    "Mozilla/5.0 (Roomba; Linux; iRobot) AppleWebKit/537.36 Vacuum/3.0",  # Cleaning the web
+    "Mozilla/5.0 (SmartToaster; Linux) AppleWebKit/537.36 Toast/2.0",  # Browsing while you breakfast
+    # Old browsers - The Nostalgia Section 👴
     "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36",
-    "Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.1; Trident/4.0)",
+    "Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.1; Trident/4.0)",  # Grandma's computer still works
+    "Mozilla/5.0 (Windows NT 5.1; rv:52.0) Gecko/20100101 Firefox/52.0",  # XP never dies
 ]
 
 # ============================================================================
@@ -218,6 +235,8 @@ state = AppState()
 # ============================================================================
 
 def generate_session_id() -> str:
+    """Generate a session ID that looks legit but is totally fake.
+    Like my confidence during code reviews."""
     return ''.join(random.choices(string.hexdigits.lower(), k=32))
 
 def generate_mac() -> str:
@@ -246,6 +265,13 @@ def get_pattern_delay(pattern: str, chaos: bool = False) -> float:
     return random.uniform(min_d, max_d)
 
 def build_headers() -> dict:
+    """
+    Build randomized HTTP headers.
+
+    Creates headers so diverse that ad networks will think you're
+    simultaneously a Windows user, a Mac enthusiast, a Linux nerd,
+    and someone who browses the web on their refrigerator.
+    """
     headers = {
         "User-Agent": random.choice(USER_AGENTS),
         "Accept": random.choice(ACCEPT_HEADERS),

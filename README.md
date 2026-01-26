@@ -638,18 +638,77 @@ If this tool saved you from targeted ads about that embarrassing thing you googl
 
 ---
 
+## 🥥 NEW: Coconuts by Palm-Tree
+
+**Version 2.0** introduces powerful new modes:
+
+| Mode | Command | What It Does |
+|------|---------|--------------|
+| 🥥 **Coconut** | `python coconuts.py --coconuts` | Headless browser army visiting top 100 sites |
+| 😴 **Sleepy** | `python coconuts.py --sleepy` | Realistic overnight traffic (AI learning optional) |
+| 🖥️ **Quadcore** | `python coconuts.py --quadcore` | 4-split terminal chaos with prime calculations |
+| 🎭 **Identity Forge** | Built-in | Faker-powered fake humans for each request |
+
+### Quick Start
+
+```bash
+# Install new dependencies
+pip install faker playwright
+playwright install chromium
+
+# Run Coconut Mode (headless browsers)
+python coconuts.py --coconuts --clones 3
+
+# Run Sleepy Mode (overnight traffic)
+python coconuts.py --sleepy --duration 480
+
+# Run Quadcore Mode (4 terminals)
+python coconuts.py --quadcore
+
+# MAXIMUM CHAOS
+python coconuts.py --all
+```
+
+---
+
+## 🎵 BONUS: Mystery Button
+
+After all this privacy work, you deserve a reward.
+Click below for an exclusive tutorial on advanced traffic obfuscation techniques.
+
+> ⚠️ **WARNING**: This link **WILL** take you to YouTube.
+> You **WILL** get Rick Rolled.
+> This is **NOT** a drill.
+> You have been **EXPLICITLY** warned.
+> Don't say we didn't tell you.
+> Seriously, it's a Rick Roll.
+> Still here? It's definitely a Rick Roll.
+> Last chance to turn back.
+
+<p align="center">
+  <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ">
+    <img src="https://img.shields.io/badge/🎁_CLICK_FOR_ADVANCED_TUTORIAL-Rick%20Roll%20Yourself-ff0000?style=for-the-badge&logo=youtube" alt="You know the rules, and so do I"/>
+  </a>
+</p>
+
+<p align="center">
+  <sub><i>"Never gonna give you up, never gonna let trackers find you..."</i></sub> 🎤
+</p>
+
+---
+
 <div align="center">
 
-**Made with 🌪️ chaos and ☕ caffeine**
+**Made with 🌪️ chaos, ☕ caffeine, and 🥥 coconuts**
 
 *"In a world of surveillance, be the noise."*
 
 ```
-                    🌐
+                    🥥
                    /|\
                   / | \
                  /  |  \
-                /   |   \
+                /🌴 |🌴 \
                / 🤖 | 🤖 \
               /     |     \
              /  🤖  |  🤖  \
@@ -659,6 +718,8 @@ If this tool saved you from targeted ads about that embarrassing thing you googl
                     |
               Your Traffic
            (Now Untrackable)
+
+    🥥 COCONUTS BY PALM-TREE 🌴
 ```
 
 </div>

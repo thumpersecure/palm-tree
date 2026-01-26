@@ -2,8 +2,14 @@
 """
 Random Network Packet Generator
 
+"Packets go brrrrr" - Ancient Network Proverb
+
 This module generates random network packets with various protocols
-for testing and simulation purposes.
+for testing and simulation purposes. No actual packets are harmed
+(or sent) in the making of this simulation.
+
+Warning: May cause network engineers to do a double-take.
+Side effects include understanding TCP flags better than you wanted to.
 """
 
 import random
@@ -11,7 +17,15 @@ from typing import Dict, List, Optional
 
 
 class RandomPacket:
-    """Generate random network packets with various protocols."""
+    """
+    Generate random network packets with various protocols.
+
+    "I'm not a real packet, but I play one on TV."
+
+    This class creates fake packets that look real enough to
+    confuse anyone watching (except actual network engineers,
+    who will just be mildly amused).
+    """
     
     # Common protocols
     PROTOCOL_TCP = 'TCP'
@@ -36,7 +50,10 @@ class RandomPacket:
     def generate_random_ip(self) -> str:
         """
         Generate a random IP address.
-        
+
+        Creates an IP that could belong to anyone, anywhere.
+        Like a digital witness protection program.
+
         Note: Excludes certain reserved addresses by using 1-254 range for
         first and last octets to avoid network/broadcast addresses.
         """

@@ -1,11 +1,42 @@
-# upgraded-palm-tree - Requirements
+# 🥥 COCONUTS BY PALM-TREE 🌴 - Requirements
+# "Installing dependencies is self-care" - Ancient DevOps Proverb
 # Install with: pip install -r requirements.txt
 
-# Traffic Noise Generator Dependencies (traffic_noise.py)
-httpx>=0.25.0          # Async HTTP client (faster than requests, modern)
-beautifulsoup4>=4.12.0 # HTML parsing for headline extraction
-lxml>=4.9.0            # Fast HTML parser backend for BeautifulSoup
-rich>=13.0.0           # Beautiful terminal UI with live updates
+# ============================================================================
+# CORE DEPENDENCIES (Required for basic operation)
+# ============================================================================
+httpx>=0.25.0          # Async HTTP client - because requests is so 2019
+beautifulsoup4>=4.12.0 # HTML parsing - making soup out of the web since forever
+lxml>=4.9.0            # Fast HTML parser - speed demon for BeautifulSoup
+rich>=13.0.0           # Beautiful terminal UI - making CLI sexy again
 
-# Random Packet Generator (random_packet.py, cli.py)
-# No external dependencies - uses Python 3.6+ standard library only
+# ============================================================================
+# COCONUTS DEPENDENCIES (For the new hotness)
+# ============================================================================
+faker>=19.0.0          # Fake identity generation - mint humans on demand
+                       # "Today I am Karen from Wisconsin" - your HTTP request
+
+# ============================================================================
+# OPTIONAL DEPENDENCIES (For maximum chaos)
+# ============================================================================
+# Uncomment these for full Coconut Mode (headless browsers):
+# playwright>=1.40.0   # Headless browser automation
+#                      # After installing: playwright install chromium
+#
+# Uncomment for Tor Chaos Mode (coming soon):
+# stem>=1.8.0          # Tor controller - onion routing shenanigans
+
+# ============================================================================
+# DEVELOPMENT DEPENDENCIES (For the brave souls contributing)
+# ============================================================================
+# pytest>=7.0.0        # Testing - because we're professionals (sometimes)
+# black>=23.0.0        # Code formatting - judge not lest ye be formatted
+# mypy>=1.0.0          # Type checking - for when you want the compiler to yell
+
+# ============================================================================
+# NOTES
+# ============================================================================
+# - Random Packet Generator uses stdlib only (no deps needed)
+# - Playwright requires separate browser install: playwright install chromium
+# - Tor Chaos Mode requires tor service running locally
+# - Coffee not included but highly recommended
