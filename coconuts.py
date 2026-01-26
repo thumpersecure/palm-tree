@@ -291,6 +291,109 @@ async def run_yolo_mode(args):
             task.cancel()
 
 
+async def run_dashboard_demo():
+    """Run the dashboard demo with simulated activity."""
+    from dashboard import demo_dashboard
+    await demo_dashboard()
+
+
+async def run_with_dashboard(args):
+    """
+    Run modes with the live dashboard.
+
+    The beautiful chaos visualizer.
+    """
+    from dashboard import Dashboard, STATS, log_activity, set_active_mode, set_active_workers, record_request, set_current_identity
+    from optimized_client import OptimizedClient
+
+    # Determine which mode to run
+    mode_name = "Traffic Noise"
+    if args.sleepy:
+        mode_name = "Sleepy Mode 😴"
+    elif args.coconuts:
+        mode_name = "Coconut Mode 🥥"
+    elif args.personality:
+        mode_name = f"Personality: {args.personality} 🎭"
+
+    set_active_mode(mode_name)
+
+    # Start dashboard
+    dashboard = Dashboard()
+    dashboard_task = asyncio.create_task(dashboard.run())
+
+    log_activity(f"Starting {mode_name}", "info")
+    set_active_workers(args.workers if hasattr(args, 'workers') else 3)
+
+    try:
+        # Run the appropriate mode with dashboard integration
+        if args.sleepy:
+            from modes.sleepy import SleepyMode
+
+            async def dashboard_fetch(url, category=None):
+                async with OptimizedClient() as client:
+                    response = await client.fetch(url, identity=f"Sleepy ({category})")
+                    return response
+
+            mode = SleepyMode(use_learning=args.learn if hasattr(args, 'learn') else False, fetch_callback=dashboard_fetch)
+            await mode.run(duration_hours=args.duration / 60 if args.duration else 1)
+
+        elif args.coconuts:
+            from modes.coconut import CoconutModeLite
+            mode = CoconutModeLite()
+            # Wrap the mode to integrate with dashboard
+            original_run = mode.run
+
+            async def dashboard_run(duration_minutes):
+                mode.running = True
+                from modes.coconut import TOP_SITES
+                import random
+
+                async with OptimizedClient() as client:
+                    end_time = datetime.now().timestamp() + (duration_minutes * 60)
+
+                    while mode.running and datetime.now().timestamp() < end_time:
+                        site = random.choice(TOP_SITES)
+                        await client.fetch(site, identity="Coconut 🥥")
+                        await asyncio.sleep(random.uniform(2, 5))
+
+            await dashboard_run(args.duration or 60)
+
+        elif args.personality:
+            from modes.personalities import PersonalityMode, PERSONALITIES
+
+            if args.personality in PERSONALITIES:
+                async def dashboard_fetch(url):
+                    async with OptimizedClient() as client:
+                        await client.fetch(url, identity=args.personality)
+
+                mode = PersonalityMode(args.personality, fetch_callback=dashboard_fetch)
+                await mode.run(duration_minutes=args.duration or 60)
+
+        else:
+            # Default: run traffic noise simulation
+            from modes.coconut import TOP_SITES
+            import random
+
+            log_activity("Running default traffic noise with dashboard", "info")
+
+            async with OptimizedClient() as client:
+                duration_seconds = (args.duration or 5) * 60
+                end_time = datetime.now().timestamp() + duration_seconds
+
+                while datetime.now().timestamp() < end_time:
+                    site = random.choice(TOP_SITES[:20])
+                    await client.fetch(site, identity="Traffic Noise 📡")
+                    await asyncio.sleep(random.uniform(1, 3))
+
+    except asyncio.CancelledError:
+        log_activity("Shutting down...", "warning")
+    finally:
+        dashboard.stop()
+        await dashboard_task
+
+    log_activity("Dashboard session complete", "success")
+
+
 def run_incognito_theater(args):
     """
     Incognito Theater - Makes it LOOK like you're in incognito mode.
@@ -417,6 +520,10 @@ Examples:
                            help='YOLO mode - no limits, maximum chaos, pray for your router')
     mode_group.add_argument('--incognito-theater', action='store_true',
                            help='Makes it LOOK like incognito mode (spoiler: it\'s not)')
+    mode_group.add_argument('--dashboard', action='store_true',
+                           help='Run with live TUI dashboard showing real-time stats')
+    mode_group.add_argument('--dashboard-demo', action='store_true',
+                           help='Run dashboard demo with simulated activity')
 
     # Sleepy mode options
     sleepy_group = parser.add_argument_group('Sleepy Mode Options')
@@ -478,7 +585,7 @@ Examples:
     # Default to traffic mode if nothing selected
     if not any([args.sleepy, args.coconuts, args.quadcore, args.traffic,
                 args.all, args.test_identity, args.personality, args.yolo,
-                args.incognito_theater]):
+                args.incognito_theater, args.dashboard, args.dashboard_demo]):
         parser.print_help()
         print("\n[Hint] Try: python coconuts.py --sleepy")
         print("[Hint] Or:  python coconuts.py --coconuts")
@@ -506,6 +613,10 @@ Examples:
             asyncio.run(run_yolo_mode(args))
         elif args.incognito_theater:
             run_incognito_theater(args)
+        elif args.dashboard_demo:
+            asyncio.run(run_dashboard_demo())
+        elif args.dashboard:
+            asyncio.run(run_with_dashboard(args))
         elif args.quadcore:
             run_quadcore_mode(args)
         elif args.sleepy:
