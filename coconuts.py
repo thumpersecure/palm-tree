@@ -213,6 +213,138 @@ async def run_all_modes(args):
             task.cancel()
 
 
+async def run_personality_mode(args):
+    """Run as a specific personality type."""
+    from modes.personalities import PersonalityMode, PERSONALITIES
+
+    if args.personality not in PERSONALITIES:
+        print(f"[Error] Unknown personality: {args.personality}")
+        print(f"[Error] Available: {', '.join(PERSONALITIES.keys())}")
+        print("[Hint] Use --list-personalities to see all options")
+        return
+
+    mode = PersonalityMode(args.personality)
+    await mode.run(duration_minutes=args.duration or 60)
+
+
+async def run_yolo_mode(args):
+    """
+    YOLO Mode - Maximum chaos, no regrets (maybe some regrets).
+
+    "What's bandwidth limiting? Never heard of it."
+    """
+    print_mode_header(
+        "🔥 YOLO MODE 🔥",
+        "NO LIMITS. MAXIMUM CHAOS. YOUR ROUTER WILL REMEMBER THIS."
+    )
+
+    print("""
+    ⚠️  WARNING: YOLO MODE ACTIVATED ⚠️
+
+    This mode:
+    - Ignores all bandwidth limits (sorry, Netflix)
+    - Runs maximum parallel workers
+    - Enables chaos mode on everything
+    - May anger your ISP
+    - Definitely angers data brokers
+    - Might summon a daemon (the Unix kind, probably)
+
+    Press Ctrl+C when you've had enough.
+    Or don't. I'm not your mom.
+    """)
+
+    await asyncio.sleep(3)  # Dramatic pause
+
+    # Run everything with no limits
+    from modes.sleepy import SleepyMode
+    from modes.coconut import CoconutModeLite
+    from modes.personalities import PersonalityMode
+    import random
+
+    tasks = []
+
+    # Sleepy mode
+    sleepy = SleepyMode(use_learning=False)
+    tasks.append(asyncio.create_task(
+        sleepy.run(duration_hours=args.duration / 60 if args.duration else 24)
+    ))
+
+    # Coconut mode
+    coconut = CoconutModeLite()
+    tasks.append(asyncio.create_task(
+        coconut.run(duration_minutes=args.duration or 1440)  # 24 hours default
+    ))
+
+    # Random personality
+    personalities = ["paranoid", "drunk", "crypto_bro", "doomscroller", "3am_you"]
+    personality = PersonalityMode(random.choice(personalities))
+    tasks.append(asyncio.create_task(
+        personality.run(duration_minutes=args.duration or 1440)
+    ))
+
+    print("[YOLO] All systems go. Godspeed, you magnificent chaos machine.\n")
+
+    try:
+        await asyncio.gather(*tasks)
+    except asyncio.CancelledError:
+        for task in tasks:
+            task.cancel()
+
+
+def run_incognito_theater(args):
+    """
+    Incognito Theater - Makes it LOOK like you're in incognito mode.
+
+    Spoiler: This is security theater. Like TSA but for browsers.
+    """
+    print_mode_header(
+        "🕵️ INCOGNITO THEATER 🕵️",
+        "Making it LOOK like incognito mode (it's not, but shhh)"
+    )
+
+    print("""
+    ┌─────────────────────────────────────────────────────────────┐
+    │                                                             │
+    │   🕵️  You've gone incognito*                               │
+    │                                                             │
+    │   Now you can browse privately, and other people who        │
+    │   use this device won't see your activity.**                │
+    │                                                             │
+    │   * Not really                                              │
+    │   ** Your ISP, employer, and that guy named Kevin at        │
+    │      the NSA can still see everything                       │
+    │                                                             │
+    │   This won't affect:                                        │
+    │   ✗ Your ISP's ability to judge your 3am searches          │
+    │   ✗ Your employer's network monitoring                      │
+    │   ✗ Kevin (he's seen things)                               │
+    │   ✗ The crushing weight of digital surveillance             │
+    │                                                             │
+    │   What this DOES do:                                        │
+    │   ✓ Makes you FEEL like a spy                              │
+    │   ✓ Displays this cool ASCII art                           │
+    │   ✓ Runs traffic noise in the background                   │
+    │   ✓ Absolutely nothing else security-related               │
+    │                                                             │
+    └─────────────────────────────────────────────────────────────┘
+
+    Press Ctrl+C to exit incognito theater and face reality.
+    """)
+
+    # Actually run traffic noise
+    import subprocess
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    traffic_noise_path = os.path.join(script_dir, "traffic_noise.py")
+
+    if os.path.exists(traffic_noise_path):
+        cmd = [sys.executable, traffic_noise_path, "-c", "-w", "3"]
+        if args.duration:
+            cmd.extend(["-d", str(args.duration)])
+        subprocess.run(cmd)
+    else:
+        print("[Incognito Theater] traffic_noise.py not found. The theater is empty.")
+
+
 def test_identity_forge():
     """Test the Identity Forge."""
     print_mode_header(
@@ -277,6 +409,14 @@ Examples:
                            help='Run all modes at once (MAXIMUM CHAOS)')
     mode_group.add_argument('--test-identity', action='store_true',
                            help='Test the Identity Forge')
+    mode_group.add_argument('--personality', type=str, metavar='TYPE',
+                           help='Run as a personality (paranoid, drunk, crypto_bro, etc.)')
+    mode_group.add_argument('--list-personalities', action='store_true',
+                           help='List all available personalities')
+    mode_group.add_argument('--yolo', action='store_true',
+                           help='YOLO mode - no limits, maximum chaos, pray for your router')
+    mode_group.add_argument('--incognito-theater', action='store_true',
+                           help='Makes it LOOK like incognito mode (spoiler: it\'s not)')
 
     # Sleepy mode options
     sleepy_group = parser.add_argument_group('Sleepy Mode Options')
@@ -329,13 +469,21 @@ Examples:
     if not args.quiet and not args.no_banner:
         print_banner()
 
+    # Handle list-personalities separately
+    if args.list_personalities:
+        from modes.personalities import list_personalities
+        list_personalities()
+        return
+
     # Default to traffic mode if nothing selected
     if not any([args.sleepy, args.coconuts, args.quadcore, args.traffic,
-                args.all, args.test_identity]):
+                args.all, args.test_identity, args.personality, args.yolo,
+                args.incognito_theater]):
         parser.print_help()
         print("\n[Hint] Try: python coconuts.py --sleepy")
         print("[Hint] Or:  python coconuts.py --coconuts")
-        print("[Hint] Or:  python coconuts.py --quadcore")
+        print("[Hint] Or:  python coconuts.py --personality drunk")
+        print("[Hint] Or:  python coconuts.py --list-personalities")
         return
 
     # Handle keyboard interrupt gracefully
@@ -350,6 +498,14 @@ Examples:
     try:
         if args.test_identity:
             test_identity_forge()
+        elif args.list_personalities:
+            pass  # Already handled above
+        elif args.personality:
+            asyncio.run(run_personality_mode(args))
+        elif args.yolo:
+            asyncio.run(run_yolo_mode(args))
+        elif args.incognito_theater:
+            run_incognito_theater(args)
         elif args.quadcore:
             run_quadcore_mode(args)
         elif args.sleepy:

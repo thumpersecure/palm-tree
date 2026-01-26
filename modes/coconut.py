@@ -17,22 +17,34 @@ Features:
 - JavaScript execution (looks more real)
 - Bandwidth throttling
 - Automatic browser installation
+
+Side Effects:
+- May cause tracker algorithms to question their existence
+- Ad networks filing for emotional distress
+- Your ISP wondering if you're okay
 """
+
+from __future__ import annotations  # Allows string type hints without importing
 
 import asyncio
 import random
 import sys
 from dataclasses import dataclass, field
-from typing import Optional, List, Dict, Callable
+from typing import Optional, List, Dict, Callable, Any, TYPE_CHECKING
 from datetime import datetime
 import os
 
-# Check for playwright availability
+# Type hints only - not imported at runtime (prevents NameError when playwright missing)
+if TYPE_CHECKING:
+    from playwright.async_api import Browser, Page, BrowserContext
+
+# Check for playwright availability at runtime
 try:
-    from playwright.async_api import async_playwright, Browser, Page, BrowserContext
+    from playwright.async_api import async_playwright
     PLAYWRIGHT_AVAILABLE = True
 except ImportError:
     PLAYWRIGHT_AVAILABLE = False
+    async_playwright = None  # type: ignore
 
 
 @dataclass
@@ -205,17 +217,26 @@ class Coconut:
     def __init__(
         self,
         coconut_id: int,
-        browser: Browser,
+        browser: Any,  # Browser type when playwright available
         config: CoconutConfig,
-        identity_forge: Optional[object] = None,
+        identity_forge: Optional[Any] = None,
     ):
+        """
+        Initialize a coconut.
+
+        Args:
+            coconut_id: Unique ID for this coconut (for logging purposes and existential identity)
+            browser: Playwright Browser instance (the vessel for our chaos)
+            config: Configuration settings (the rules we'll probably bend)
+            identity_forge: Optional identity generator (for becoming someone else)
+        """
         self.coconut_id = coconut_id
         self.browser = browser
         self.config = config
         self.identity_forge = identity_forge
 
-        self.context: Optional[BrowserContext] = None
-        self.page: Optional[Page] = None
+        self.context: Any = None  # BrowserContext when available
+        self.page: Any = None     # Page when available
         self.visits = 0
         self.errors = 0
 
