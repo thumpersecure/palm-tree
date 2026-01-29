@@ -1,21 +1,23 @@
 # Security Policy
 
-*This repo is protected by Jedi Forces.
+### *This repo is protected by Jedi Forces.
 
-*You are required to follow the law. 
+### *You are required to follow the laws...
 
-*International, 
-*intergalactic, 
-*federal, 
-*state, 
-*and local laws.
+###*International, 
 
-* Don't abuse nor misuse.
+###*intergalactic, 
 
+###*federal, 
 
-* 🌴 palm-tree 
-*  and community
+###*state, 
+
+###*and local laws.
 
 
-## Further reading
-* [GitHub Security Lab](https://securitylab.github.com/)
+##Have Fun and Enjoy
+
+
+## 🌴 palm-tree community
+
+
