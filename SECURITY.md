@@ -1,23 +1,23 @@
 # Security Policy
 
-### *This repo is protected by Jedi Forces.
+## *This repo is protected by Jedi Forces.
 
-### *You are required to follow the laws...
+## *You are required to follow the laws...
 
-###*International, 
+## *International, 
 
-###*intergalactic, 
+## *intergalactic, 
 
-###*federal, 
+## *federal, 
 
-###*state, 
+## *state, 
 
-###*and local laws.
-
-
-##Have Fun and Enjoy
+## *and local laws.
 
 
-## 🌴 palm-tree community
+## * Have Fun and Enjoy
 
+###
+##🌴 palm-tree community
+###
 
