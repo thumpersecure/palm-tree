@@ -177,6 +177,25 @@ NEWS_SITES = {
         "https://www.nbcnews.com",
         "https://www.cnn.com",
     ],
+    "SocialNetworkAds": [
+        " https://www.dailymail.co.uk ",
+        " https://www.tmz.com ",
+        " https://www.unilad.com ",
+        " https://www.ladbible.com ",
+        " https://www.foxnews.com ",
+        " https://www.independent.co.uk ",
+        " https://www.politico.com ",
+        " https://www.mirror.co.uk ",
+        " https://www.euronews.com ",
+        " https://www.businessinsider.com ",
+        " https://www.msn.com ",
+        " https://www.windowscentral.com ",
+        " https://www.techradar.com ",
+        " https://www.bgr.com ",
+        " https://www.marketwatch.com ",
+        " https://www.bleacherreport.com ",
+        " https://www.eater.com ",
+    ],
 }
 
 # ============================================================================
@@ -195,8 +214,13 @@ REFERERS = [
     "https://www.bing.com/",
     "https://duckduckgo.com/",
     "https://www.facebook.com/",
+    "https://meta.com/",
+    "https://business.facebook.com/",
     "https://twitter.com/",
     "https://www.reddit.com/",
+    "https://www.microsoft.com/",
+    "https://instagram.com/",
+    "https://www.instagram.com/",
     "",  # Direct
 ]
 
@@ -634,7 +658,7 @@ Examples:
     parser.add_argument("-c", "--chaos", action="store_true",
                         help="Chaos mode - erratic multi-bot simulation")
     parser.add_argument("-w", "--workers", type=int, default=3, metavar="NUM",
-                        help="Number of parallel workers (default: 3, max: 10)")
+                        help="Number of parallel workers (default: 3, max: 30)")
     parser.add_argument("-d", "--duration", type=int, default=0, metavar="MINS",
                         help="Run duration in minutes (default: continuous)")
     parser.add_argument("-i", "--interface", type=str, default="eth0",
@@ -653,7 +677,7 @@ Examples:
         show_headlines=not args.no_headlines,
         randomize_identity=args.randomize_id,
         chaos_mode=args.chaos,
-        parallel_workers=min(max(args.workers, 1), 10),
+        parallel_workers=min(max(args.workers, 1), 30),
         duration=args.duration,
         interface=args.interface,
         quiet=args.quiet,
