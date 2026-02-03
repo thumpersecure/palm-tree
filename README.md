@@ -50,7 +50,19 @@ This tool generates **randomized network traffic** to obscure your browsing patt
 | Version | File | Best For |
 |---------|------|----------|
 | 🐚 **Bash** | `traffic-noise.sh` | Kali Linux, MAC spoofing, going full chaos |
-| 🐍 **Python** | `traffic_noise.py` | VPS deployment, **LIVE HEADLINE UI** 📰 |
+| 🐍 **Python** | `traffic_noise.py` | VPS deployment, **LIVE HEADLINE UI** 📰, Markov chains |
+
+### What's New
+
+- **Markov Chain Chaos Mode** - Human-like browsing patterns using probabilistic state transitions
+- **Chaos Mathematics** - Logistic map timing for unpredictable but natural delays
+- **200+ News Sites** - Including 50 left-leaning, 50 right-leaning, tabloids, hobbies, and more
+- **30 Social Media Platforms** - Full social media coverage
+- **Privacy Sites** - EFF, Tor Project, privacy advocates
+- **Issue Simulation** - Generate traffic that looks like you're troubleshooting network/hardware/software/malware issues
+- **Persona Mode** - Browse like a specific user type (tech enthusiast, news junkie, privacy advocate, etc.)
+- **10 Headlines Display** - See up to 10 live headlines at once
+- **Improved Dashboard** - Better layout and activity tracking
 
 ---
 
@@ -63,14 +75,21 @@ This tool generates **randomized network traffic** to obscure your browsing patt
 |---------|:----:|:------:|---------------|
 | 🎭 30+ User Agents | ✅ | ✅ | Pretend to be Chrome, Firefox, a PlayStation 5, or a Samsung Smart Fridge |
 | 🌐 14 DNS Servers | ✅ | ✅ | Google, Cloudflare, Quad9... we're not picky |
-| 📰 50+ News Sites | ✅ | ✅ | Actually get informed while being sneaky |
+| 📰 200+ News Sites | ✅ | ✅ | Politically diverse, tabloids, tech, hobbies, and more |
 | 🔀 MAC Spoofing | ✅ | ❌ | New identity, who dis? |
-| 🌪️ Chaos Mode | ✅ | ✅ | Become a swarm of bots |
-| 👥 Parallel Workers | ✅ | ✅ | Up to 10 simultaneous identities |
-| 🖥️ Live Terminal UI | ❌ | ✅ | Watch headlines scroll by in style |
+| 🌪️ Chaos Mode | ✅ | ✅ | Become a swarm of bots with Markov chains |
+| 👥 Parallel Workers | ✅ | ✅ | Up to 30 simultaneous identities |
+| 🖥️ Live Terminal UI | ❌ | ✅ | Watch up to 10 headlines scroll by in style |
 | 🎯 VPS Mode | ✅ | ✅ | Point it at your home server |
 | 🍪 Fake Cookies | ✅ | ✅ | Generate fake Google Analytics cookies |
 | ⏱️ 5 Browsing Patterns | ✅ | ✅ | Normal, Bursty, Slow, Erratic, Scanner |
+| 🧠 Markov Chains | ❌ | ✅ | Human-like category transitions |
+| 📐 Chaos Mathematics | ❌ | ✅ | Logistic map timing for natural delays |
+| 🎭 Persona Mode | ❌ | ✅ | Browse as a tech enthusiast, news junkie, etc. |
+| 🔧 Issue Simulation | ❌ | ✅ | Simulate troubleshooting searches |
+| 🏛️ Political Balance | ❌ | ✅ | 50 left + 50 right leaning sites |
+| 📱 30 Social Platforms | ❌ | ✅ | Full social media coverage |
+| 🔒 Privacy Sites | ❌ | ✅ | EFF, Tor Project, privacy advocates |
 
 </details>
 
@@ -327,11 +346,21 @@ sudo ./traffic-noise.sh -c -r -w 10 -d 60
 | `-v` | `--vps IP:PORT` | - | Connect to your server |
 | `-H` | `--headlines` | ✅ | Show live headlines |
 | | `--no-headlines` | - | Disable headlines |
-| `-c` | `--chaos` | ❌ | CHAOS MODE 🌪️ |
-| `-w` | `--workers NUM` | 3 | Parallel workers (1-10) |
+| `-c` | `--chaos` | ❌ | CHAOS MODE with Markov chains 🌪️ |
+| `-w` | `--workers NUM` | 3 | Parallel workers (1-30) |
 | `-d` | `--duration MINS` | ∞ | Run duration |
-| | `--max-headlines` | 3 | Headlines to show |
+| | `--max-headlines` | 10 | Headlines to show (up to 10) |
 | `-q` | `--quiet` | ❌ | Minimal output |
+| | `--no-markov` | ❌ | Disable Markov chains (pure random) |
+| | `--simulate-issues TYPE` | - | Simulate technical issues |
+| | `--persona TYPE` | - | Browse as persona type |
+| | `--include-political` | ❌ | Include politically diverse sites |
+| | `--include-tabloids` | ❌ | Include tabloid sites |
+| | `--include-social` | ❌ | Include social media |
+| | `--include-privacy` | ❌ | Include privacy sites |
+| | `--include-hobbies` | ❌ | Include hobby sites |
+| | `--include-all` | ❌ | Include all categories |
+| | `--list-personas` | - | List available personas |
 
 #### Bash Options
 
@@ -386,12 +415,99 @@ sequenceDiagram
 
 | Aspect | Normal Mode | Chaos Mode |
 |--------|-------------|------------|
-| Timing | Predictable (5-30s) | Erratic (1-120s) |
+| Timing | Predictable (5-30s) | Chaotic (Logistic Map) |
 | Identity Changes | Per session | Mid-session |
 | User Agents | Random per request | Wildly random |
-| Pattern | Consistent | Switches randomly |
+| Pattern | Consistent | Markov Chain transitions |
+| Category Selection | Pure random | Probabilistic (human-like) |
 | Appearance | 1 confused person | 47 confused bots |
 | Ad Networks | "Hmm, unusual" | "WHAT IS HAPPENING" |
+
+### Markov Chains & Chaos Mathematics
+
+The Python version now uses **Markov chains** for human-like browsing patterns:
+
+```
+Category Transitions (simplified):
+┌──────────┐  30%   ┌──────────┐
+│ Lifestyle ├──────►│ Lifestyle │
+└────┬─────┘       └──────────┘
+     │ 15%
+     ▼
+┌──────────┐  35%   ┌──────────┐
+│   World   ├──────►│   World   │
+└────┬─────┘       └──────────┘
+     │ 15%
+     ▼
+┌──────────┐
+│Technology │  ... and so on
+└──────────┘
+```
+
+**Chaos Mathematics** uses the **Logistic Map** for timing:
+```
+x_{n+1} = r × x_n × (1 - x_n)
+
+Where r = 3.9 produces deterministic chaos:
+- Looks random to observers
+- Actually follows mathematical rules
+- Creates natural-looking delays
+```
+
+---
+
+## 🎭 Persona Mode
+
+Browse like a specific type of person:
+
+```bash
+# Browse like a tech enthusiast
+python traffic_noise.py --persona tech_enthusiast -c
+
+# List all available personas
+python traffic_noise.py --list-personas
+```
+
+| Persona | What They Browse |
+|---------|-----------------|
+| `tech_enthusiast` | Technology, privacy, and hobby sites |
+| `news_junkie` | World news and trending topics across political spectrum |
+| `privacy_advocate` | Privacy tools and security resources |
+| `social_butterfly` | Social media, lifestyle, and trending content |
+| `entertainment_seeker` | Tabloids, social media, and entertainment |
+| `health_conscious` | Health, wellness, lifestyle, and hobbies |
+| `political_observer` | Political news from multiple perspectives |
+| `hobbyist` | DIY, crafts, cooking, and technology projects |
+| `troubleshooter` | Technical support searches and problem-solving |
+
+---
+
+## 🔧 Issue Simulation Mode
+
+Generate traffic that looks like you're troubleshooting technical problems:
+
+```bash
+# Simulate networking issues
+python traffic_noise.py --simulate-issues networking -c
+
+# Simulate hardware problems
+python traffic_noise.py --simulate-issues hardware -c
+
+# Simulate malware concerns
+python traffic_noise.py --simulate-issues malware -c
+
+# Mix all issue types
+python traffic_noise.py --simulate-issues mixed -c
+```
+
+| Issue Type | Example Searches |
+|------------|-----------------|
+| `networking` | "wifi not connecting", "dns server not responding" |
+| `hardware` | "computer won't turn on", "blue screen of death fix" |
+| `software` | "windows update stuck", "application won't open" |
+| `malware` | "remove malware", "browser hijacked fix" |
+| `misconfigured` | "proxy settings wrong", "firewall blocking" |
+| `mixed` | All of the above randomly |
 
 ---
 

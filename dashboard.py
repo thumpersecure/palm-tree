@@ -276,13 +276,14 @@ def make_identity_panel() -> Panel:
     )
 
 
-def make_activity_panel() -> Panel:
+def make_activity_panel(max_entries: int = 15) -> Panel:
     """Create the activity log panel."""
-    table = Table(box=None, show_header=False, padding=(0, 1), expand=True)
+    table = Table(box=None, show_header=True, padding=(0, 1), expand=True)
     table.add_column("Time", style="dim", width=8)
     table.add_column("Event", style="white", ratio=1)
+    table.add_column("Status", style="cyan", width=8)
 
-    for entry in ACTIVITY_LOG.get_recent(12):
+    for entry in ACTIVITY_LOG.get_recent(max_entries):
         level = entry["level"]
         style = {
             "info": "white",
@@ -298,10 +299,28 @@ def make_activity_panel() -> Panel:
             "warning": "⚠️",
         }.get(level, "📝")
 
+        status_text = {
+            "info": "INFO",
+            "success": "OK",
+            "error": "FAIL",
+            "warning": "WARN",
+        }.get(level, "INFO")
+
+        # Truncate message if too long
+        message = entry['message']
+        if len(message) > 50:
+            message = message[:47] + "..."
+
         table.add_row(
             entry["time"],
-            Text(f"{icon} {entry['message']}", style=style)
+            Text(f"{icon} {message}", style=style),
+            Text(status_text, style=style)
         )
+
+    # Add placeholder rows if needed
+    current_count = len(ACTIVITY_LOG.get_recent(max_entries))
+    if current_count == 0:
+        table.add_row("--:--:--", Text("Waiting for activity...", style="dim"), "")
 
     return Panel(
         table,
@@ -315,16 +334,27 @@ def make_workers_panel() -> Panel:
     if STATS.active_workers == 0:
         content = Text("No active workers\nWaiting for chaos to begin...", style="dim italic")
     else:
-        table = Table(box=None, show_header=True, padding=(0, 1))
-        table.add_column("Worker", style="cyan")
-        table.add_column("Status", style="green")
-        table.add_column("Requests", style="yellow")
+        table = Table(box=None, show_header=True, padding=(0, 1), expand=True)
+        table.add_column("Worker", style="cyan", width=10)
+        table.add_column("Status", style="green", width=12)
+        table.add_column("Reqs", style="yellow", width=6)
+        table.add_column("Pattern", style="magenta", width=10)
 
-        # Simulated worker data (in real implementation, track actual workers)
-        for i in range(min(STATS.active_workers, 5)):
-            status = random.choice(["🟢 Active", "🔄 Fetching", "⏳ Waiting"])
-            requests = random.randint(1, 50)
-            table.add_row(f"Worker-{i+1}", status, str(requests))
+        # Worker status simulation (more realistic)
+        statuses = ["🟢 Active", "🔄 Fetch", "⏳ Wait", "📡 Send"]
+        patterns = ["normal", "bursty", "slow", "erratic", "scanner"]
+
+        for i in range(min(STATS.active_workers, 8)):
+            # Use consistent random based on worker ID for stability
+            status_idx = (i + int(STATS.total_requests / 10)) % len(statuses)
+            pattern_idx = (i * 7 + int(STATS.total_requests / 5)) % len(patterns)
+
+            table.add_row(
+                f"W-{i+1}",
+                statuses[status_idx],
+                str((i + 1) * 5 + STATS.total_requests // STATS.active_workers if STATS.active_workers > 0 else 0),
+                patterns[pattern_idx]
+            )
 
         content = table
 
@@ -392,39 +422,40 @@ class Dashboard:
     "A window into the beautiful chaos."
     """
 
-    def __init__(self):
+    def __init__(self, max_activity_entries: int = 15):
         self.console = Console()
         self.running = False
         self._refresh_rate = 4  # Refreshes per second
+        self._max_activity = max_activity_entries
 
     def make_layout(self) -> Layout:
         """Create the dashboard layout."""
         layout = Layout()
 
-        # Main structure
+        # Main structure - improved proportions
         layout.split_column(
             Layout(name="header", size=4),
             Layout(name="body", ratio=1),
             Layout(name="footer", size=3),
         )
 
-        # Body split
+        # Body split - better balance for content
         layout["body"].split_row(
-            Layout(name="left", ratio=1),
-            Layout(name="right", ratio=1),
+            Layout(name="left", ratio=2),
+            Layout(name="right", ratio=3),
         )
 
-        # Left side
+        # Left side - stats panels
         layout["left"].split_column(
-            Layout(name="stats", ratio=1),
+            Layout(name="stats", ratio=2),
             Layout(name="fun_stats", ratio=1),
+            Layout(name="identity", size=7),
         )
 
-        # Right side
+        # Right side - activity and workers
         layout["right"].split_column(
-            Layout(name="identity", size=6),
+            Layout(name="activity", ratio=2),
             Layout(name="workers", ratio=1),
-            Layout(name="activity", ratio=1),
         )
 
         return layout
@@ -436,7 +467,7 @@ class Dashboard:
         layout["fun_stats"].update(make_fun_stats_panel())
         layout["identity"].update(make_identity_panel())
         layout["workers"].update(make_workers_panel())
-        layout["activity"].update(make_activity_panel())
+        layout["activity"].update(make_activity_panel(self._max_activity))
         layout["footer"].update(make_footer())
         return layout
 
