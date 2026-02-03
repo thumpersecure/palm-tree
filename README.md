@@ -209,6 +209,92 @@ python traffic_noise.py --list-personas
 
 </details>
 
+### Markov Chains & Chaos Mathematics
+
+The Python version now uses **Markov chains** for human-like browsing patterns:
+
+```
+Category Transitions (simplified):
+┌──────────┐  30%   ┌──────────┐
+│ Lifestyle ├──────►│ Lifestyle │
+└────┬─────┘       └──────────┘
+     │ 15%
+     ▼
+┌──────────┐  35%   ┌──────────┐
+│   World   ├──────►│   World   │
+└────┬─────┘       └──────────┘
+     │ 15%
+     ▼
+┌──────────┐
+│Technology │  ... and so on
+└──────────┘
+```
+
+**Chaos Mathematics** uses the **Logistic Map** for timing:
+```
+x_{n+1} = r × x_n × (1 - x_n)
+
+Where r = 3.9 produces deterministic chaos:
+- Looks random to observers
+- Actually follows mathematical rules
+- Creates natural-looking delays
+```
+
+---
+
+## 🎭 Persona Mode
+
+Browse like a specific type of person:
+
+```bash
+# Browse like a tech enthusiast
+python traffic_noise.py --persona tech_enthusiast -c
+
+# List all available personas
+python traffic_noise.py --list-personas
+```
+
+| Persona | What They Browse |
+|---------|-----------------|
+| `tech_enthusiast` | Technology, privacy, and hobby sites |
+| `news_junkie` | World news and trending topics across political spectrum |
+| `privacy_advocate` | Privacy tools and security resources |
+| `social_butterfly` | Social media, lifestyle, and trending content |
+| `entertainment_seeker` | Tabloids, social media, and entertainment |
+| `health_conscious` | Health, wellness, lifestyle, and hobbies |
+| `political_observer` | Political news from multiple perspectives |
+| `hobbyist` | DIY, crafts, cooking, and technology projects |
+| `troubleshooter` | Technical support searches and problem-solving |
+
+---
+
+## 🔧 Issue Simulation Mode
+
+Generate traffic that looks like you're troubleshooting technical problems:
+
+```bash
+# Simulate networking issues
+python traffic_noise.py --simulate-issues networking -c
+
+# Simulate hardware problems
+python traffic_noise.py --simulate-issues hardware -c
+
+# Simulate malware concerns
+python traffic_noise.py --simulate-issues malware -c
+
+# Mix all issue types
+python traffic_noise.py --simulate-issues mixed -c
+```
+
+| Issue Type | Example Searches |
+|------------|-----------------|
+| `networking` | "wifi not connecting", "dns server not responding" |
+| `hardware` | "computer won't turn on", "blue screen of death fix" |
+| `software` | "windows update stuck", "application won't open" |
+| `malware` | "remove malware", "browser hijacked fix" |
+| `misconfigured` | "proxy settings wrong", "firewall blocking" |
+| `mixed` | All of the above randomly |
+
 ---
 
 ## How It Works

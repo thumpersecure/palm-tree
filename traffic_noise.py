@@ -51,6 +51,150 @@ from rich.text import Text
 from rich.style import Style
 from rich.prompt import Prompt, Confirm, IntPrompt
 from rich import box
+import math
+
+# ============================================================================
+# MARKOV CHAIN & CHAOS MATHEMATICS
+# ============================================================================
+
+class MarkovChain:
+    """
+    Markov chain for human-like browsing pattern transitions.
+
+    "Because even chaos should have some method to its madness."
+    """
+
+    def __init__(self):
+        # State transition probabilities for browsing categories
+        # Rows: current state, Columns: next state probability
+        self.category_transitions = {
+            "Lifestyle": {"Lifestyle": 0.3, "World": 0.15, "Technology": 0.15, "Health": 0.15, "Trending": 0.15, "SocialMedia": 0.1},
+            "World": {"Lifestyle": 0.1, "World": 0.35, "Technology": 0.15, "Health": 0.1, "Trending": 0.2, "SocialMedia": 0.1},
+            "Technology": {"Lifestyle": 0.1, "World": 0.15, "Technology": 0.35, "Health": 0.1, "Trending": 0.15, "SocialMedia": 0.15},
+            "Health": {"Lifestyle": 0.2, "World": 0.15, "Technology": 0.1, "Health": 0.35, "Trending": 0.1, "SocialMedia": 0.1},
+            "Trending": {"Lifestyle": 0.15, "World": 0.2, "Technology": 0.15, "Health": 0.1, "Trending": 0.25, "SocialMedia": 0.15},
+            "SocialMedia": {"Lifestyle": 0.15, "World": 0.15, "Technology": 0.2, "Health": 0.1, "Trending": 0.15, "SocialMedia": 0.25},
+        }
+
+        # Browsing pattern transitions
+        self.pattern_transitions = {
+            "normal": {"normal": 0.6, "bursty": 0.15, "slow": 0.15, "erratic": 0.1},
+            "bursty": {"normal": 0.2, "bursty": 0.5, "slow": 0.1, "erratic": 0.2},
+            "slow": {"normal": 0.3, "bursty": 0.1, "slow": 0.5, "erratic": 0.1},
+            "erratic": {"normal": 0.15, "bursty": 0.25, "slow": 0.1, "erratic": 0.5},
+        }
+
+        self.current_category = random.choice(list(self.category_transitions.keys()))
+        self.current_pattern = random.choice(list(self.pattern_transitions.keys()))
+
+    def next_category(self) -> str:
+        """Get next category based on Markov chain transition."""
+        transitions = self.category_transitions.get(self.current_category, {})
+        if not transitions:
+            self.current_category = random.choice(list(self.category_transitions.keys()))
+            return self.current_category
+
+        categories = list(transitions.keys())
+        probabilities = list(transitions.values())
+        self.current_category = random.choices(categories, weights=probabilities, k=1)[0]
+        return self.current_category
+
+    def next_pattern(self) -> str:
+        """Get next browsing pattern based on Markov chain transition."""
+        transitions = self.pattern_transitions.get(self.current_pattern, {})
+        if not transitions:
+            self.current_pattern = random.choice(list(self.pattern_transitions.keys()))
+            return self.current_pattern
+
+        patterns = list(transitions.keys())
+        probabilities = list(transitions.values())
+        self.current_pattern = random.choices(patterns, weights=probabilities, k=1)[0]
+        return self.current_pattern
+
+
+class ChaosGenerator:
+    """
+    Chaos mathematics for generating unpredictable but deterministic timing.
+
+    Uses the logistic map and other chaotic systems to create
+    human-like irregular timing that still follows natural patterns.
+
+    "Order within chaos, chaos within order."
+    """
+
+    def __init__(self, r: float = 3.9, seed: float = None):
+        """
+        Initialize chaos generator.
+
+        Args:
+            r: Control parameter for logistic map (3.57 < r <= 4.0 for chaos)
+            seed: Initial value (0 < seed < 1)
+        """
+        self.r = r  # 3.9 gives good chaotic behavior
+        self.x = seed if seed else random.random() * 0.5 + 0.25  # Start near middle
+        self.iteration = 0
+
+    def logistic_map(self) -> float:
+        """
+        Generate next value using the logistic map.
+
+        x_{n+1} = r * x_n * (1 - x_n)
+
+        This creates deterministic chaos - appears random but follows rules.
+        """
+        self.x = self.r * self.x * (1 - self.x)
+        self.iteration += 1
+        return self.x
+
+    def henon_map(self, a: float = 1.4, b: float = 0.3) -> tuple:
+        """
+        Generate next point using the Hénon map for 2D chaos.
+
+        Creates more complex chaotic patterns for multi-dimensional variation.
+        """
+        if not hasattr(self, 'y'):
+            self.y = random.random() * 0.5 + 0.25
+
+        new_x = 1 - a * self.x ** 2 + self.y
+        new_y = b * self.x
+        self.x = new_x
+        self.y = new_y
+        return (self.x, self.y)
+
+    def get_chaos_delay(self, min_delay: float, max_delay: float) -> float:
+        """
+        Get a chaotic delay value that looks human-like.
+
+        Uses logistic map combined with sinusoidal modulation for
+        realistic browsing patterns.
+        """
+        # Base chaos value
+        chaos_value = self.logistic_map()
+
+        # Add sinusoidal "time of day" effect
+        time_factor = math.sin(self.iteration * 0.1) * 0.3 + 1.0
+
+        # Combine for final delay
+        normalized = chaos_value * time_factor
+        normalized = max(0.1, min(1.0, normalized))  # Clamp to [0.1, 1.0]
+
+        delay = min_delay + (max_delay - min_delay) * normalized
+        return delay
+
+    def get_burst_count(self, min_burst: int = 1, max_burst: int = 8) -> int:
+        """Get number of requests in a burst using chaos."""
+        chaos_value = self.logistic_map()
+        return int(min_burst + (max_burst - min_burst) * chaos_value)
+
+    def should_switch_behavior(self, base_probability: float = 0.1) -> bool:
+        """Determine if behavior should switch using chaos."""
+        return self.logistic_map() < base_probability
+
+
+# Global instances for chaos mode
+markov_chain = MarkovChain()
+chaos_generator = ChaosGenerator()
+
 
 # ============================================================================
 # TAXI CAB DRIVER JOKES (for --help)
@@ -865,7 +1009,6 @@ async def connect_to_vps(client: httpx.AsyncClient, target: str, config: Config)
             return True
         except Exception:
             continue
-
     state.errors += 1
     return False
 
@@ -946,6 +1089,9 @@ def update_display(layout: Layout, config: Config):
 async def worker(worker_id: int, config: Config, layout: Layout, live: Live):
     pattern = random.choice(BROWSING_PATTERNS)
     state.workers_active += 1
+    worker_chaos = ChaosGenerator(r=3.85 + worker_id * 0.01)
+
+    # Initialize per-worker chaos generator for variety
     worker_chaos = ChaosGenerator(r=3.85 + worker_id * 0.01)
 
     async with httpx.AsyncClient() as client:
