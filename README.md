@@ -1,4 +1,4 @@
-# Traffic Noise Generator v3.3
+# Traffic Noise Generator v3.3.2
 
 <div align="center">
 
@@ -11,11 +11,11 @@
 [![GitHub stars](https://img.shields.io/github/stars/thumpersecure/palm-tree?style=for-the-badge&logo=github)](https://github.com/thumpersecure/palm-tree/stargazers)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/downloads/)
-[![Version](https://img.shields.io/badge/version-3.3-green.svg?style=for-the-badge)](https://github.com/thumpersecure/palm-tree)
+[![Version](https://img.shields.io/badge/version-3.3.2-green.svg?style=for-the-badge)](https://github.com/thumpersecure/palm-tree)
 
 **Make advertisers cry. Make data brokers confused. Make tracking algorithms question their existence.**
 
-[Quick Start](#-quick-start) | [Features](#-features) | [v3.3 Upgrades](#-v33-upgrades) | [Usage](#-usage) | [VPS Setup](#-vps-setup)
+[Quick Start](#-quick-start) | [Features](#-features) | [v3.3.2 Upgrades](#-v332-upgrades) | [Issue Simulation](#-issue-simulation-mode) | [Usage](#-usage)
 
 </div>
 
@@ -37,7 +37,7 @@ Advertisers and data brokers build detailed profiles of your browsing habits. Th
 # Clone and install
 git clone https://github.com/thumpersecure/palm-tree.git
 cd palm-tree
-pip install httpx beautifulsoup4 lxml rich
+pip install httpx beautifulsoup4 lxml rich faker
 
 # Interactive setup (recommended for first time)
 python traffic_noise.py --interactive
@@ -63,27 +63,43 @@ python traffic_noise.py --setup
 
 ---
 
-## v3.3 Upgrades
-
-This version brings **major improvements** to make your traffic noise more effective and harder to detect:
+## v3.3.2 Upgrades
 
 <details open>
-<summary><b>What's New in v3.3</b></summary>
+<summary><b>What's New in v3.3.2</b></summary>
 
 | Feature | What It Does | Why It's Better |
 |---------|--------------|-----------------|
-| **Stealth Mode** | Randomizes TLS fingerprints, header ordering, Sec-CH-UA | Evades advanced fingerprinting (JA3/JA4) that sees through basic user-agent switching |
-| **Scheduled Profiles** | Changes browsing patterns based on time of day | Mimics realistic human behavior - tech sites during work, entertainment at night |
-| **Privacy Score** | Real-time confusion metric (0-100) | Know exactly how much chaos you're generating |
-| **Decoy Injection** | Injects fake interests, demographics, locations into cookies | Actively poisons tracking profiles with misleading data |
-| **Plugin System** | Load custom sites/personas from `~/.traffic_noise/plugins/` | Extend without modifying core code |
-| **Interactive Mode** | Guided setup wizard with prompts | No need to memorize CLI flags |
-| **Issue Simulation** | Generate traffic that looks like troubleshooting | Masks your real browsing as "my wifi is broken" searches |
+| **Issue Traffic Generator** | Generate traffic mimicking computer/network/adware troubleshooting | Makes your profile look like you're fighting with technology 24/7 |
+| **15 Issue Categories** | DNS, SSL, WiFi, VPN, BSOD, Adware, Cryptominer, Ransomware, and more | Comprehensive coverage of tech support patterns |
+| **Frustration Mode** | Search queries get more desperate over time | Realistic human behavior simulation |
+| **Issue Chaining** | One issue leads to related issues (WiFi → DNS → Router) | Natural troubleshooting patterns |
+| **Spicy-Cat Style** | Inspired by security testing patterns | Educational and privacy-focused |
+
+**New Issue Types:**
+- Network: `dns`, `ssl`, `wifi`, `vpn`, `networking`
+- System: `bsod`, `system`, `hardware`, `software`
+- Malware: `adware`, `ransomware`, `cryptominer`, `malware`
+- Combined: `mixed` (random selection)
 
 </details>
 
 <details>
-<summary><b>Previous Features (Still Available)</b></summary>
+<summary><b>Previous v3.3 Features</b></summary>
+
+| Feature | What It Does |
+|---------|--------------|
+| **Stealth Mode** | Randomizes TLS fingerprints, header ordering, Sec-CH-UA |
+| **Scheduled Profiles** | Changes browsing patterns based on time of day |
+| **Privacy Score** | Real-time confusion metric (0-100) |
+| **Decoy Injection** | Injects fake interests, demographics, locations into cookies |
+| **Plugin System** | Load custom sites/personas from `~/.traffic_noise/plugins/` |
+| **Interactive Mode** | Guided setup wizard with prompts |
+
+</details>
+
+<details>
+<summary><b>Core Features (v2.0+)</b></summary>
 
 - **Markov Chains** - Human-like category transitions
 - **Chaos Mathematics** - Logistic map timing for natural delays
@@ -93,6 +109,99 @@ This version brings **major improvements** to make your traffic noise more effec
 - **Persona Mode** - 9 different user types
 - **10 Headlines** - Live display
 - **30 Workers** - Max parallel identities
+
+</details>
+
+---
+
+## Issue Simulation Mode
+
+<details open>
+<summary><b>What Is Issue Simulation?</b></summary>
+
+Generate traffic that looks like you're troubleshooting computer problems. Perfect for:
+- **Privacy**: Your browsing profile shows constant tech problems
+- **Testing**: Simulate realistic troubleshooting behavior
+- **Education**: Understand what malware/adware patterns look like
+
+```bash
+# Simulate WiFi problems
+python traffic_noise.py --simulate-issues wifi -c
+
+# Simulate adware infection troubleshooting
+python traffic_noise.py --simulate-issues adware -c -w 5
+
+# Mix all issue types
+python traffic_noise.py --simulate-issues mixed -c --stealth
+```
+
+</details>
+
+<details>
+<summary><b>Available Issue Types</b></summary>
+
+#### Network Issues
+| Type | Description | Example Searches |
+|------|-------------|------------------|
+| `networking` | General connectivity | "internet not working", "connection timeout" |
+| `dns` | DNS failures | "dns_probe_finished_nxdomain", "dns server not responding" |
+| `ssl` | Certificate errors | "your connection is not private", "ssl handshake failed" |
+| `wifi` | Wireless problems | "wifi keeps disconnecting", "no internet" |
+| `vpn` | VPN issues | "vpn won't connect", "vpn slow" |
+
+#### System Issues
+| Type | Description | Example Searches |
+|------|-------------|------------------|
+| `hardware` | Device problems | "blue screen", "device not recognized" |
+| `system` | Performance | "computer slow", "high cpu usage" |
+| `bsod` | Crash errors | "IRQL_NOT_LESS_OR_EQUAL", "CRITICAL_PROCESS_DIED" |
+| `software` | App crashes | "dll missing", "application won't start" |
+
+#### Malware/Adware
+| Type | Description | Example Searches |
+|------|-------------|------------------|
+| `malware` | General infections | "trojan removal", "virus scan" |
+| `adware` | Ad infections | "popup ads won't stop", "browser hijacked" |
+| `ransomware` | Encryption attacks | "files encrypted", "decrypt files" |
+| `cryptominer` | Mining malware | "cpu 100% usage", "fan running high" |
+
+#### Combined
+| Type | Description |
+|------|-------------|
+| `mixed` | Random mix of all above |
+
+</details>
+
+<details>
+<summary><b>Advanced Issue Traffic Generator</b></summary>
+
+For programmatic access, use the `IssueTrafficGenerator` class directly:
+
+```python
+from issue_traffic import IssueTrafficGenerator, IssueType
+import asyncio
+
+async def main():
+    generator = IssueTrafficGenerator(
+        issue_types=[
+            IssueType.WIFI_PROBLEMS,
+            IssueType.ADWARE_INFECTION,
+            IssueType.SLOW_COMPUTER,
+        ],
+        frustration_mode=True,  # Searches get more desperate
+        chaos_factor=0.3,       # 30% chance to chain to related issues
+    )
+
+    await generator.run(duration_minutes=30)
+
+asyncio.run(main())
+```
+
+**Features:**
+- **Frustration Escalation**: Search queries become more desperate over time
+- **Issue Chaining**: One problem leads to related problems naturally
+- **Realistic Timing**: Delays mimic frustrated user behavior
+- **Multiple Search Engines**: Google, Bing, DuckDuckGo, Reddit, YouTube
 
 </details>
 
@@ -112,17 +221,18 @@ This version brings **major improvements** to make your traffic noise more effec
 | Chaos Mode | ✅ | ✅ | Python uses Markov chains |
 | Workers (1-30) | ✅ | ✅ | Parallel identities |
 | Live UI | ❌ | ✅ | Rich terminal dashboard |
-| Stealth Mode | ❌ | ✅ | **NEW v3.3** |
-| Scheduled Profiles | ❌ | ✅ | **NEW v3.3** |
-| Privacy Score | ❌ | ✅ | **NEW v3.3** |
-| Decoy Injection | ❌ | ✅ | **NEW v3.3** |
-| Interactive Setup | ❌ | ✅ | **NEW v3.3** |
-| Plugin System | ❌ | ✅ | **NEW v3.3** |
+| Issue Simulation | ❌ | ✅ | **NEW v3.3.2** - 15 types |
+| Stealth Mode | ❌ | ✅ | v3.3 |
+| Scheduled Profiles | ❌ | ✅ | v3.3 |
+| Privacy Score | ❌ | ✅ | v3.3 |
+| Decoy Injection | ❌ | ✅ | v3.3 |
+| Interactive Setup | ❌ | ✅ | v3.3 |
+| Plugin System | ❌ | ✅ | v3.3 |
 
 </details>
 
 <details>
-<summary><b>Content Categories</b></summary>
+<summary><b>Content Categories (200+ Sites)</b></summary>
 
 | Category | Sites | Examples |
 |----------|-------|----------|
@@ -134,6 +244,27 @@ This version brings **major improvements** to make your traffic noise more effec
 | Social Media | 30 | All major platforms |
 | Privacy | 20 | EFF, Tor Project, Schneier |
 | Hobbies | 30 | DIY, cooking, photography |
+| **Issue Categories** | **17** | **NEW: DNS, SSL, Adware, BSOD, etc.** |
+
+</details>
+
+<details>
+<summary><b>User Agents (30+ Included)</b></summary>
+
+**Standard Browsers:**
+- Chrome (Windows, Mac, Linux)
+- Firefox (Windows, Mac, Linux)
+- Safari (Mac, iOS)
+- Edge (Windows)
+- Mobile browsers (Android, iOS)
+
+**Exotic Devices:**
+- PlayStation 5
+- Nintendo Switch
+- Samsung Smart TV
+- Tesla Browser
+- Samsung Smart Fridge
+- Googlebot / Bingbot / Twitterbot
 
 </details>
 
@@ -148,11 +279,19 @@ This version brings **major improvements** to make your traffic noise more effec
 # Interactive setup wizard
 python traffic_noise.py --interactive
 
-# Maximum chaos with all v3.3 features
+# Maximum chaos with all v3.3.2 features
 python traffic_noise.py -c -w 5 --stealth --decoys --include-all
 
-# Simulate someone troubleshooting computer issues
+# Simulate troubleshooting issues (NEW)
 python traffic_noise.py --simulate-issues mixed -c
+
+# Specific issue types (NEW)
+python traffic_noise.py --simulate-issues adware -c -w 5
+python traffic_noise.py --simulate-issues wifi -c
+python traffic_noise.py --simulate-issues bsod -c
+
+# List all issue types (NEW)
+python traffic_noise.py --list-issues
 
 # Browse as a specific persona
 python traffic_noise.py --persona privacy_advocate -c
@@ -179,12 +318,16 @@ python traffic_noise.py -v YOUR_IP:8080 -c -w 5
 | `--stealth` | off | Fingerprint randomization |
 | `--decoys` | off | Inject misleading data |
 | `--scheduled` | off | Time-based profiles |
-| `--simulate-issues TYPE` | - | networking/hardware/software/malware/mixed |
+| `--simulate-issues TYPE` | - | **15 types** (see below) |
+| `--list-issues` | - | **NEW: List all issue types** |
 | `--persona TYPE` | - | 9 types available |
 | `--include-all` | off | All content categories |
 | `--max-headlines` | 10 | Headlines to show |
 | `--no-markov` | off | Disable Markov chains |
 | `--no-privacy-score` | off | Hide privacy score |
+
+**Issue Types:**
+`networking`, `hardware`, `software`, `malware`, `misconfigured`, `mixed`, `adware`, `ransomware`, `system`, `dns`, `ssl`, `wifi`, `vpn`, `bsod`, `cryptominer`
 
 </details>
 
@@ -209,92 +352,6 @@ python traffic_noise.py --list-personas
 
 </details>
 
-### Markov Chains & Chaos Mathematics
-
-The Python version now uses **Markov chains** for human-like browsing patterns:
-
-```
-Category Transitions (simplified):
-┌──────────┐  30%   ┌──────────┐
-│ Lifestyle ├──────►│ Lifestyle │
-└────┬─────┘       └──────────┘
-     │ 15%
-     ▼
-┌──────────┐  35%   ┌──────────┐
-│   World   ├──────►│   World   │
-└────┬─────┘       └──────────┘
-     │ 15%
-     ▼
-┌──────────┐
-│Technology │  ... and so on
-└──────────┘
-```
-
-**Chaos Mathematics** uses the **Logistic Map** for timing:
-```
-x_{n+1} = r × x_n × (1 - x_n)
-
-Where r = 3.9 produces deterministic chaos:
-- Looks random to observers
-- Actually follows mathematical rules
-- Creates natural-looking delays
-```
-
----
-
-## 🎭 Persona Mode
-
-Browse like a specific type of person:
-
-```bash
-# Browse like a tech enthusiast
-python traffic_noise.py --persona tech_enthusiast -c
-
-# List all available personas
-python traffic_noise.py --list-personas
-```
-
-| Persona | What They Browse |
-|---------|-----------------|
-| `tech_enthusiast` | Technology, privacy, and hobby sites |
-| `news_junkie` | World news and trending topics across political spectrum |
-| `privacy_advocate` | Privacy tools and security resources |
-| `social_butterfly` | Social media, lifestyle, and trending content |
-| `entertainment_seeker` | Tabloids, social media, and entertainment |
-| `health_conscious` | Health, wellness, lifestyle, and hobbies |
-| `political_observer` | Political news from multiple perspectives |
-| `hobbyist` | DIY, crafts, cooking, and technology projects |
-| `troubleshooter` | Technical support searches and problem-solving |
-
----
-
-## 🔧 Issue Simulation Mode
-
-Generate traffic that looks like you're troubleshooting technical problems:
-
-```bash
-# Simulate networking issues
-python traffic_noise.py --simulate-issues networking -c
-
-# Simulate hardware problems
-python traffic_noise.py --simulate-issues hardware -c
-
-# Simulate malware concerns
-python traffic_noise.py --simulate-issues malware -c
-
-# Mix all issue types
-python traffic_noise.py --simulate-issues mixed -c
-```
-
-| Issue Type | Example Searches |
-|------------|-----------------|
-| `networking` | "wifi not connecting", "dns server not responding" |
-| `hardware` | "computer won't turn on", "blue screen of death fix" |
-| `software` | "windows update stuck", "application won't open" |
-| `malware` | "remove malware", "browser hijacked fix" |
-| `misconfigured` | "proxy settings wrong", "firewall blocking" |
-| `mixed` | All of the above randomly |
-
 ---
 
 ## How It Works
@@ -304,7 +361,7 @@ python traffic_noise.py --simulate-issues mixed -c
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                    Traffic Noise Generator                   │
+│                    Traffic Noise Generator v3.3.2           │
 ├─────────────────────────────────────────────────────────────┤
 │                                                             │
 │  ┌─────────┐  ┌─────────┐  ┌─────────┐  ┌─────────┐       │
@@ -317,6 +374,11 @@ python traffic_noise.py --simulate-issues mixed -c
 │  ┌──────────────────────┴──────────────────────┐           │
 │  │           Markov Chain + Chaos Math          │           │
 │  │  (Determines timing, categories, patterns)   │           │
+│  └──────────────────────┬──────────────────────┘           │
+│                         │                                   │
+│  ┌──────────────────────┴──────────────────────┐           │
+│  │         Issue Traffic Generator (NEW)        │           │
+│  │  (DNS, SSL, WiFi, Adware, BSOD patterns)     │           │
 │  └──────────────────────┬──────────────────────┘           │
 │                         │                                   │
 │  ┌──────────────────────┴──────────────────────┐           │
@@ -374,6 +436,31 @@ Result: Timing that LOOKS random but follows deterministic chaos
 - Appears human-like
 - Mathematically beautiful
 ```
+
+</details>
+
+<details>
+<summary><b>Issue Traffic Patterns (v3.3.2)</b></summary>
+
+**Frustration Escalation:**
+```
+Search 1: "wifi not connecting"
+Search 3: "wifi not connecting fix"
+Search 5: "why wifi keeps disconnecting"
+Search 8: "please help wifi not working"
+Search 12: "HELP wifi still broken nothing works"
+```
+
+**Issue Chaining:**
+```
+WiFi Problems → DNS Issues → Router Reset → Factory Reset →
+"Should I buy a new router?" → Amazon router shopping
+```
+
+**Realistic Timing:**
+- High urgency issues (BSOD, Ransomware) = faster, frantic searches
+- Low urgency (slow computer) = longer delays, more thorough reading
+- Frustration increases = shorter delays over time
 
 </details>
 

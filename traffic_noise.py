@@ -18,7 +18,7 @@ Side effects may include:
 Not responsible for any existential crises caused to tracking scripts.
 """
 
-__version__ = "3.3"
+__version__ = "3.3.2"
 __author__ = "palm-tree"
 
 import asyncio
@@ -41,6 +41,19 @@ from contextlib import suppress
 from pathlib import Path
 
 import httpx
+
+# Import issue traffic generator
+try:
+    from issue_traffic import (
+        IssueTrafficGenerator,
+        IssueType,
+        get_issue_types,
+        get_issue_categories,
+        get_issue_pattern,
+    )
+    ISSUE_TRAFFIC_AVAILABLE = True
+except ImportError:
+    ISSUE_TRAFFIC_AVAILABLE = False
 from bs4 import BeautifulSoup
 from rich.console import Console
 from rich.live import Live
@@ -214,75 +227,6 @@ TAXI_JOKES = [
     "What's a taxi driver's favorite exercise? Running the meter!",
     "Why don't taxis ever get lonely? They're always picking people up!",
 ]
-
-# ============================================================================
-# MARKOV CHAIN & CHAOS MATHEMATICS
-# ============================================================================
-
-class MarkovChain:
-    """Markov chain for human-like browsing pattern transitions."""
-
-    def __init__(self):
-        self.category_transitions = {
-            "Lifestyle": {"Lifestyle": 0.3, "World": 0.15, "Technology": 0.15, "Health": 0.15, "Trending": 0.15, "SocialMedia": 0.1},
-            "World": {"Lifestyle": 0.1, "World": 0.35, "Technology": 0.15, "Health": 0.1, "Trending": 0.2, "SocialMedia": 0.1},
-            "Technology": {"Lifestyle": 0.1, "World": 0.15, "Technology": 0.35, "Health": 0.1, "Trending": 0.15, "SocialMedia": 0.15},
-            "Health": {"Lifestyle": 0.2, "World": 0.15, "Technology": 0.1, "Health": 0.35, "Trending": 0.1, "SocialMedia": 0.1},
-            "Trending": {"Lifestyle": 0.15, "World": 0.2, "Technology": 0.15, "Health": 0.1, "Trending": 0.25, "SocialMedia": 0.15},
-            "SocialMedia": {"Lifestyle": 0.15, "World": 0.15, "Technology": 0.2, "Health": 0.1, "Trending": 0.15, "SocialMedia": 0.25},
-        }
-        self.pattern_transitions = {
-            "normal": {"normal": 0.6, "bursty": 0.15, "slow": 0.15, "erratic": 0.1},
-            "bursty": {"normal": 0.2, "bursty": 0.5, "slow": 0.1, "erratic": 0.2},
-            "slow": {"normal": 0.3, "bursty": 0.1, "slow": 0.5, "erratic": 0.1},
-            "erratic": {"normal": 0.15, "bursty": 0.25, "slow": 0.1, "erratic": 0.5},
-        }
-        self.current_category = random.choice(list(self.category_transitions.keys()))
-        self.current_pattern = random.choice(list(self.pattern_transitions.keys()))
-
-    def next_category(self) -> str:
-        transitions = self.category_transitions.get(self.current_category, {})
-        if not transitions:
-            self.current_category = random.choice(list(self.category_transitions.keys()))
-            return self.current_category
-        categories = list(transitions.keys())
-        probabilities = list(transitions.values())
-        self.current_category = random.choices(categories, weights=probabilities, k=1)[0]
-        return self.current_category
-
-    def next_pattern(self) -> str:
-        transitions = self.pattern_transitions.get(self.current_pattern, {})
-        if not transitions:
-            self.current_pattern = random.choice(list(self.pattern_transitions.keys()))
-            return self.current_pattern
-        patterns = list(transitions.keys())
-        probabilities = list(transitions.values())
-        self.current_pattern = random.choices(patterns, weights=probabilities, k=1)[0]
-        return self.current_pattern
-
-
-class ChaosGenerator:
-    """Chaos mathematics for unpredictable but deterministic timing."""
-
-    def __init__(self, r: float = 3.9, seed: float = None):
-        self.r = r
-        self.x = seed if seed else random.random() * 0.5 + 0.25
-        self.iteration = 0
-
-    def logistic_map(self) -> float:
-        self.x = self.r * self.x * (1 - self.x)
-        self.iteration += 1
-        return self.x
-
-    def get_chaos_delay(self, min_delay: float, max_delay: float) -> float:
-        chaos_value = self.logistic_map()
-        time_factor = math.sin(self.iteration * 0.1) * 0.3 + 1.0
-        normalized = max(0.1, min(1.0, chaos_value * time_factor))
-        return min_delay + (max_delay - min_delay) * normalized
-
-    def should_switch_behavior(self, base_probability: float = 0.1) -> bool:
-        return self.logistic_map() < base_probability
-
 
 # ============================================================================
 # STEALTH MODE - TLS/HTTP FINGERPRINT RANDOMIZATION
@@ -792,6 +736,133 @@ NEWS_SITES = {
         "https://www.howtogeek.com",
         "https://www.lifehacker.com",
     ],
+    # v3.3.2 - Extended issue categories (spicy-cat style)
+    "DNSIssues": [
+        "https://www.google.com/search?q=dns+server+not+responding",
+        "https://www.google.com/search?q=dns_probe_finished_nxdomain",
+        "https://www.google.com/search?q=flush+dns+cache+windows",
+        "https://www.google.com/search?q=change+dns+server+to+google",
+        "https://www.google.com/search?q=best+dns+servers+2024",
+        "https://www.cloudflare.com/learning/dns/what-is-dns/",
+        "https://support.google.com/chrome/answer/95669",
+    ],
+    "SSLErrors": [
+        "https://www.google.com/search?q=ssl+certificate+error",
+        "https://www.google.com/search?q=your+connection+is+not+private",
+        "https://www.google.com/search?q=err_cert_authority_invalid",
+        "https://www.google.com/search?q=ssl+handshake+failed",
+        "https://www.google.com/search?q=certificate+expired+error",
+        "https://www.ssllabs.com/ssltest/",
+    ],
+    "WiFiProblems": [
+        "https://www.google.com/search?q=wifi+keeps+disconnecting",
+        "https://www.google.com/search?q=wifi+connected+but+no+internet",
+        "https://www.google.com/search?q=wifi+not+working+windows+11",
+        "https://www.google.com/search?q=wifi+slow+on+my+computer+only",
+        "https://www.google.com/search?q=5ghz+wifi+not+showing",
+        "https://support.microsoft.com/en-us/windows/fix-wi-fi-connection-issues-in-windows",
+    ],
+    "VPNIssues": [
+        "https://www.google.com/search?q=vpn+not+connecting",
+        "https://www.google.com/search?q=vpn+connection+failed",
+        "https://www.google.com/search?q=vpn+keeps+disconnecting",
+        "https://www.google.com/search?q=vpn+slow+speed",
+        "https://www.dnsleaktest.com",
+        "https://ipleak.net",
+    ],
+    "SlowComputer": [
+        "https://www.google.com/search?q=why+is+my+computer+so+slow",
+        "https://www.google.com/search?q=speed+up+windows+11",
+        "https://www.google.com/search?q=100+percent+disk+usage+windows",
+        "https://www.google.com/search?q=disable+startup+programs",
+        "https://www.google.com/search?q=computer+freezing+randomly",
+        "https://www.ccleaner.com",
+    ],
+    "HighCPU": [
+        "https://www.google.com/search?q=100+cpu+usage+windows",
+        "https://www.google.com/search?q=svchost+high+cpu",
+        "https://www.google.com/search?q=antimalware+service+executable+high+cpu",
+        "https://www.google.com/search?q=chrome+high+cpu+usage",
+        "https://www.google.com/search?q=cpu+usage+spikes+to+100",
+    ],
+    "BSOD": [
+        "https://www.google.com/search?q=blue+screen+of+death+fix",
+        "https://www.google.com/search?q=irql_not_less_or_equal",
+        "https://www.google.com/search?q=system_service_exception",
+        "https://www.google.com/search?q=kernel_security_check_failure",
+        "https://www.google.com/search?q=critical_process_died",
+        "https://www.nirsoft.net/utils/blue_screen_view.html",
+    ],
+    "AdwareInfection": [
+        "https://www.google.com/search?q=remove+adware",
+        "https://www.google.com/search?q=popup+ads+virus",
+        "https://www.google.com/search?q=ads+on+every+website",
+        "https://www.google.com/search?q=browser+has+adware",
+        "https://www.google.com/search?q=adware+removal+tool",
+        "https://www.malwarebytes.com/adwcleaner",
+    ],
+    "BrowserHijack": [
+        "https://www.google.com/search?q=browser+hijacked",
+        "https://www.google.com/search?q=homepage+changed+virus",
+        "https://www.google.com/search?q=search+engine+changed+to+yahoo",
+        "https://www.google.com/search?q=bing+redirect+virus",
+        "https://www.google.com/search?q=new+tab+opens+random+sites",
+    ],
+    "PopupAds": [
+        "https://www.google.com/search?q=stop+popup+ads",
+        "https://www.google.com/search?q=popup+ads+won't+stop",
+        "https://www.google.com/search?q=random+popups+on+desktop",
+        "https://www.google.com/search?q=notification+popup+virus",
+        "https://www.google.com/search?q=mcafee+popup+scam",
+    ],
+    "Cryptominer": [
+        "https://www.google.com/search?q=computer+mining+bitcoin+virus",
+        "https://www.google.com/search?q=cpu+100+cryptominer",
+        "https://www.google.com/search?q=cryptominer+removal",
+        "https://www.google.com/search?q=fan+running+high+for+no+reason",
+        "https://www.malwarebytes.com/cryptojacking",
+    ],
+    "Ransomware": [
+        "https://www.google.com/search?q=ransomware+help",
+        "https://www.google.com/search?q=files+encrypted+virus",
+        "https://www.google.com/search?q=ransomware+decryption+tool",
+        "https://www.google.com/search?q=how+to+recover+encrypted+files",
+        "https://www.nomoreransom.org",
+    ],
+    "Trojan": [
+        "https://www.google.com/search?q=trojan+virus+removal",
+        "https://www.google.com/search?q=trojan+detected+windows+defender",
+        "https://www.google.com/search?q=how+to+remove+trojan",
+        "https://www.google.com/search?q=trojan+keeps+coming+back",
+    ],
+    "Spyware": [
+        "https://www.google.com/search?q=spyware+removal",
+        "https://www.google.com/search?q=computer+spying+on+me",
+        "https://www.google.com/search?q=keylogger+detection",
+        "https://www.google.com/search?q=is+someone+monitoring+my+computer",
+        "https://www.spybot.info",
+    ],
+    "DriverIssues": [
+        "https://www.google.com/search?q=driver+update+windows",
+        "https://www.google.com/search?q=device+driver+error",
+        "https://www.google.com/search?q=nvidia+driver+not+installing",
+        "https://www.google.com/search?q=code+43+graphics+card",
+        "https://www.nvidia.com/Download/index.aspx",
+    ],
+    "UpdateFailures": [
+        "https://www.google.com/search?q=windows+update+failed",
+        "https://www.google.com/search?q=update+stuck+at+100",
+        "https://www.google.com/search?q=windows+update+error+0x80070002",
+        "https://www.google.com/search?q=reset+windows+update",
+        "https://support.microsoft.com/en-us/windows/troubleshoot-problems-updating-windows",
+    ],
+    "DLLErrors": [
+        "https://www.google.com/search?q=dll+file+missing",
+        "https://www.google.com/search?q=msvcp140.dll+missing",
+        "https://www.google.com/search?q=vcruntime140.dll+not+found",
+        "https://www.google.com/search?q=reinstall+visual+c++",
+        "https://www.microsoft.com/en-us/download/details.aspx?id=48145",
+    ],
 }
 
 LANGUAGES = [
@@ -855,15 +926,30 @@ def get_random_news_url(config: Config = None, use_markov: bool = False) -> tupl
             available.append("Hobbies")
 
         if config.simulate_issues:
+            # v3.3.2 - Extended issue categories (spicy-cat style)
             issue_map = {
-                "networking": ["NetworkingIssues"],
-                "hardware": ["HardwareIssues"],
-                "software": ["SoftwareIssues"],
-                "malware": ["MalwareIssues"],
-                "misconfigured": ["MisconfiguredSettings"],
-                "mixed": ["NetworkingIssues", "HardwareIssues", "SoftwareIssues", "MalwareIssues", "MisconfiguredSettings"],
+                "networking": ["NetworkingIssues", "DNSIssues", "WiFiProblems", "VPNIssues", "SSLErrors"],
+                "hardware": ["HardwareIssues", "HighCPU", "BSOD", "DriverIssues"],
+                "software": ["SoftwareIssues", "UpdateFailures", "DLLErrors", "SlowComputer"],
+                "malware": ["MalwareIssues", "AdwareInfection", "BrowserHijack", "PopupAds", "Trojan", "Spyware"],
+                "adware": ["AdwareInfection", "BrowserHijack", "PopupAds", "Cryptominer"],
+                "ransomware": ["Ransomware", "Trojan", "MalwareIssues"],
+                "system": ["SlowComputer", "HighCPU", "BSOD", "DriverIssues", "UpdateFailures"],
+                "misconfigured": ["MisconfiguredSettings", "DNSIssues", "SSLErrors"],
+                "dns": ["DNSIssues", "NetworkingIssues"],
+                "ssl": ["SSLErrors", "NetworkingIssues"],
+                "wifi": ["WiFiProblems", "NetworkingIssues"],
+                "vpn": ["VPNIssues", "NetworkingIssues", "SSLErrors"],
+                "bsod": ["BSOD", "DriverIssues", "HardwareIssues"],
+                "cryptominer": ["Cryptominer", "HighCPU", "SlowComputer"],
+                "mixed": [
+                    "NetworkingIssues", "HardwareIssues", "SoftwareIssues", "MalwareIssues",
+                    "MisconfiguredSettings", "DNSIssues", "SSLErrors", "WiFiProblems",
+                    "SlowComputer", "HighCPU", "AdwareInfection", "BrowserHijack",
+                    "PopupAds", "Cryptominer", "BSOD", "DriverIssues", "UpdateFailures",
+                ],
             }
-            if config.simulate_issues in issue_map and random.random() < 0.3:
+            if config.simulate_issues in issue_map and random.random() < 0.4:
                 cat = random.choice(issue_map[config.simulate_issues])
                 if cat in NEWS_SITES:
                     return cat, random.choice(NEWS_SITES[cat])
@@ -1270,8 +1356,12 @@ Examples:
     parser.add_argument("--decoys", action="store_true", help="Inject decoy/misleading data")
     parser.add_argument("--no-privacy-score", action="store_true", help="Hide privacy score")
 
-    issue = parser.add_argument_group("Issue Simulation")
-    issue.add_argument("--simulate-issues", choices=["networking", "hardware", "software", "malware", "misconfigured", "mixed"])
+    issue = parser.add_argument_group("Issue Simulation (v3.3.2 - spicy-cat style)")
+    issue.add_argument("--simulate-issues", choices=[
+        "networking", "hardware", "software", "malware", "misconfigured", "mixed",
+        "adware", "ransomware", "system", "dns", "ssl", "wifi", "vpn", "bsod", "cryptominer"
+    ], help="Simulate troubleshooting specific issue types")
+    issue.add_argument("--list-issues", action="store_true", help="List all available issue types")
 
     content = parser.add_argument_group("Content Categories")
     content.add_argument("--include-political", action="store_true")
@@ -1307,6 +1397,45 @@ Examples:
         for name, desc in personas.items():
             console.print(f"  [cyan]{name:22}[/] - {desc}")
         console.print()
+        return
+
+    if args.list_issues:
+        console.print("\n[bold]Available Issue Types (v3.3.2 - spicy-cat style):[/]\n")
+        issue_categories = {
+            "Network Issues": {
+                "networking": "General network connectivity problems",
+                "dns": "DNS resolution failures, server not responding",
+                "ssl": "SSL/TLS certificate errors, HTTPS issues",
+                "wifi": "WiFi disconnecting, no internet",
+                "vpn": "VPN connection failures, slow speeds",
+            },
+            "System Issues": {
+                "hardware": "Hardware problems, device errors",
+                "system": "Slow computer, performance issues",
+                "bsod": "Blue Screen of Death, system crashes",
+                "software": "Application crashes, missing files",
+            },
+            "Malware/Adware": {
+                "malware": "General malware infections",
+                "adware": "Popup ads, browser infections",
+                "ransomware": "Encrypted files, ransom demands",
+                "cryptominer": "Hidden cryptocurrency mining",
+            },
+            "Configuration": {
+                "misconfigured": "Wrong settings, configuration errors",
+            },
+            "Combined": {
+                "mixed": "Random mix of all issue types",
+            },
+        }
+        for category, issues in issue_categories.items():
+            console.print(f"[bold magenta]{category}:[/]")
+            for name, desc in issues.items():
+                console.print(f"  [cyan]{name:15}[/] - {desc}")
+            console.print()
+
+        console.print("[dim]Usage: python traffic_noise.py --simulate-issues [type] -c[/]")
+        console.print("[dim]Example: python traffic_noise.py --simulate-issues adware -c -w 5[/]\n")
         return
 
     if args.interactive:

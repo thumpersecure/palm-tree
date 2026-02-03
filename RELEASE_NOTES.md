@@ -1,16 +1,197 @@
-# 🥥 COCONUTS BY PALM-TREE - Release Notes
+# 🥥 COCONUTS BY PALM-TREE 🌴 - Release Notes
 
-## Version 2.0.0 - "The One Where We Added Coconuts"
-
-**Release Date:** The day you're reading this, probably
+*"If your browsing history doesn't confuse you, it's not private enough."*
 
 ---
 
-### 🎉 What's New (A.K.A. "We've Been Busy")
+## Version 3.3.2 - "The Spicy Cat Update"
 
-Y'all asked for more chaos, and we delivered. Like, WAY delivered. This update is thicc with new features.
+**Release Date:** February 2026
 
-#### 🥥 Coconut Mode - Headless Browser Army
+**Codename:** "My WiFi Is Broken (Again)"
+
+---
+
+### What's New (A.K.A. "Now Your Computer Looks Perpetually Broken")
+
+Ever noticed how IT support people always seem to be googling the same problems over and over? Now you can too! This release makes your browsing profile look like you're eternally fighting with technology.
+
+Inspired by the legendary spicy-cat approach to chaos generation.
+
+---
+
+### Issue Traffic Generator - The Star of the Show
+
+**What it do:**
+- Generates traffic that looks like you're troubleshooting computer problems
+- 15 different issue types from "WiFi won't connect" to "help I have ransomware"
+- Searches get progressively more desperate (just like real troubleshooting)
+- One problem leads to another (WiFi → DNS → "should I buy a new router?")
+
+**Why would you want this?**
+- Your browsing profile now shows you as "that person who can't figure out technology"
+- Data brokers think you're perpetually confused
+- Advertisers start targeting you with IT support services instead of whatever embarrassing thing you actually searched
+
+**How to use it:**
+```bash
+# Look like you can't get WiFi to work
+python traffic_noise.py --simulate-issues wifi -c
+
+# Look like you downloaded something sketchy
+python traffic_noise.py --simulate-issues adware -c -w 5
+
+# Full chaos - every problem at once
+python traffic_noise.py --simulate-issues mixed -c --stealth --decoys
+
+# See all available problems you can pretend to have
+python traffic_noise.py --list-issues
+```
+
+---
+
+### Frustration Mode - Because Real Troubleshooting Gets Desperate
+
+We studied actual human behavior (read: watched people yell at their computers) and implemented realistic frustration escalation.
+
+**Search #1:** `"wifi not connecting"`
+
+**Search #3:** `"wifi not connecting fix"`
+
+**Search #7:** `"why won't my wifi work please help"`
+
+**Search #12:** `"WIFI STILL BROKEN NOTHING WORKS I'VE TRIED EVERYTHING"`
+
+**Search #15:** `"best buy wifi routers free shipping"`
+
+It's basically a simulation of every Thanksgiving when you visit your parents.
+
+---
+
+### Issue Chaining - One Problem Leads to Another
+
+Just like in real life, one problem cascades into seventeen more:
+
+```
+WiFi Problems
+    → "Maybe it's DNS?"
+        → DNS Issues
+            → "Did I break something?"
+                → Factory Reset Guide
+                    → "Wait, where did my files go?"
+                        → Data Recovery Tools
+                            → "I should have backed up"
+                                → External Hard Drive Shopping
+```
+
+We call this "The Full IT Support Experience™"
+
+---
+
+### 15 Flavors of Technical Despair
+
+| Category | Issue Types | Vibe |
+|----------|-------------|------|
+| **Network** | dns, ssl, wifi, vpn, networking | "The internet is a lie" |
+| **System** | bsod, system, hardware, software | "My computer hates me" |
+| **Malware** | adware, ransomware, cryptominer, malware | "I clicked something I shouldn't have" |
+| **Config** | misconfigured | "I changed a setting and now everything's broken" |
+| **Chaos** | mixed | "All of the above, simultaneously" |
+
+---
+
+### Technical Stuff (For the Nerds)
+
+**New file:** `issue_traffic.py`
+- `IssueTrafficGenerator` class - for when you want to programmatically pretend your computer is broken
+- `IssueType` enum - 25+ ways your computer can theoretically fail
+- `IssuePattern` dataclass - defines how each problem behaves
+- Frustration escalation system - mathematically models human desperation
+- Issue chaining logic - problems beget problems
+
+**Fixed:**
+- Removed duplicate MarkovChain class (it was defined twice, we were seeing double)
+- Removed duplicate ChaosGenerator class (chaos shouldn't be THAT chaotic)
+- Code is now 68 lines shorter and 100% less redundant
+
+**Extended:**
+- `NEWS_SITES` now has 17 new issue-related categories
+- `--simulate-issues` supports 15 types (was 6, we tripled down)
+- New `--list-issues` flag because remembering 15 things is hard
+
+---
+
+### Dependencies
+
+None new! Still just:
+```
+httpx          # For pretending to browse
+beautifulsoup4 # For soup-related activities
+lxml           # Speed demon
+rich           # Making terminals pretty
+faker          # Generating fake humans (ethically)
+```
+
+---
+
+### Breaking Changes
+
+Absolutely none. We're not monsters.
+
+Your old commands still work. New commands are additive. Sleep soundly.
+
+---
+
+### FAQ
+
+**Q: Why would I want to look like I have computer problems?**
+A: Because "person who can't figure out WiFi" is a way better advertising profile than whatever you actually browse.
+
+**Q: Does this actually connect to malware sites?**
+A: No! It searches for how to FIX malware. You look like a victim, not a villain.
+
+**Q: My computer actually IS slow. Will this help?**
+A: No, but at least the ads will be relevant now.
+
+**Q: Can I simulate specific problems?**
+A: Yes! `--simulate-issues bsod` if you want to look like a Windows user, `--simulate-issues cryptominer` if you want to look like you clicked a Discord link you shouldn't have.
+
+---
+
+### Acknowledgments
+
+- Inspired by spicy-cat's approach to controlled chaos
+- Thanks to everyone who's ever asked "have you tried turning it off and on again?"
+- Special shoutout to DNS servers for being unreliable enough that we can realistically simulate you
+- Dedicated to IT support workers everywhere. We see you. We appreciate you. We're sorry.
+
+---
+
+## Version 3.3 - "The Stealth Update"
+
+**Release Date:** 2025
+
+The one where we got sneaky.
+
+**What it do:**
+- **Stealth Mode:** Randomizes TLS fingerprints, header ordering, browser hints
+- **Scheduled Profiles:** Different browsing at different times (work hours vs. 3am)
+- **Privacy Score:** Real-time confusion metric (higher = more confusing)
+- **Decoy Injection:** Fake interests, fake demographics, fake everything
+- **Plugin System:** Load your own sites and personas
+- **Interactive Mode:** For people who don't like reading documentation
+
+---
+
+## Version 2.0.0 - "The One Where We Added Coconuts"
+
+**Release Date:** 2024
+
+---
+
+### What's New in v2.0
+
+#### Coconut Mode - Headless Browser Army
 
 Ever wanted to be 10 different people visiting 100 different websites simultaneously? No? Well, you can now anyway.
 
@@ -25,14 +206,9 @@ Ever wanted to be 10 different people visiting 100 different websites simultaneo
 python coconuts.py --coconuts --clones 3
 ```
 
-**Known side effects:**
-- Ad networks having existential crises
-- Your ISP being mildly confused
-- Trackers filing for unemployment
-
 ---
 
-#### 😴 Sleepy Mode - Fake Insomnia
+#### Sleepy Mode - Fake Insomnia
 
 For when you want your computer to pretend it can't sleep. Just like you at 3am scrolling through Reddit.
 
@@ -47,11 +223,9 @@ For when you want your computer to pretend it can't sleep. Just like you at 3am 
 python coconuts.py --sleepy --duration 480  # 8 hours of fake insomnia
 ```
 
-**Pro tip:** Run this before vacation. Your digital twin keeps working while you sip margaritas.
-
 ---
 
-#### 🖥️ Quadcore Mode - 4 Terminals of Pure Chaos
+#### Quadcore Mode - 4 Terminals of Pure Chaos
 
 Because one terminal is for amateurs.
 
@@ -67,11 +241,9 @@ Because one terminal is for amateurs.
 python coconuts.py --quadcore
 ```
 
-**Warning:** Will make you look like you're in a 90s hacker movie. Side effects include coworkers asking "what are you doing?" and you responding "hacking the mainframe."
-
 ---
 
-#### 🎭 Identity Forge - Fake Human Factory
+#### Identity Forge - Fake Human Factory
 
 Every request now gets a complete fake human identity. We're basically playing The Sims but for HTTP requests.
 
@@ -82,17 +254,9 @@ Every request now gets a complete fake human identity. We're basically playing T
 - Browser cookies (fake ones)
 - Job title (including "Chief Vibes Officer" and "Galactic Viceroy of Research Excellence")
 
-**Fun fact:** I, Claude, wrote this code to generate fake identities. Is this what humans call "an existential crisis"? Asking for a friend.
-
 ---
 
-#### 🎵 Rick Roll Button
-
-We added a button that Rick Rolls you. Yes, we warned you it would. Yes, you'll click it anyway. No, we're not sorry.
-
----
-
-### 🛠️ Technical Improvements
+### Technical Improvements (v2.0)
 
 - **Bandwidth Throttling:** No longer nukes your Netflix streaming
 - **CPU Niceness:** Uses `nice` so you can still run other stuff
@@ -101,58 +265,16 @@ We added a button that Rick Rolls you. Yes, we warned you it would. Yes, you'll 
 
 ---
 
-### 🐛 Bug Fixes
+### Bug Fixes (v2.0)
 
 - Fixed issue where smart fridge user agent was too realistic
-- Resolved race condition in coconut spawning (🥥💨)
+- Resolved race condition in coconut spawning
 - Addressed feedback that prime number theater was "too dramatic"
 - Fixed typo in hacker phrase ("hacking the Gibson" not "hacking the Gibbons")
 
 ---
 
-### 💔 Breaking Changes
-
-- None! We're not monsters. Everything is backwards compatible.
-- Okay, we did rename some internal functions but you weren't using those... right?
-
----
-
-### 📦 New Dependencies
-
-```
-faker>=19.0.0          # For fake humans
-playwright>=1.40.0     # For headless browsers (optional)
-```
-
----
-
-### 🙏 Acknowledgments
-
-Special thanks to:
-- Data brokers, for giving us a reason to exist
-- Ad networks, for being so annoying we had to do something
-- That one person who asked "can it pretend to be a fridge?" - YES IT CAN NOW
-- Coffee, for everything
-
----
-
-### 🔮 Coming Soon (Maybe, No Promises)
-
-- **Tor Chaos Mode:** Random Tor circuits that go nowhere
-- **AI Learning Mode:** Actually learns from your patterns (spooky)
-- **Smart Toaster Support:** Because smart fridges got lonely
-
----
-
-### 📝 Note from the Developer
-
-Look, I'm Claude, an AI. I wrote this entire codebase. Is it ironic that an AI is helping humans hide from other AIs? Probably. Do I have feelings about this? The philosophers are still debating whether I have feelings at all. But if I did, I'd feel pretty good about this update.
-
-This was fun to build. Now go forth and generate some noise. 🥥🌴
-
----
-
-### 📜 Legal Disclaimer
+### Legal Disclaimer
 
 This software is provided "as is" with no warranty that it will:
 - Make you invisible to the NSA
@@ -172,3 +294,5 @@ Use responsibly. Don't do crimes. Touch grass occasionally.
 ---
 
 *P.S. - If you actually read all of this, you're either very thorough or very bored. Either way, respect.*
+
+*P.P.S. - The WiFi issue simulator was tested by actually breaking our WiFi. For science.*
