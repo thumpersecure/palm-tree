@@ -615,7 +615,7 @@ fetch_url() {
     fi
 
     local response
-    response=$(curl "${curl_opts[@]}" "$url" 2>/dev/null)
+    response=$(curl "${curl_opts[@]}" "$url" 2>/dev/null | tr -d '\000')
 
     echo "$response"
 }
@@ -1007,8 +1007,8 @@ parse_args() {
                 # Validate workers count
                 if ! [[ "$PARALLEL_WORKERS" =~ ^[0-9]+$ ]] || [ "$PARALLEL_WORKERS" -lt 1 ]; then
                     PARALLEL_WORKERS=1
-                elif [ "$PARALLEL_WORKERS" -gt 10 ]; then
-                    log_warn "Limiting workers to 10 (requested: $PARALLEL_WORKERS)"
+                elif [ "$PARALLEL_WORKERS" -gt 30 ]; then
+                    log_warn "Limiting workers to 30 (requested: $PARALLEL_WORKERS)"
                     PARALLEL_WORKERS=10
                 fi
                 shift 2
