@@ -18,7 +18,7 @@ Side effects may include:
 Not responsible for any existential crises caused to tracking scripts.
 """
 
-__version__ = "3.3.2"
+__version__ = "3.4.0"
 __author__ = "palm-tree"
 
 import asyncio
@@ -54,6 +54,43 @@ try:
     ISSUE_TRAFFIC_AVAILABLE = True
 except ImportError:
     ISSUE_TRAFFIC_AVAILABLE = False
+
+# v3.4.0 feature imports
+try:
+    from geo_rotate import GeoRotator, GEO_LOCATIONS, list_locations as _list_geo_locations
+    GEO_ROTATE_AVAILABLE = True
+except ImportError:
+    GEO_ROTATE_AVAILABLE = False
+
+try:
+    from bandwidth_control import BandwidthController, list_profiles as _list_bw_profiles
+    BANDWIDTH_CONTROL_AVAILABLE = True
+except ImportError:
+    BANDWIDTH_CONTROL_AVAILABLE = False
+
+try:
+    from proxy_chain import ProxyChain, create_proxy_client
+    PROXY_CHAIN_AVAILABLE = True
+except ImportError:
+    PROXY_CHAIN_AVAILABLE = False
+
+try:
+    from session_export import SessionTracker
+    SESSION_EXPORT_AVAILABLE = True
+except ImportError:
+    SESSION_EXPORT_AVAILABLE = False
+
+try:
+    from daily_routines import (
+        DAILY_ROUTINES,
+        get_routine,
+        list_routines as _list_daily_routines,
+        get_routine_categories,
+        get_routine_search_queries,
+    )
+    DAILY_ROUTINES_AVAILABLE = True
+except ImportError:
+    DAILY_ROUTINES_AVAILABLE = False
 from bs4 import BeautifulSoup
 from rich.console import Console
 from rich.live import Live
@@ -508,6 +545,13 @@ chaos_generator = ChaosGenerator()
 privacy_metrics = PrivacyMetrics()
 plugin_manager = PluginManager()
 
+# v3.4.0 global instances (initialized lazily in main)
+geo_rotator: Optional[Any] = None
+bandwidth_controller: Optional[Any] = None
+proxy_chain_manager: Optional[Any] = None
+session_tracker: Optional[Any] = None
+active_daily_routine: Optional[Any] = None
+
 # ============================================================================
 # CONFIGURATION
 # ============================================================================
@@ -532,12 +576,25 @@ class Config:
     include_privacy: bool = False
     include_hobbies: bool = False
     persona: Optional[str] = None
-    # New v3.3 features
+    # v3.3 features
     stealth_mode: bool = False
     scheduled_profile: bool = False
     show_privacy_score: bool = True
     inject_decoys: bool = False
     interactive: bool = False
+    # v3.4.0 features
+    geo_rotate: bool = False
+    geo_countries: Optional[str] = None
+    geo_interval: int = 300
+    bandwidth_profile: Optional[str] = None
+    bandwidth_max_kbps: Optional[int] = None
+    bandwidth_adaptive: bool = True
+    proxy_list: Optional[List[str]] = None
+    proxy_file: Optional[str] = None
+    proxy_rotation: str = "round_robin"
+    export_session: bool = False
+    export_path: Optional[str] = None
+    daily_routine: Optional[str] = None
 
 # Timing
 MIN_DELAY, MAX_DELAY = 3, 45
@@ -911,6 +968,8 @@ def generate_session_id() -> str:
     return ''.join(random.choices(string.hexdigits.lower(), k=32))
 
 def get_random_news_url(config: Config = None, use_markov: bool = False) -> tuple:
+    global geo_rotator, active_daily_routine
+
     available = ["Lifestyle", "World", "Technology", "Health", "Trending", "SocialNetworkAds"]
 
     if config:
@@ -924,6 +983,19 @@ def get_random_news_url(config: Config = None, use_markov: bool = False) -> tupl
             available.append("Privacy")
         if config.include_hobbies:
             available.append("Hobbies")
+
+        # v3.4.0 - Daily routine categories override
+        if active_daily_routine and DAILY_ROUTINES_AVAILABLE:
+            routine_cats = active_daily_routine.get_active_categories()
+            if routine_cats:
+                valid_routine_cats = [c for c in routine_cats if c in NEWS_SITES]
+                if valid_routine_cats:
+                    available = valid_routine_cats
+
+        # v3.4.0 - Geo-rotation: occasionally inject locale-specific URLs
+        if geo_rotator and GEO_ROTATE_AVAILABLE and random.random() < 0.2:
+            locale_url = geo_rotator.get_locale_url()
+            return "GeoLocale", locale_url
 
         if config.simulate_issues:
             # v3.3.2 - Extended issue categories (spicy-cat style)
@@ -1009,6 +1081,8 @@ def get_pattern_delay(pattern: str, chaos: bool = False, use_chaos_math: bool = 
 
 
 def build_headers(config: Config = None) -> dict:
+    global geo_rotator
+
     ua = random.choice(USER_AGENTS)
     headers = {
         "User-Agent": ua,
@@ -1025,8 +1099,17 @@ def build_headers(config: Config = None) -> dict:
     if referer:
         headers["Referer"] = referer
 
-    # Add decoy cookies
-    if config and config.inject_decoys:
+    # v3.4.0 - Geo-rotation headers
+    if geo_rotator and GEO_ROTATE_AVAILABLE:
+        geo_headers = geo_rotator.get_headers()
+        headers.update(geo_headers)
+        geo_cookie = geo_rotator.get_geo_cookie()
+        if config and config.inject_decoys:
+            headers["Cookie"] = DecoyInjector.generate_decoy_cookies() + "; " + geo_cookie
+        else:
+            ts = int(datetime.now().timestamp())
+            headers["Cookie"] = f"_ga=GA1.2.{random.randint(1000000, 9999999)}.{ts}; session={generate_session_id()}; {geo_cookie}"
+    elif config and config.inject_decoys:
         headers["Cookie"] = DecoyInjector.generate_decoy_cookies()
     elif random.random() > 0.3:
         ts = int(datetime.now().timestamp())
@@ -1074,13 +1157,46 @@ def extract_headlines(html: str, url: str, category: str) -> list:
 # ============================================================================
 
 async def fetch_url(client: httpx.AsyncClient, url: str, config: Config) -> Optional[str]:
+    global bandwidth_controller, session_tracker
+
     headers = build_headers(config)
+
+    # v3.4.0 - Bandwidth control: wait for permission
+    if bandwidth_controller and BANDWIDTH_CONTROL_AVAILABLE:
+        await bandwidth_controller.acquire(5000)
+
     try:
+        start_time = datetime.now()
         response = await client.get(url, headers=headers, timeout=30.0, follow_redirects=True)
+        elapsed_ms = (datetime.now() - start_time).total_seconds() * 1000
         state.request_count += 1
+
+        response_bytes = len(response.content) if response.content else 0
+
+        # v3.4.0 - Record bandwidth
+        if bandwidth_controller and BANDWIDTH_CONTROL_AVAILABLE:
+            bandwidth_controller.record(response_bytes)
+
+        # v3.4.0 - Session tracking
+        if session_tracker and SESSION_EXPORT_AVAILABLE:
+            geo_loc = None
+            if geo_rotator and GEO_ROTATE_AVAILABLE:
+                geo_loc = geo_rotator.current.country_name
+            session_tracker.record_request(
+                url=url,
+                category=state.last_category or "Unknown",
+                user_agent=headers.get("User-Agent", ""),
+                status="success",
+                response_time_ms=elapsed_ms,
+                bytes_transferred=response_bytes,
+                geo_location=geo_loc,
+            )
+
         return response.text
-    except Exception:
+    except Exception as e:
         state.errors += 1
+        if session_tracker and SESSION_EXPORT_AVAILABLE:
+            session_tracker.record_error(url, str(e))
         return None
 
 
@@ -1124,6 +1240,8 @@ def create_display(config: Config) -> Layout:
 
 
 def update_display(layout: Layout, config: Config):
+    global geo_rotator, bandwidth_controller, active_daily_routine
+
     elapsed = str(datetime.now() - state.start_time).split('.')[0]
 
     mode_text = "[bold cyan]CHAOS[/]" if config.chaos_mode else f"[cyan]{config.mode.upper()}[/]"
@@ -1131,6 +1249,13 @@ def update_display(layout: Layout, config: Config):
     header_text.append(f"Traffic Noise v{__version__} ", style="bold green")
     header_text.append(f"| {mode_text} ", style="white")
     header_text.append(f"| Workers: [yellow]{config.parallel_workers}[/] ", style="white")
+    if geo_rotator and GEO_ROTATE_AVAILABLE:
+        loc = geo_rotator.current
+        header_text.append(f"| Geo: [blue]{loc.country_code}[/] ", style="white")
+    if active_daily_routine and DAILY_ROUTINES_AVAILABLE:
+        slot = active_daily_routine.get_current_slot()
+        if slot:
+            header_text.append(f"| Routine: [green]{slot.description[:20]}[/] ", style="white")
     header_text.append(f"| {elapsed}", style="magenta")
 
     layout["header"].update(Panel(header_text, box=box.ROUNDED))
@@ -1163,28 +1288,64 @@ def update_display(layout: Layout, config: Config):
         score_color = "green" if score > 70 else "yellow" if score > 40 else "red"
         stats.add_row("Privacy Score:", f"[{score_color}]{score}/100[/]", "Fingerprints:", f"[cyan]{len(privacy_metrics.unique_user_agents)}[/]")
 
+    # v3.4.0 - Bandwidth stats
+    if bandwidth_controller and BANDWIDTH_CONTROL_AVAILABLE:
+        bw_stats = bandwidth_controller.get_stats()
+        stats.add_row("Bandwidth:", f"[cyan]{bw_stats['current_kbps']:.1f} KB/s[/]",
+                       "Throttled:", f"[yellow]{bw_stats['throttle_events']}[/]")
+
     layout["stats"].update(Panel(stats, title="[bold]Statistics[/]", border_style="green"))
 
-    target = f"[yellow]VPS: {config.vps_target}[/]" if config.vps_target else "[dim]News mode[/]"
-    layout["footer"].update(Panel(Text(f"Ctrl+C to stop | {target}"), box=box.ROUNDED))
+    footer_parts = ["Ctrl+C to stop"]
+    if config.vps_target:
+        footer_parts.append(f"[yellow]VPS: {config.vps_target}[/]")
+    else:
+        footer_parts.append("[dim]News mode[/]")
+    if proxy_chain_manager and PROXY_CHAIN_AVAILABLE and proxy_chain_manager.has_proxies:
+        pstats = proxy_chain_manager.get_stats()
+        footer_parts.append(f"[magenta]Proxies: {pstats['healthy_proxies']}/{pstats['total_proxies']}[/]")
+    if config.export_session:
+        footer_parts.append("[green]Export: ON[/]")
+
+    layout["footer"].update(Panel(Text(" | ".join(footer_parts)), box=box.ROUNDED))
 
 # ============================================================================
 # WORKER
 # ============================================================================
 
 async def worker(worker_id: int, config: Config, layout: Layout, live: Live):
+    global bandwidth_controller, active_daily_routine, session_tracker, geo_rotator
+
     pattern = random.choice(BROWSING_PATTERNS)
     state.workers_active += 1
     worker_chaos = ChaosGenerator(r=3.85 + worker_id * 0.01)
 
-    # Initialize per-worker chaos generator for variety
-    worker_chaos = ChaosGenerator(r=3.85 + worker_id * 0.01)
+    # v3.4.0 - Create client with optional proxy support
+    proxy_url = None
+    if proxy_chain_manager and PROXY_CHAIN_AVAILABLE and proxy_chain_manager.has_proxies:
+        proxy_url = proxy_chain_manager.get_httpx_proxy()
 
-    async with httpx.AsyncClient() as client:
+    client_kwargs = {"timeout": 30.0}
+    if proxy_url:
+        client_kwargs["proxy"] = proxy_url
+
+    async with httpx.AsyncClient(**client_kwargs) as client:
         while state.running:
             try:
+                # v3.4.0 - Daily routine break check
+                if active_daily_routine and DAILY_ROUTINES_AVAILABLE:
+                    if active_daily_routine.should_take_break():
+                        await asyncio.sleep(random.uniform(30, 120))
+                        continue
+
                 if random.random() < 0.2:
                     send_local_udp(19999 + worker_id)
+
+                # v3.4.0 - Bandwidth throttle: add recommended delay
+                if bandwidth_controller and BANDWIDTH_CONTROL_AVAILABLE:
+                    extra_delay = await bandwidth_controller.get_recommended_delay()
+                    if extra_delay > 0:
+                        await asyncio.sleep(extra_delay)
 
                 if config.mode == "vps" and config.vps_target:
                     await connect_to_vps(client, config.vps_target, config)
@@ -1202,18 +1363,49 @@ async def worker(worker_id: int, config: Config, layout: Layout, live: Live):
 
                     privacy_metrics.record_request(random.choice(USER_AGENTS), category, 0)
 
+                # v3.4.0 - Session tracker: periodic privacy snapshot
+                if session_tracker and SESSION_EXPORT_AVAILABLE and session_tracker.should_snapshot():
+                    session_tracker.take_privacy_snapshot(
+                        confusion_score=privacy_metrics.get_confusion_score(),
+                        unique_fingerprints=len(privacy_metrics.unique_user_agents),
+                        categories_visited=len(privacy_metrics.unique_categories),
+                        identity_changes=privacy_metrics.identity_changes,
+                    )
+
+                # v3.4.0 - Track geo rotation
+                if session_tracker and geo_rotator and GEO_ROTATE_AVAILABLE:
+                    loc = geo_rotator.current
+                    if not session_tracker.geo_rotation_history or \
+                       session_tracker.geo_rotation_history[-1].get("country") != loc.country_name:
+                        session_tracker.record_geo_rotation(loc.country_name, loc.timezone)
+
                 update_display(layout, config)
                 live.refresh()
 
+                # v3.4.0 - Daily routine intensity affects delay
                 delay = get_pattern_delay(pattern, config.chaos_mode, config.chaos_mode and config.use_markov)
+                if active_daily_routine and DAILY_ROUTINES_AVAILABLE:
+                    intensity = active_daily_routine.get_intensity()
+                    if intensity > 0:
+                        delay = delay / intensity
+
                 privacy_metrics.timing_samples.append(delay)
 
                 if config.chaos_mode:
                     if config.use_markov and worker_chaos.should_switch_behavior(0.15):
                         pattern = markov_chain.next_pattern()
                         privacy_metrics.record_identity_change()
+                        if session_tracker and SESSION_EXPORT_AVAILABLE:
+                            session_tracker.record_identity_change(f"worker-{worker_id}", pattern)
                     elif random.random() < 0.1:
                         pattern = random.choice(BROWSING_PATTERNS)
+
+                # v3.4.0 - Rotate proxy periodically
+                if proxy_chain_manager and PROXY_CHAIN_AVAILABLE and proxy_chain_manager.has_proxies:
+                    if random.random() < 0.05:
+                        new_proxy = proxy_chain_manager.get_httpx_proxy()
+                        if new_proxy and new_proxy != proxy_url:
+                            proxy_url = new_proxy
 
                 await asyncio.sleep(delay)
 
@@ -1252,6 +1444,16 @@ def interactive_setup() -> Config:
     decoys = Confirm.ask("  Enable [yellow]Decoy Injection[/] (misleading data)?", default=True)
     scheduled = Confirm.ask("  Enable [blue]Scheduled Profiles[/] (time-based)?", default=False)
 
+    console.print("\n[bold]v3.4.0 Features:[/]")
+    geo = Confirm.ask("  Enable [blue]Geo-Rotation[/] (rotate browsing locations)?", default=False)
+    bw_profile = None
+    if Confirm.ask("  Enable [cyan]Bandwidth Control[/] (limit traffic speed)?", default=False):
+        bw_profile = Prompt.ask("    Profile", choices=["conservative", "moderate", "aggressive", "stealth"], default="moderate")
+    export = Confirm.ask("  Enable [green]Session Export[/] (save analytics report)?", default=True)
+    routine = None
+    if Confirm.ask("  Use a [magenta]Daily Routine[/] (realistic daily pattern)?", default=False):
+        routine = Prompt.ask("    Routine", choices=list(DAILY_ROUTINES.keys()) if DAILY_ROUTINES_AVAILABLE else ["office_worker"], default="office_worker")
+
     duration = IntPrompt.ask("\nRun for how many [magenta]minutes[/] (0 = continuous)?", default=0)
 
     return Config(
@@ -1267,6 +1469,10 @@ def interactive_setup() -> Config:
         duration=duration,
         include_hobbies=True,
         interactive=True,
+        geo_rotate=geo,
+        bandwidth_profile=bw_profile,
+        export_session=export,
+        daily_routine=routine,
     )
 
 # ============================================================================
@@ -1375,6 +1581,27 @@ Examples:
     persona.add_argument("--persona", choices=["tech_enthusiast", "news_junkie", "privacy_advocate", "social_butterfly", "entertainment_seeker", "health_conscious", "political_observer", "hobbyist", "troubleshooter"])
     persona.add_argument("--list-personas", action="store_true")
 
+    # v3.4.0 features
+    v34 = parser.add_argument_group("v3.4.0 Features")
+    v34.add_argument("--geo-rotate", action="store_true", help="Enable geo-location rotation")
+    v34.add_argument("--geo-countries", type=str, help="Comma-separated country codes to rotate (e.g., US,GB,DE,JP)")
+    v34.add_argument("--geo-interval", type=int, default=300, help="Seconds between geo rotations (default: 300)")
+    v34.add_argument("--list-geo", action="store_true", help="List available geo locations")
+    v34.add_argument("--bandwidth", type=str, choices=["unlimited", "conservative", "moderate", "aggressive", "stealth"],
+                     help="Bandwidth control profile")
+    v34.add_argument("--bandwidth-max-kbps", type=int, help="Max bandwidth in KB/s (overrides profile)")
+    v34.add_argument("--no-adaptive", action="store_true", help="Disable adaptive bandwidth throttling")
+    v34.add_argument("--list-bandwidth", action="store_true", help="List bandwidth profiles")
+    v34.add_argument("--proxy", type=str, action="append", help="Proxy URL (can specify multiple: --proxy socks5://host:port)")
+    v34.add_argument("--proxy-file", type=str, help="File with proxy URLs (one per line)")
+    v34.add_argument("--proxy-rotation", choices=["round_robin", "random", "least_used", "fastest"], default="round_robin",
+                     help="Proxy rotation strategy")
+    v34.add_argument("--export", action="store_true", help="Export session analytics as JSON")
+    v34.add_argument("--export-path", type=str, help="Custom path for session export file")
+    v34.add_argument("--daily-routine", type=str, choices=list(DAILY_ROUTINES.keys()) if DAILY_ROUTINES_AVAILABLE else [],
+                     help="Use a pre-built daily browsing routine")
+    v34.add_argument("--list-routines", action="store_true", help="List available daily routines")
+
     args = parser.parse_args()
 
     if args.setup:
@@ -1438,6 +1665,28 @@ Examples:
         console.print("[dim]Example: python traffic_noise.py --simulate-issues adware -c -w 5[/]\n")
         return
 
+    # v3.4.0 list commands
+    if args.list_geo:
+        if GEO_ROTATE_AVAILABLE:
+            _list_geo_locations()
+        else:
+            console.print("[red]Geo-rotation module not available.[/]")
+        return
+
+    if args.list_bandwidth:
+        if BANDWIDTH_CONTROL_AVAILABLE:
+            _list_bw_profiles()
+        else:
+            console.print("[red]Bandwidth control module not available.[/]")
+        return
+
+    if args.list_routines:
+        if DAILY_ROUTINES_AVAILABLE:
+            _list_daily_routines()
+        else:
+            console.print("[red]Daily routines module not available.[/]")
+        return
+
     if args.interactive:
         config = interactive_setup()
     else:
@@ -1468,10 +1717,55 @@ Examples:
             scheduled_profile=args.scheduled,
             inject_decoys=args.decoys,
             show_privacy_score=not args.no_privacy_score,
+            # v3.4.0
+            geo_rotate=args.geo_rotate,
+            geo_countries=args.geo_countries,
+            geo_interval=args.geo_interval,
+            bandwidth_profile=args.bandwidth,
+            bandwidth_max_kbps=args.bandwidth_max_kbps,
+            bandwidth_adaptive=not args.no_adaptive,
+            proxy_list=args.proxy,
+            proxy_file=args.proxy_file,
+            proxy_rotation=args.proxy_rotation,
+            export_session=args.export,
+            export_path=args.export_path,
+            daily_routine=args.daily_routine,
         )
 
     signal.signal(signal.SIGINT, signal_handler)
     signal.signal(signal.SIGTERM, signal_handler)
+
+    # ========================================================================
+    # v3.4.0 - Initialize new feature modules
+    # ========================================================================
+    global geo_rotator, bandwidth_controller, proxy_chain_manager, session_tracker, active_daily_routine
+
+    if config.geo_rotate and GEO_ROTATE_AVAILABLE:
+        countries = config.geo_countries.split(",") if config.geo_countries else None
+        geo_rotator = GeoRotator(
+            rotation_interval=config.geo_interval,
+            locations=countries,
+        )
+
+    if config.bandwidth_profile and BANDWIDTH_CONTROL_AVAILABLE:
+        bandwidth_controller = BandwidthController(
+            profile=config.bandwidth_profile,
+            max_kbps=config.bandwidth_max_kbps,
+            adaptive=config.bandwidth_adaptive,
+        )
+
+    if PROXY_CHAIN_AVAILABLE and (config.proxy_list or config.proxy_file):
+        proxy_chain_manager = ProxyChain(
+            proxies=config.proxy_list,
+            proxy_file=config.proxy_file,
+            rotation_strategy=config.proxy_rotation,
+        )
+
+    if config.export_session and SESSION_EXPORT_AVAILABLE:
+        session_tracker = SessionTracker(session_name=f"traffic_noise_{datetime.now().strftime('%Y%m%d_%H%M')}")
+
+    if config.daily_routine and DAILY_ROUTINES_AVAILABLE:
+        active_daily_routine = get_routine(config.daily_routine)
 
     if not config.quiet:
         features = []
@@ -1479,6 +1773,12 @@ Examples:
         if config.stealth_mode: features.append("Stealth")
         if config.inject_decoys: features.append("Decoys")
         if config.scheduled_profile: features.append("Scheduled")
+        if config.geo_rotate: features.append("GeoRotate")
+        if config.bandwidth_profile: features.append(f"BW:{config.bandwidth_profile}")
+        if proxy_chain_manager and proxy_chain_manager.has_proxies:
+            features.append(f"Proxy:{proxy_chain_manager.get_stats()['total_proxies']}")
+        if config.export_session: features.append("Export")
+        if config.daily_routine: features.append(f"Routine:{config.daily_routine}")
 
         console.print(Panel.fit(
             f"[bold green]Traffic Noise Generator v{__version__}[/]\n"
@@ -1496,6 +1796,29 @@ Examples:
             report = privacy_metrics.get_report()
             console.print(f"\n[bold]Session Report:[/] Score: {report['confusion_score']}/100 | "
                          f"Fingerprints: {report['unique_fingerprints']} | Requests: {report['requests']}")
+
+        # v3.4.0 - Export session report
+        if session_tracker and SESSION_EXPORT_AVAILABLE:
+            session_tracker.take_privacy_snapshot(
+                confusion_score=privacy_metrics.get_confusion_score(),
+                unique_fingerprints=len(privacy_metrics.unique_user_agents),
+                categories_visited=len(privacy_metrics.unique_categories),
+                identity_changes=privacy_metrics.identity_changes,
+            )
+            export_path = session_tracker.export_json(config.export_path)
+            session_tracker.print_summary()
+            console.print(f"[green]Session report saved to: {export_path}[/]")
+
+        # v3.4.0 - Print geo-rotation stats
+        if geo_rotator and GEO_ROTATE_AVAILABLE:
+            geo_stats = geo_rotator.get_stats()
+            console.print(f"[blue]Geo rotations: {geo_stats['rotation_count']} across {geo_stats['locations_available']} locations[/]")
+
+        # v3.4.0 - Print bandwidth stats
+        if bandwidth_controller and BANDWIDTH_CONTROL_AVAILABLE:
+            bw_stats = bandwidth_controller.get_stats()
+            console.print(f"[cyan]Bandwidth: {bw_stats['total_mb']} MB transferred, {bw_stats['throttle_events']} throttle events[/]")
+
         console.print("[green]Cleanup complete.[/]")
 
 

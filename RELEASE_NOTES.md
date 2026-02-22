@@ -4,6 +4,203 @@
 
 ---
 
+## Version 3.4.0 - "The Globe-Trotter Update"
+
+**Release Date:** February 2026
+
+**Codename:** "I Browsed From 16 Countries Today (Without Leaving My Couch)"
+
+---
+
+### What's New (A.K.A. "Your Tracker Profile Is Now International")
+
+Five brand-new features that make your traffic noise smarter, more realistic, and harder to track than ever. We went from "confuse the trackers" to "make the trackers question the nature of reality."
+
+---
+
+### Feature 1: Geo-Rotation Mode
+
+**Browse like a globe-trotter without a passport.**
+
+Automatically rotates your apparent location through 16 countries, changing Accept-Language headers, timezone hints, locale-specific cookies, and even visiting country-specific websites.
+
+**Countries:** US, GB, DE, FR, JP, BR, AU, IN, CA, KR, MX, SE, NL, IT, ES, PL
+
+```bash
+# Rotate through all 16 locations every 5 minutes
+python traffic_noise.py -c --geo-rotate
+
+# Only rotate between specific countries
+python traffic_noise.py -c --geo-rotate --geo-countries US,JP,DE,BR
+
+# Faster rotation (every 2 minutes)
+python traffic_noise.py -c --geo-rotate --geo-interval 120
+
+# See all available locations
+python traffic_noise.py --list-geo
+```
+
+**What trackers see:** "This person was in Tokyo 5 minutes ago and is now in Berlin. Are they on a teleporter?"
+
+---
+
+### Feature 2: Bandwidth Control
+
+**Generate noise without nuking your Netflix.**
+
+Smart bandwidth management with 5 preset profiles and adaptive time-of-day throttling. Uses a token bucket algorithm for smooth rate limiting with burst allowance.
+
+**Profiles:**
+| Profile | Speed | Requests | Use Case |
+|---------|-------|----------|----------|
+| `stealth` | 50 KB/s | 15/min | Barely detectable |
+| `conservative` | 100 KB/s | 30/min | Shared connections |
+| `moderate` | 500 KB/s | 60/min | **Recommended** |
+| `aggressive` | 2000 KB/s | 120/min | Dedicated connections |
+| `unlimited` | No limit | No limit | Full send |
+
+```bash
+# Recommended profile
+python traffic_noise.py -c --bandwidth moderate
+
+# Hard limit at 200 KB/s
+python traffic_noise.py -c --bandwidth-max-kbps 200
+
+# Disable adaptive throttling (normally backs off during work hours)
+python traffic_noise.py -c --bandwidth moderate --no-adaptive
+
+# See all profiles
+python traffic_noise.py --list-bandwidth
+```
+
+**Adaptive mode:** Automatically reduces traffic during work hours (9-5) and increases at night, mimicking natural usage patterns.
+
+---
+
+### Feature 3: Proxy Chain Support
+
+**Route your noise through proxies for extra anonymity.**
+
+Full SOCKS5 and HTTP proxy support with multiple rotation strategies, automatic health checking, and failover.
+
+```bash
+# Single proxy
+python traffic_noise.py -c --proxy socks5://proxy1.example.com:1080
+
+# Multiple proxies with rotation
+python traffic_noise.py -c --proxy socks5://proxy1:1080 --proxy http://proxy2:8080 --proxy-rotation random
+
+# Load proxies from a file
+python traffic_noise.py -c --proxy-file ~/proxies.txt --proxy-rotation fastest
+```
+
+**Rotation strategies:**
+- `round_robin` - Cycle through proxies in order
+- `random` - Pick a random proxy each time
+- `least_used` - Use the proxy with fewest requests
+- `fastest` - Use the proxy with lowest latency
+
+**Proxy file format:**
+```
+# One proxy per line, comments with #
+socks5://proxy1.example.com:1080
+http://user:pass@proxy2.example.com:8080
+```
+
+---
+
+### Feature 4: Session Export & Analytics
+
+**Measure exactly how confused the trackers are.**
+
+Full session analytics tracking with JSON export. See privacy score trends over time, category distribution, identity rotation history, and top sites visited.
+
+```bash
+# Enable session export
+python traffic_noise.py -c --export
+
+# Custom export path
+python traffic_noise.py -c --export --export-path ./my_session.json
+```
+
+**Report includes:**
+- Session summary (duration, requests, success rate, data transferred)
+- Privacy score trend over time
+- Category distribution breakdown
+- Top sites visited
+- Identity rotation history
+- Geo-rotation history
+- Hourly request distribution
+- Error log
+
+Reports are saved to `~/.traffic_noise/reports/` by default.
+
+---
+
+### Feature 5: Daily Routine Profiles
+
+**Browse like a real human, not a random noise generator.**
+
+Six pre-built daily routines that mimic realistic human browsing patterns throughout the day. Each routine defines what to browse, when, at what intensity, and includes natural breaks.
+
+**Available Routines:**
+| Routine | Description |
+|---------|-------------|
+| `office_worker` | 9-to-5: news morning, work afternoon, entertainment evening |
+| `student` | Late start, study sessions, procrastination, late-night cramming |
+| `remote_worker` | WFH: blurred work/life lines, mid-day breaks, afternoon focus |
+| `night_owl` | Peak at midnight, wakes up at noon, deep focus after dark |
+| `parent` | Stolen moments between school runs, ME TIME after bedtime |
+| `retiree` | Steady, deliberate browsing with morning news and evening hobbies |
+
+```bash
+# Browse like an office worker
+python traffic_noise.py -c --daily-routine office_worker
+
+# Browse like a night owl
+python traffic_noise.py -c --daily-routine night_owl
+
+# See all routines and current activity
+python traffic_noise.py --list-routines
+```
+
+**Weekend awareness:** Routines automatically adjust on weekends (later start, different categories, lower intensity).
+
+---
+
+### Technical Stuff
+
+**New files:**
+- `geo_rotate.py` - 16-country geo-rotation engine
+- `bandwidth_control.py` - Token bucket rate limiter with adaptive profiles
+- `proxy_chain.py` - Proxy pool manager with health checking
+- `session_export.py` - Analytics tracker with JSON export
+- `daily_routines.py` - Time-slot based daily behavior patterns
+
+**Updated:**
+- `traffic_noise.py` - All features integrated with CLI flags, display, and shutdown hooks
+- Version bumped to 3.4.0
+
+**New CLI flags:** 13 new command-line arguments
+**New `--list` commands:** `--list-geo`, `--list-bandwidth`, `--list-routines`
+
+---
+
+### Dependencies
+
+Still no new required dependencies! All v3.4.0 features use stdlib + existing deps:
+```
+httpx          # Now also used by proxy_chain
+```
+
+---
+
+### Breaking Changes
+
+None. All new features are opt-in via CLI flags. Your existing commands work exactly the same.
+
+---
+
 ## Version 3.3.2 - "The Spicy Cat Update"
 
 **Release Date:** February 2026
