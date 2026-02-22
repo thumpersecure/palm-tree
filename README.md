@@ -427,6 +427,44 @@ python traffic_noise.py --list-personas
 
 ---
 
+## Mobile App (Pine-Tree)
+
+<details open>
+<summary><b>WiFi Noise from Your Phone</b></summary>
+
+**Pine-Tree** is a mobile web app that generates WiFi noise directly from your phone's browser. No installation required — it runs on GitHub Pages as a Progressive Web App.
+
+**Live App:** [thumpersecure.github.io/palm-tree](https://thumpersecure.github.io/palm-tree/)
+
+```
+📱 Open the link on your phone → Tap the power button → Done.
+```
+
+| Feature | Description |
+|---------|-------------|
+| **Pine-Tree WiFi Noise** | Fires decoy requests to 100+ sites across 8 categories |
+| **4 Modes** | WiFi Noise, Chaos, Stealth, Globe-Trotter |
+| **Geo-Rotation** | Rotates through 16 countries with matching headers |
+| **Decoy Searches** | Fake Google/Bing/DDG searches for random interests |
+| **Frustration Mode** | Mimics desperate tech support searches |
+| **Live Dashboard** | Real-time feed, stats, and noise score |
+| **Installable PWA** | Add to home screen for native app experience |
+| **5 Speed Levels** | From "Very Slow" to "Turbo" |
+| **Offline Support** | Service worker caches the app shell |
+
+**Install as App:**
+- **iOS:** Open in Safari → Share → "Add to Home Screen"
+- **Android:** Open in Chrome → Menu → "Install app" or "Add to Home Screen"
+
+**Deploy your own:**
+1. Fork this repo
+2. Go to Settings → Pages → Source: "Deploy from branch" → Branch: `main` → Folder: `/docs`
+3. Your app is live at `https://yourusername.github.io/palm-tree/`
+
+</details>
+
+---
+
 ## How It Works
 
 <details>
