@@ -1,11 +1,11 @@
 {
-  "name": "Pine-Tree Noise Generator",
-  "short_name": "Pine-Tree",
-  "description": "Mobile WiFi privacy noise generator. Generate decoy traffic to confuse ad trackers and data brokers.",
-  "start_url": ".",
+  "name": "Coconuts by Palm-Tree",
+  "short_name": "Palm-Tree",
+  "description": "Mobile WiFi noise generator. Drop coconuts on trackers. Make data brokers cry.",
+  "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#0a0e1a",
-  "theme_color": "#0a0e1a",
+  "background_color": "#0c1222",
+  "theme_color": "#0c1222",
   "orientation": "portrait",
   "icons": [
     {

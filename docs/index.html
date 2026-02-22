@@ -5,23 +5,23 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="theme-color" content="#0a0e1a">
-<meta name="description" content="Pine-Tree WiFi Noise Generator — mobile privacy tool that generates decoy traffic to confuse trackers.">
-<title>Pine-Tree Noise</title>
+<meta name="theme-color" content="#0c1222">
+<meta name="description" content="Coconuts by Palm-Tree — mobile WiFi noise generator. Make trackers cry with tropical chaos.">
+<title>Coconuts by Palm-Tree</title>
 <link rel="manifest" href="manifest.json">
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌲</text></svg>">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌴</text></svg>">
 <link rel="apple-touch-icon" href="icon-192.png">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --bg:#0a0e1a;--bg2:#111827;--bg3:#1e293b;--bg4:#334155;
-  --fg:#e2e8f0;--fg2:#94a3b8;--fg3:#64748b;
-  --green:#22c55e;--green2:#16a34a;--green-glow:rgba(34,197,94,.25);
-  --red:#ef4444;--red2:#dc2626;--red-glow:rgba(239,68,68,.2);
-  --blue:#3b82f6;--blue2:#2563eb;--blue-glow:rgba(59,130,246,.2);
-  --amber:#f59e0b;--purple:#a855f7;--cyan:#06b6d4;
-  --radius:16px;--radius-sm:10px;
-  --shadow:0 4px 24px rgba(0,0,0,.3);
+  --bg:#0c1222;--bg2:#131c30;--bg3:#1a2742;--bg4:#253553;
+  --fg:#f0f4f8;--fg2:#a3b8d0;--fg3:#5e7896;
+  --palm:#2dd4a8;--palm2:#14b88e;--palm-glow:rgba(45,212,168,.3);
+  --coconut:#f5a623;--coconut2:#e09112;--coconut-glow:rgba(245,166,35,.25);
+  --sunset:#ff6b6b;--sunset2:#ee5a5a;--sunset-glow:rgba(255,107,107,.2);
+  --ocean:#38bdf8;--ocean2:#0ea5e9;--ocean-glow:rgba(56,189,248,.2);
+  --sand:#fbbf24;--lagoon:#06b6d4;
+  --radius:18px;--radius-sm:12px;
   --font:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
   --safe-top:env(safe-area-inset-top,0px);
   --safe-bot:env(safe-area-inset-bottom,0px);
@@ -29,440 +29,511 @@
 html{font-family:var(--font);background:var(--bg);color:var(--fg);-webkit-tap-highlight-color:transparent;overflow:hidden;height:100%}
 body{height:100%;overflow:hidden;display:flex;flex-direction:column}
 
-/* ── Screens ── */
 .screen{display:none;flex-direction:column;height:100%;overflow:hidden}
 .screen.active{display:flex}
 .screen-body{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:0 16px 100px}
 
-/* ── Header ── */
+/* ── Tropical Header ── */
 .header{
-  padding:calc(12px + var(--safe-top)) 16px 12px;
-  background:var(--bg2);border-bottom:1px solid var(--bg3);
-  display:flex;align-items:center;gap:12px;
+  padding:calc(10px + var(--safe-top)) 16px 10px;
+  background:linear-gradient(135deg,#0f1b33 0%,#162544 50%,#1a3050 100%);
+  border-bottom:1px solid rgba(45,212,168,.15);
+  display:flex;align-items:center;gap:10px;
   position:sticky;top:0;z-index:10;
 }
-.header-logo{font-size:26px;line-height:1}
-.header-title{font-size:18px;font-weight:700;flex:1}
-.header-title span{color:var(--green);font-weight:400;font-size:13px;display:block}
-.header-btn{
-  width:40px;height:40px;border-radius:50%;border:none;
-  background:var(--bg3);color:var(--fg);font-size:18px;cursor:pointer;
-  display:flex;align-items:center;justify-content:center;
+.header-logo{font-size:28px;line-height:1;filter:drop-shadow(0 0 6px rgba(45,212,168,.4))}
+.header-title{font-size:17px;font-weight:800;flex:1;letter-spacing:-.02em}
+.header-title .brand{
+  background:linear-gradient(90deg,var(--palm),var(--coconut));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
 }
+.header-title .sub{color:var(--fg3);font-weight:400;font-size:11px;display:block;letter-spacing:.02em}
+.header-btn{
+  width:38px;height:38px;border-radius:50%;border:1px solid var(--bg4);
+  background:var(--bg3);color:var(--fg2);font-size:16px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;transition:all .2s;
+}
+.header-btn:active{transform:scale(.92)}
 
 /* ── Tab Bar ── */
 .tab-bar{
   display:flex;
-  background:var(--bg2);border-top:1px solid var(--bg3);
-  padding:6px 8px calc(6px + var(--safe-bot));
+  background:linear-gradient(0deg,#0c1222 0%,#131c30 100%);
+  border-top:1px solid rgba(45,212,168,.1);
+  padding:4px 6px calc(4px + var(--safe-bot));
   position:fixed;bottom:0;left:0;right:0;z-index:20;
 }
 .tab{
-  flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;
+  flex:1;display:flex;flex-direction:column;align-items:center;gap:1px;
   padding:6px 0;border-radius:var(--radius-sm);cursor:pointer;border:none;
-  background:none;color:var(--fg3);font-size:10px;font-weight:600;
-  transition:color .2s;
+  background:none;color:var(--fg3);font-size:9px;font-weight:700;
+  letter-spacing:.03em;text-transform:uppercase;transition:color .2s;
 }
-.tab svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-.tab.active{color:var(--green)}
+.tab .ico{font-size:20px;line-height:1.2}
+.tab.active{color:var(--palm)}
+.tab.active .ico{filter:drop-shadow(0 0 8px var(--palm-glow))}
 
 /* ── Cards ── */
 .card{
-  background:var(--bg2);border:1px solid var(--bg3);border-radius:var(--radius);
-  padding:16px;margin-top:14px;
+  background:linear-gradient(160deg,var(--bg2),var(--bg3));
+  border:1px solid rgba(45,212,168,.08);border-radius:var(--radius);
+  padding:16px;margin-top:14px;position:relative;overflow:hidden;
 }
-.card-title{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--fg2);margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,var(--palm),transparent);opacity:.3;
+}
+.card-title{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--palm);margin-bottom:10px;display:flex;align-items:center;gap:6px}
 
-/* ── Big Button ── */
-.power-section{display:flex;flex-direction:column;align-items:center;padding:28px 0 12px}
-.power-btn{
-  width:140px;height:140px;border-radius:50%;border:4px solid var(--bg4);
-  background:var(--bg2);cursor:pointer;
-  display:flex;align-items:center;justify-content:center;
-  transition:all .35s cubic-bezier(.4,0,.2,1);
-  box-shadow:0 0 0 0 transparent;position:relative;
+/* ── Palm Tree Power Button ── */
+.power-section{display:flex;flex-direction:column;align-items:center;padding:20px 0 8px;position:relative}
+.power-ring{
+  width:156px;height:156px;border-radius:50%;padding:6px;
+  background:conic-gradient(from 0deg,var(--bg4),var(--bg3),var(--bg4));
+  transition:all .5s cubic-bezier(.4,0,.2,1);position:relative;
 }
-.power-btn svg{width:56px;height:56px;stroke:var(--fg3);fill:none;stroke-width:2;transition:stroke .3s}
-.power-btn.active{border-color:var(--green);box-shadow:0 0 40px var(--green-glow),0 0 80px var(--green-glow)}
-.power-btn.active svg{stroke:var(--green)}
-.power-label{margin-top:14px;font-size:15px;font-weight:600;color:var(--fg2)}
-.power-sub{font-size:12px;color:var(--fg3);margin-top:2px}
+.power-ring.active{
+  background:conic-gradient(from 0deg,var(--palm),var(--coconut),var(--palm),var(--ocean),var(--palm));
+  animation:ringRotate 3s linear infinite;
+  box-shadow:0 0 40px var(--palm-glow),0 0 80px rgba(45,212,168,.15);
+}
+@keyframes ringRotate{to{filter:hue-rotate(360deg)}}
+.power-btn{
+  width:100%;height:100%;border-radius:50%;border:none;
+  background:radial-gradient(circle at 40% 35%,#1a2e4a,var(--bg));
+  cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  transition:transform .2s;gap:2px;
+}
+.power-btn:active{transform:scale(.95)}
+.power-btn .palm{font-size:48px;filter:drop-shadow(0 2px 8px rgba(0,0,0,.5));transition:transform .5s}
+.power-ring.active .palm{animation:sway 2s ease-in-out infinite}
+@keyframes sway{0%,100%{transform:rotate(-3deg)}50%{transform:rotate(3deg)}}
+.power-btn .label{font-size:10px;font-weight:700;color:var(--fg3);text-transform:uppercase;letter-spacing:.08em}
+.power-ring.active .label{color:var(--palm)}
+.power-status{margin-top:12px;text-align:center}
+.power-status .main{font-size:15px;font-weight:700;color:var(--fg2)}
+.power-status .hint{font-size:11px;color:var(--fg3);margin-top:2px}
+.power-ring.active + .power-status .main{
+  background:linear-gradient(90deg,var(--palm),var(--coconut));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+
+/* ── Falling Coconuts ── */
+.coconut-zone{position:fixed;top:0;left:0;right:0;bottom:0;pointer-events:none;z-index:5;overflow:hidden}
+.falling-coconut{
+  position:absolute;font-size:22px;
+  animation:coconutFall var(--dur) ease-in forwards;
+  filter:drop-shadow(0 4px 8px rgba(0,0,0,.4));
+}
+@keyframes coconutFall{
+  0%{transform:translateY(-40px) rotate(0deg);opacity:1}
+  80%{opacity:1}
+  100%{transform:translateY(calc(100vh + 40px)) rotate(720deg);opacity:0}
+}
 
 /* ── Stats Row ── */
-.stats-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:14px}
+.stats-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:12px}
 .stat-box{
-  background:var(--bg2);border:1px solid var(--bg3);border-radius:var(--radius-sm);
-  padding:12px;text-align:center;
+  background:var(--bg2);border:1px solid rgba(45,212,168,.08);border-radius:var(--radius-sm);
+  padding:12px 8px;text-align:center;position:relative;overflow:hidden;
 }
-.stat-val{font-size:22px;font-weight:800;color:var(--green);line-height:1.1}
-.stat-label{font-size:10px;font-weight:600;color:var(--fg3);text-transform:uppercase;letter-spacing:.04em;margin-top:3px}
+.stat-box::after{
+  content:'';position:absolute;bottom:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--palm),var(--coconut));opacity:.4;
+}
+.stat-val{font-size:24px;font-weight:900;line-height:1.1}
+.stat-val.green{color:var(--palm)}
+.stat-val.amber{color:var(--coconut)}
+.stat-val.ocean{color:var(--ocean)}
+.stat-label{font-size:9px;font-weight:700;color:var(--fg3);text-transform:uppercase;letter-spacing:.06em;margin-top:3px}
 
 /* ── Mode Picker ── */
 .mode-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .mode-card{
-  background:var(--bg3);border:2px solid transparent;border-radius:var(--radius-sm);
-  padding:14px 12px;cursor:pointer;transition:all .2s;text-align:center;
+  background:var(--bg3);border:2px solid rgba(255,255,255,.04);border-radius:var(--radius-sm);
+  padding:14px 10px;cursor:pointer;transition:all .25s;text-align:center;position:relative;
 }
-.mode-card.selected{border-color:var(--green);background:rgba(34,197,94,.08)}
-.mode-card .icon{font-size:28px;margin-bottom:4px}
-.mode-card .name{font-size:13px;font-weight:700}
-.mode-card .desc{font-size:10px;color:var(--fg3);margin-top:2px}
+.mode-card.selected{border-color:var(--palm);background:rgba(45,212,168,.06)}
+.mode-card.selected::after{
+  content:'';position:absolute;inset:0;border-radius:inherit;
+  box-shadow:inset 0 0 20px rgba(45,212,168,.08);pointer-events:none;
+}
+.mode-card .ico{font-size:30px;margin-bottom:4px}
+.mode-card .name{font-size:13px;font-weight:800;letter-spacing:-.01em}
+.mode-card .desc{font-size:10px;color:var(--fg3);margin-top:3px;line-height:1.3}
 
 /* ── Sliders ── */
-.slider-group{margin-top:14px}
+.slider-group{margin-top:12px}
 .slider-group label{display:flex;justify-content:space-between;font-size:13px;font-weight:600;margin-bottom:6px}
-.slider-group label span{color:var(--green)}
-input[type=range]{
-  -webkit-appearance:none;width:100%;height:6px;border-radius:3px;
-  background:var(--bg4);outline:none;
-}
+.slider-group label span{color:var(--coconut);font-weight:800}
+input[type=range]{-webkit-appearance:none;width:100%;height:6px;border-radius:3px;background:var(--bg4);outline:none}
 input[type=range]::-webkit-slider-thumb{
-  -webkit-appearance:none;width:22px;height:22px;border-radius:50%;
-  background:var(--green);cursor:pointer;border:3px solid var(--bg2);
+  -webkit-appearance:none;width:24px;height:24px;border-radius:50%;
+  background:linear-gradient(135deg,var(--palm),var(--coconut));cursor:pointer;border:3px solid var(--bg);
+  box-shadow:0 0 10px var(--palm-glow);
 }
 
 /* ── Toggle ── */
-.toggle-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--bg3)}
+.toggle-row{display:flex;align-items:center;justify-content:space-between;padding:11px 0;border-bottom:1px solid rgba(255,255,255,.04)}
 .toggle-row:last-child{border:none}
 .toggle-info{flex:1}
 .toggle-info .label{font-size:14px;font-weight:600}
 .toggle-info .hint{font-size:11px;color:var(--fg3)}
-.toggle{
-  position:relative;width:48px;height:28px;flex-shrink:0;
-}
+.toggle{position:relative;width:48px;height:28px;flex-shrink:0}
 .toggle input{opacity:0;width:0;height:0}
 .toggle .track{
-  position:absolute;inset:0;background:var(--bg4);border-radius:14px;
-  transition:background .3s;cursor:pointer;
+  position:absolute;inset:0;background:var(--bg4);border-radius:14px;transition:background .3s;cursor:pointer;
 }
 .toggle .track::after{
   content:'';position:absolute;left:3px;top:3px;width:22px;height:22px;
   background:#fff;border-radius:50%;transition:transform .3s;
 }
-.toggle input:checked + .track{background:var(--green)}
+.toggle input:checked + .track{background:linear-gradient(135deg,var(--palm),var(--palm2))}
 .toggle input:checked + .track::after{transform:translateX(20px)}
 
 /* ── Live Feed ── */
-.feed{max-height:240px;overflow-y:auto;font-size:11px;font-family:'SF Mono',Menlo,monospace}
-.feed-item{padding:4px 0;border-bottom:1px solid var(--bg3);display:flex;gap:6px;align-items:baseline}
-.feed-item .time{color:var(--fg3);flex-shrink:0;width:56px}
-.feed-item .cat{color:var(--blue);font-weight:600;flex-shrink:0;width:70px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.feed-item .url{color:var(--fg2);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.feed-item.error .url{color:var(--red)}
-.feed-item.geo .cat{color:var(--purple)}
+.feed{max-height:220px;overflow-y:auto;font-size:11px;font-family:'SF Mono',Menlo,Consolas,monospace}
+.feed-item{padding:4px 0;border-bottom:1px solid rgba(255,255,255,.03);display:flex;gap:6px;align-items:baseline}
+.feed-item .time{color:var(--fg3);flex-shrink:0;width:52px;font-size:10px}
+.feed-item .cat{font-weight:700;flex-shrink:0;width:68px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.feed-item .cat.c-news{color:var(--ocean)}.feed-item .cat.c-tech{color:var(--palm)}
+.feed-item .cat.c-social{color:#a78bfa}.feed-item .cat.c-shopping{color:var(--coconut)}
+.feed-item .cat.c-health{color:#f472b6}.feed-item .cat.c-privacy{color:#34d399}
+.feed-item .cat.c-finance{color:var(--sand)}.feed-item .cat.c-decoy{color:var(--fg3)}
+.feed-item .cat.c-frustrat{color:var(--sunset)}.feed-item .cat.c-sys{color:var(--palm)}
+.feed-item .cat.c-geo{color:#c084fc}
+.feed-item .url{color:var(--fg3);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.feed-item.error .url{color:var(--sunset)}
 
-/* ── Geo Map ── */
+/* ── Geo ── */
 .geo-strip{display:flex;gap:8px;overflow-x:auto;padding:4px 0;-webkit-overflow-scrolling:touch}
 .geo-chip{
   flex-shrink:0;padding:6px 14px;border-radius:20px;font-size:12px;font-weight:600;
-  background:var(--bg3);border:1px solid var(--bg4);cursor:pointer;white-space:nowrap;
-  transition:all .2s;
+  background:var(--bg4);border:1px solid rgba(255,255,255,.06);white-space:nowrap;transition:all .2s;
 }
-.geo-chip.active{background:rgba(34,197,94,.15);border-color:var(--green);color:var(--green)}
+.geo-chip.active{background:rgba(45,212,168,.12);border-color:var(--palm);color:var(--palm)}
 
-/* ── Pulse animation ── */
+/* ── Animations ── */
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
 .pulsing .stat-val{animation:pulse 1.5s ease-in-out infinite}
 .status-dot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:4px}
-.status-dot.on{background:var(--green);box-shadow:0 0 6px var(--green)}
+.status-dot.on{background:var(--palm);box-shadow:0 0 8px var(--palm)}
 .status-dot.off{background:var(--fg3)}
 
-/* ── About ── */
-.about-hero{text-align:center;padding:30px 0 10px}
-.about-hero .tree{font-size:64px}
-.about-hero h2{font-size:22px;font-weight:800;margin-top:8px}
-.about-hero p{color:var(--fg2);font-size:13px;margin-top:4px}
-.about-link{
-  display:block;padding:14px 16px;background:var(--bg2);border:1px solid var(--bg3);
-  border-radius:var(--radius-sm);margin-top:10px;color:var(--fg);text-decoration:none;
-  font-size:14px;font-weight:600;display:flex;align-items:center;gap:10px;
+/* ── Banner Quote ── */
+.quote-banner{
+  margin-top:14px;padding:12px 16px;border-radius:var(--radius-sm);text-align:center;
+  background:linear-gradient(135deg,rgba(45,212,168,.06),rgba(245,166,35,.06));
+  border:1px solid rgba(45,212,168,.1);
 }
+.quote-banner .q{font-size:13px;color:var(--fg2);font-style:italic;line-height:1.4}
+.quote-banner .a{font-size:11px;color:var(--fg3);margin-top:4px}
+
+/* ── Tracker Tears ── */
+.tears-bar{
+  display:flex;gap:6px;justify-content:center;margin-top:14px;flex-wrap:wrap;
+}
+.tear{
+  padding:5px 12px;border-radius:20px;font-size:11px;font-weight:700;
+  display:flex;align-items:center;gap:4px;
+}
+.tear.t1{background:rgba(45,212,168,.1);color:var(--palm)}
+.tear.t2{background:rgba(245,166,35,.1);color:var(--coconut)}
+.tear.t3{background:rgba(255,107,107,.1);color:var(--sunset)}
+
+/* ── About ── */
+.about-hero{text-align:center;padding:24px 0 10px}
+.about-hero .art{font-size:14px;line-height:1.3;font-family:'SF Mono',Menlo,monospace;color:var(--palm);margin-bottom:10px;white-space:pre;opacity:.9}
+.about-hero h2{
+  font-size:24px;font-weight:900;
+  background:linear-gradient(90deg,var(--palm),var(--coconut),var(--sand));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+.about-hero p{color:var(--fg2);font-size:13px;margin-top:6px;line-height:1.4}
+.about-link{
+  display:flex;align-items:center;gap:10px;
+  padding:14px 16px;background:var(--bg2);border:1px solid rgba(45,212,168,.1);
+  border-radius:var(--radius-sm);margin-top:10px;color:var(--fg);text-decoration:none;
+  font-size:14px;font-weight:600;transition:border-color .2s;
+}
+.about-link:active{border-color:var(--palm)}
 .about-link span{flex:1}
-.about-link .arrow{color:var(--fg3)}
+.about-link .arrow{color:var(--fg3);font-size:18px}
+
+/* ── Misc ── */
+code{background:var(--bg4);padding:1px 5px;border-radius:4px;font-size:12px;color:var(--coconut)}
+.divider{height:1px;background:linear-gradient(90deg,transparent,rgba(45,212,168,.15),transparent);margin:16px 0}
 </style>
 </head>
 <body>
 
-<!-- ════════════════════════ SCREEN: HOME ════════════════════════ -->
+<!-- Falling coconuts container -->
+<div class="coconut-zone" id="coconutZone"></div>
+
+<!-- ════════════════════ HOME ════════════════════ -->
 <div class="screen active" id="screen-home">
   <div class="header">
-    <div class="header-logo">🌲</div>
-    <div class="header-title">Pine-Tree Noise<span>WiFi Privacy Tool v3.4</span></div>
+    <div class="header-logo">🌴</div>
+    <div class="header-title">
+      <span class="brand">Coconuts by Palm-Tree</span>
+      <span class="sub">WiFi Noise Generator v3.4</span>
+    </div>
     <button class="header-btn" onclick="showScreen('settings')">⚙️</button>
   </div>
   <div class="screen-body">
+
     <!-- Power -->
     <div class="power-section">
-      <button class="power-btn" id="powerBtn" onclick="toggleEngine()">
-        <svg viewBox="0 0 24 24"><path d="M12 2v10"/><path d="M18.4 6.6a9 9 0 1 1-12.8 0"/></svg>
-      </button>
-      <div class="power-label" id="powerLabel">Tap to Start</div>
-      <div class="power-sub" id="powerSub">Generate WiFi noise from your phone</div>
+      <div class="power-ring" id="powerRing" onclick="toggleEngine()">
+        <button class="power-btn" id="powerBtn">
+          <span class="palm">🌴</span>
+          <span class="label">Start</span>
+        </button>
+      </div>
+      <div class="power-status">
+        <div class="main" id="powerLabel">Tap the Palm Tree</div>
+        <div class="hint" id="powerSub">Drop coconuts on the trackers</div>
+      </div>
     </div>
+
     <!-- Stats -->
     <div class="stats-row" id="statsRow">
-      <div class="stat-box"><div class="stat-val" id="statReqs">0</div><div class="stat-label">Requests</div></div>
-      <div class="stat-box"><div class="stat-val" id="statSites">0</div><div class="stat-label">Sites</div></div>
-      <div class="stat-box"><div class="stat-val" id="statScore">0</div><div class="stat-label">Noise Score</div></div>
+      <div class="stat-box"><div class="stat-val green" id="statReqs">0</div><div class="stat-label">🥥 Coconuts</div></div>
+      <div class="stat-box"><div class="stat-val amber" id="statSites">0</div><div class="stat-label">🌊 Sites Hit</div></div>
+      <div class="stat-box"><div class="stat-val ocean" id="statScore">0</div><div class="stat-label">🌴 Palm Score</div></div>
     </div>
+
+    <!-- Tracker tears -->
+    <div class="tears-bar" id="tearsBar">
+      <div class="tear t1">🎯 Ads Confused: <span id="tearAds">0</span></div>
+      <div class="tear t2">😢 Trackers Crying: <span id="tearTrack">0</span></div>
+      <div class="tear t3">🤯 Brokers Puzzled: <span id="tearBroke">0</span></div>
+    </div>
+
+    <!-- Quote -->
+    <div class="quote-banner" id="quoteBanner">
+      <div class="q" id="quoteText">"In a world of surveillance, be the noise."</div>
+      <div class="a">— The Palm-Tree Manifesto</div>
+    </div>
+
     <!-- Mode -->
     <div class="card">
-      <div class="card-title">🌲 Noise Mode</div>
+      <div class="card-title">🥥 Coconut Mode</div>
       <div class="mode-grid" id="modeGrid">
         <div class="mode-card selected" data-mode="wifi" onclick="selectMode(this)">
-          <div class="icon">📶</div><div class="name">WiFi Noise</div>
-          <div class="desc">Pine-tree style mixed traffic</div>
+          <div class="ico">🌴</div><div class="name">Palm Breeze</div>
+          <div class="desc">Classic WiFi noise — steady tropical flow</div>
         </div>
         <div class="mode-card" data-mode="chaos" onclick="selectMode(this)">
-          <div class="icon">🌀</div><div class="name">Chaos</div>
-          <div class="desc">Maximum random chaos</div>
+          <div class="ico">🥥💥</div><div class="name">Coconut Storm</div>
+          <div class="desc">Maximum chaos — coconuts everywhere</div>
         </div>
         <div class="mode-card" data-mode="stealth" onclick="selectMode(this)">
-          <div class="icon">🥷</div><div class="name">Stealth</div>
-          <div class="desc">Low & slow, hard to detect</div>
+          <div class="ico">🌿</div><div class="name">Hidden Frond</div>
+          <div class="desc">Low & slow — barely a rustle</div>
         </div>
         <div class="mode-card" data-mode="geo" onclick="selectMode(this)">
-          <div class="icon">🌍</div><div class="name">Globe-Trotter</div>
-          <div class="desc">Rotate through countries</div>
+          <div class="ico">🏝️</div><div class="name">Island Hopper</div>
+          <div class="desc">Teleport between 16 countries</div>
         </div>
       </div>
     </div>
+
     <!-- Intensity -->
     <div class="card">
-      <div class="card-title">⚡ Intensity</div>
+      <div class="card-title">🌊 Wave Intensity</div>
       <div class="slider-group">
-        <label>Speed <span id="speedLabel">Medium</span></label>
+        <label>Speed <span id="speedLabel">Tropical Breeze</span></label>
         <input type="range" id="speedSlider" min="1" max="5" value="3" oninput="updateSpeed()">
       </div>
     </div>
-    <!-- Live -->
+
+    <!-- Live Feed -->
     <div class="card">
-      <div class="card-title"><span class="status-dot off" id="liveDot"></span> Live Feed</div>
+      <div class="card-title"><span class="status-dot off" id="liveDot"></span> Live Coconut Drop</div>
       <div class="feed" id="liveFeed">
-        <div class="feed-item"><span class="time">--:--:--</span><span class="cat">READY</span><span class="url">Waiting to start...</span></div>
+        <div class="feed-item"><span class="time">--:--:--</span><span class="cat c-sys">READY</span><span class="url">Palm tree standing by...</span></div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ════════════════════════ SCREEN: STATS ════════════════════════ -->
+<!-- ════════════════════ STATS ════════════════════ -->
 <div class="screen" id="screen-stats">
   <div class="header">
-    <div class="header-logo">📊</div>
-    <div class="header-title">Statistics<span>Session Analytics</span></div>
+    <div class="header-logo">🥥</div>
+    <div class="header-title"><span class="brand">Coconut Analytics</span><span class="sub">How confused are the trackers?</span></div>
   </div>
   <div class="screen-body">
     <div class="stats-row">
-      <div class="stat-box"><div class="stat-val" id="s2Reqs">0</div><div class="stat-label">Total Reqs</div></div>
-      <div class="stat-box"><div class="stat-val" id="s2Ok">0</div><div class="stat-label">Success</div></div>
-      <div class="stat-box"><div class="stat-val" id="s2Err">0</div><div class="stat-label">Errors</div></div>
+      <div class="stat-box"><div class="stat-val green" id="s2Reqs">0</div><div class="stat-label">🥥 Total Drops</div></div>
+      <div class="stat-box"><div class="stat-val amber" id="s2Ok">0</div><div class="stat-label">✅ Landed</div></div>
+      <div class="stat-box"><div class="stat-val ocean" id="s2Err">0</div><div class="stat-label">🌊 Missed</div></div>
     </div>
     <div class="stats-row">
-      <div class="stat-box"><div class="stat-val" id="s2Sites">0</div><div class="stat-label">Sites</div></div>
-      <div class="stat-box"><div class="stat-val" id="s2Cats">0</div><div class="stat-label">Categories</div></div>
-      <div class="stat-box"><div class="stat-val" id="s2Time">0:00</div><div class="stat-label">Uptime</div></div>
+      <div class="stat-box"><div class="stat-val green" id="s2Sites">0</div><div class="stat-label">🏝️ Islands</div></div>
+      <div class="stat-box"><div class="stat-val amber" id="s2Cats">0</div><div class="stat-label">🌺 Categories</div></div>
+      <div class="stat-box"><div class="stat-val ocean" id="s2Time">0:00</div><div class="stat-label">⏱️ Uptime</div></div>
     </div>
     <div class="card">
-      <div class="card-title">🏷️ Category Breakdown</div>
+      <div class="card-title">🌺 Category Harvest</div>
       <div id="catBreakdown" style="font-size:13px"></div>
     </div>
     <div class="card">
-      <div class="card-title">🌍 Geo Locations Visited</div>
+      <div class="card-title">🏝️ Islands Visited</div>
       <div class="geo-strip" id="geoStrip"></div>
-      <div style="font-size:12px;color:var(--fg3);margin-top:8px" id="geoCount">No geo-rotation data yet</div>
+      <div style="font-size:12px;color:var(--fg3);margin-top:8px" id="geoCount">Enable Island Hopper mode to explore</div>
     </div>
     <div class="card">
-      <div class="card-title">🔥 Noise Score History</div>
-      <canvas id="scoreChart" height="120" style="width:100%"></canvas>
+      <div class="card-title">🌴 Palm Score History</div>
+      <canvas id="scoreChart" height="130" style="width:100%"></canvas>
     </div>
   </div>
 </div>
 
-<!-- ════════════════════════ SCREEN: SETTINGS ════════════════════════ -->
+<!-- ════════════════════ SETTINGS ════════════════════ -->
 <div class="screen" id="screen-settings">
   <div class="header">
     <div class="header-logo">⚙️</div>
-    <div class="header-title">Settings<span>Configure Noise Generator</span></div>
+    <div class="header-title"><span class="brand">Palm Settings</span><span class="sub">Tune Your Tropical Chaos</span></div>
   </div>
   <div class="screen-body">
     <div class="card">
-      <div class="card-title">📡 Categories</div>
-      <div class="toggle-row"><div class="toggle-info"><div class="label">News Sites</div><div class="hint">BBC, CNN, Reuters, etc.</div></div><label class="toggle"><input type="checkbox" checked data-cat="news"><span class="track"></span></label></div>
-      <div class="toggle-row"><div class="toggle-info"><div class="label">Technology</div><div class="hint">Verge, Wired, Ars Technica</div></div><label class="toggle"><input type="checkbox" checked data-cat="tech"><span class="track"></span></label></div>
-      <div class="toggle-row"><div class="toggle-info"><div class="label">Social Media</div><div class="hint">Reddit, Twitter, Instagram</div></div><label class="toggle"><input type="checkbox" checked data-cat="social"><span class="track"></span></label></div>
-      <div class="toggle-row"><div class="toggle-info"><div class="label">Shopping</div><div class="hint">Amazon, eBay, Etsy</div></div><label class="toggle"><input type="checkbox" checked data-cat="shopping"><span class="track"></span></label></div>
-      <div class="toggle-row"><div class="toggle-info"><div class="label">Health & Lifestyle</div><div class="hint">WebMD, Healthline</div></div><label class="toggle"><input type="checkbox" data-cat="health"><span class="track"></span></label></div>
-      <div class="toggle-row"><div class="toggle-info"><div class="label">Privacy Sites</div><div class="hint">EFF, Tor Project, Schneier</div></div><label class="toggle"><input type="checkbox" checked data-cat="privacy"><span class="track"></span></label></div>
-      <div class="toggle-row"><div class="toggle-info"><div class="label">Finance</div><div class="hint">Bloomberg, MarketWatch</div></div><label class="toggle"><input type="checkbox" data-cat="finance"><span class="track"></span></label></div>
-      <div class="toggle-row"><div class="toggle-info"><div class="label">Search Decoys</div><div class="hint">Fake searches on Google/Bing/DDG</div></div><label class="toggle"><input type="checkbox" checked data-cat="decoy"><span class="track"></span></label></div>
+      <div class="card-title">🏝️ Target Islands (Categories)</div>
+      <div class="toggle-row"><div class="toggle-info"><div class="label">🗞️ News Sites</div><div class="hint">BBC, CNN, Reuters, Guardian, NYT</div></div><label class="toggle"><input type="checkbox" checked data-cat="news"><span class="track"></span></label></div>
+      <div class="toggle-row"><div class="toggle-info"><div class="label">💻 Technology</div><div class="hint">Verge, Wired, Ars Technica, CNET</div></div><label class="toggle"><input type="checkbox" checked data-cat="tech"><span class="track"></span></label></div>
+      <div class="toggle-row"><div class="toggle-info"><div class="label">📱 Social Media</div><div class="hint">Reddit, Twitter, YouTube, TikTok</div></div><label class="toggle"><input type="checkbox" checked data-cat="social"><span class="track"></span></label></div>
+      <div class="toggle-row"><div class="toggle-info"><div class="label">🛒 Shopping</div><div class="hint">Amazon, eBay, Walmart, Etsy</div></div><label class="toggle"><input type="checkbox" checked data-cat="shopping"><span class="track"></span></label></div>
+      <div class="toggle-row"><div class="toggle-info"><div class="label">💊 Health & Wellness</div><div class="hint">WebMD, Healthline, Mayo Clinic</div></div><label class="toggle"><input type="checkbox" data-cat="health"><span class="track"></span></label></div>
+      <div class="toggle-row"><div class="toggle-info"><div class="label">🔒 Privacy & Security</div><div class="hint">EFF, Tor Project, Schneier</div></div><label class="toggle"><input type="checkbox" checked data-cat="privacy"><span class="track"></span></label></div>
+      <div class="toggle-row"><div class="toggle-info"><div class="label">💰 Finance</div><div class="hint">Bloomberg, CNBC, WSJ, Forbes</div></div><label class="toggle"><input type="checkbox" data-cat="finance"><span class="track"></span></label></div>
+      <div class="toggle-row"><div class="toggle-info"><div class="label">🎣 Decoy Searches</div><div class="hint">Fake Google/Bing/DDG search queries</div></div><label class="toggle"><input type="checkbox" checked data-cat="decoy"><span class="track"></span></label></div>
     </div>
     <div class="card">
-      <div class="card-title">🌍 Geo-Rotation</div>
-      <div class="toggle-row"><div class="toggle-info"><div class="label">Enable Geo-Rotation</div><div class="hint">Rotate Accept-Language headers</div></div><label class="toggle"><input type="checkbox" id="geoToggle"><span class="track"></span></label></div>
+      <div class="card-title">🏝️ Island Hopping (Geo-Rotation)</div>
+      <div class="toggle-row"><div class="toggle-info"><div class="label">Enable Island Hopping</div><div class="hint">Rotate Accept-Language headers across 16 countries</div></div><label class="toggle"><input type="checkbox" id="geoToggle"><span class="track"></span></label></div>
       <div class="slider-group" style="margin-top:8px">
-        <label>Rotation interval <span id="geoIntLabel">5 min</span></label>
+        <label>Hop interval <span id="geoIntLabel">5 min</span></label>
         <input type="range" id="geoIntSlider" min="1" max="15" value="5" oninput="document.getElementById('geoIntLabel').textContent=this.value+' min'">
       </div>
     </div>
     <div class="card">
-      <div class="card-title">🛡️ Advanced</div>
-      <div class="toggle-row"><div class="toggle-info"><div class="label">Randomize User-Agent</div><div class="hint">Different browser identity per request</div></div><label class="toggle"><input type="checkbox" checked id="uaToggle"><span class="track"></span></label></div>
-      <div class="toggle-row"><div class="toggle-info"><div class="label">Inject Decoy Cookies</div><div class="hint">Fake ad tracking cookies</div></div><label class="toggle"><input type="checkbox" checked id="cookieToggle"><span class="track"></span></label></div>
-      <div class="toggle-row"><div class="toggle-info"><div class="label">Frustration Mode</div><div class="hint">Search queries get more desperate</div></div><label class="toggle"><input type="checkbox" id="frustrationToggle"><span class="track"></span></label></div>
+      <div class="card-title">🌴 Advanced Palm Powers</div>
+      <div class="toggle-row"><div class="toggle-info"><div class="label">🎭 Identity Shuffle</div><div class="hint">Randomize User-Agent per request</div></div><label class="toggle"><input type="checkbox" checked id="uaToggle"><span class="track"></span></label></div>
+      <div class="toggle-row"><div class="toggle-info"><div class="label">🍪 Fake Cookie Injection</div><div class="hint">Misleading ad tracking cookies</div></div><label class="toggle"><input type="checkbox" checked id="cookieToggle"><span class="track"></span></label></div>
+      <div class="toggle-row"><div class="toggle-info"><div class="label">😤 Frustration Mode</div><div class="hint">Tech support queries get more desperate</div></div><label class="toggle"><input type="checkbox" id="frustrationToggle"><span class="track"></span></label></div>
+      <div class="toggle-row"><div class="toggle-info"><div class="label">🥥 Falling Coconuts</div><div class="hint">Animated coconuts on each request</div></div><label class="toggle"><input type="checkbox" checked id="coconutAnimToggle"><span class="track"></span></label></div>
     </div>
   </div>
 </div>
 
-<!-- ════════════════════════ SCREEN: ABOUT ════════════════════════ -->
+<!-- ════════════════════ ABOUT ════════════════════ -->
 <div class="screen" id="screen-about">
   <div class="header">
-    <div class="header-logo">🌲</div>
-    <div class="header-title">About<span>Pine-Tree Noise</span></div>
+    <div class="header-logo">🌴</div>
+    <div class="header-title"><span class="brand">About</span><span class="sub">The Palm-Tree Story</span></div>
   </div>
   <div class="screen-body">
     <div class="about-hero">
-      <div class="tree">🌲</div>
-      <h2>Pine-Tree Noise</h2>
-      <p>Mobile WiFi privacy noise generator<br>Part of the Palm-Tree / Coconuts project</p>
+      <div class="art" id="asciiArt"></div>
+      <h2>Coconuts by Palm-Tree</h2>
+      <p>Make advertisers cry. Make data brokers confused.<br>Make tracking algorithms question their existence.</p>
     </div>
+
+    <div class="quote-banner">
+      <div class="q">"If you can't hide, overwhelm."</div>
+      <div class="a">— Sun Tzu, probably</div>
+    </div>
+
     <div class="card">
-      <div class="card-title">📖 What is this?</div>
-      <p style="font-size:13px;color:var(--fg2);line-height:1.5">
-        Pine-Tree generates decoy web traffic directly from your phone to confuse ad trackers, data brokers, and profiling algorithms. It visits random sites across many categories, making your browsing profile look like dozens of different people.
+      <div class="card-title">🥥 What Are Coconuts?</div>
+      <p style="font-size:13px;color:var(--fg2);line-height:1.6">
+        Each request is a <b>coconut</b> — falling from the palm tree of privacy onto the heads of unsuspecting trackers. The more coconuts you drop, the more confused they get. Your browsing profile goes from "identifiable human" to "chaos entity browsing from 16 countries simultaneously."
       </p>
     </div>
     <div class="card">
-      <div class="card-title">🔒 How it works</div>
-      <p style="font-size:13px;color:var(--fg2);line-height:1.5">
-        The app fires lightweight fetch requests (using <code>no-cors</code> mode) to real websites across news, tech, social, shopping, and privacy categories. Each request uses randomized headers and timing based on chaos mathematics, making the traffic pattern indistinguishable from real browsing.
+      <div class="card-title">🌴 How It Works</div>
+      <p style="font-size:13px;color:var(--fg2);line-height:1.6">
+        The app fires <code>fetch</code> requests in <code>no-cors</code> mode to 100+ real websites across 8 categories. Timing uses <b>chaos mathematics</b> (logistic map) for human-like patterns. Headers rotate through 16 geo-locations. Decoy searches pollute your profile with random interests from beekeeping to luxury yachts.
       </p>
     </div>
+    <div class="card">
+      <div class="card-title">🏝️ Modes Explained</div>
+      <p style="font-size:13px;color:var(--fg2);line-height:1.6">
+        <b style="color:var(--palm)">🌴 Palm Breeze</b> — Steady mixed traffic, the classic<br>
+        <b style="color:var(--coconut)">🥥💥 Coconut Storm</b> — Burst mode, 3x requests, half delays<br>
+        <b style="color:var(--fg2)">🌿 Hidden Frond</b> — 2.5x slower, whisper-quiet stealth<br>
+        <b style="color:var(--ocean)">🏝️ Island Hopper</b> — Auto geo-rotation, globe-trotting chaos
+      </p>
+    </div>
+
+    <div class="divider"></div>
+
     <a class="about-link" href="https://github.com/thumpersecure/palm-tree" target="_blank">
-      <span>🌴 Palm-Tree on GitHub</span><span class="arrow">→</span>
+      🌴 <span>Palm-Tree on GitHub</span><span class="arrow">→</span>
     </a>
     <a class="about-link" href="https://github.com/thumpersecure/palm-tree#-quick-start" target="_blank">
-      <span>🖥️ Desktop CLI Tool (Python)</span><span class="arrow">→</span>
+      🖥️ <span>Desktop CLI (Python)</span><span class="arrow">→</span>
     </a>
-    <div class="card" style="text-align:center">
-      <p style="font-size:12px;color:var(--fg3)">v3.4.0 &bull; MIT License<br>For educational and privacy testing purposes only.</p>
+    <a class="about-link" href="https://github.com/thumpersecure/palm-tree#mobile-app-pine-tree" target="_blank">
+      📱 <span>Deployment Guide</span><span class="arrow">→</span>
+    </a>
+
+    <div class="card" style="text-align:center;margin-bottom:20px">
+      <p style="font-size:12px;color:var(--fg3);line-height:1.6">
+        v3.4.0 — MIT License<br>
+        Made with chaos, caffeine, and coconuts 🥥<br>
+        For educational and privacy testing purposes only.
+      </p>
     </div>
   </div>
 </div>
 
-<!-- ════════════════════════ TAB BAR ════════════════════════ -->
+<!-- ════════════════════ TAB BAR ════════════════════ -->
 <nav class="tab-bar">
-  <button class="tab active" onclick="showScreen('home')">
-    <svg viewBox="0 0 24 24"><path d="M12 2 L2 12 h3v9h6v-6h2v6h6v-9h3z"/></svg>
-    Home
-  </button>
-  <button class="tab" onclick="showScreen('stats')">
-    <svg viewBox="0 0 24 24"><rect x="3" y="12" width="4" height="9" rx="1"/><rect x="10" y="7" width="4" height="14" rx="1"/><rect x="17" y="3" width="4" height="18" rx="1"/></svg>
-    Stats
-  </button>
-  <button class="tab" onclick="showScreen('settings')">
-    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-    Settings
-  </button>
-  <button class="tab" onclick="showScreen('about')">
-    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
-    About
-  </button>
+  <button class="tab active" onclick="showScreen('home')"><span class="ico">🌴</span>Home</button>
+  <button class="tab" onclick="showScreen('stats')"><span class="ico">🥥</span>Stats</button>
+  <button class="tab" onclick="showScreen('settings')"><span class="ico">⚙️</span>Settings</button>
+  <button class="tab" onclick="showScreen('about')"><span class="ico">🏝️</span>About</button>
 </nav>
 
 <script>
 /* ═══════════════════════════════════════════════════════════════
-   PINE-TREE WIFI NOISE GENERATOR — CLIENT ENGINE
+   🌴 COCONUTS BY PALM-TREE — WIFI NOISE ENGINE
+   "Making data brokers cry since 2024"
    ═══════════════════════════════════════════════════════════════ */
 
-// ── Site Database ──
-const SITES = {
-  news: [
-    "https://www.bbc.com","https://www.cnn.com","https://www.reuters.com",
-    "https://www.theguardian.com","https://www.nytimes.com","https://apnews.com",
-    "https://www.npr.org","https://www.aljazeera.com","https://www.france24.com",
-    "https://news.ycombinator.com","https://www.usatoday.com","https://www.nbcnews.com",
-    "https://www.washingtonpost.com","https://www.politico.com","https://www.huffpost.com",
-    "https://www.foxnews.com","https://www.msnbc.com","https://www.vox.com",
-    "https://www.theatlantic.com","https://www.economist.com",
-  ],
-  tech: [
-    "https://www.theverge.com","https://techcrunch.com","https://arstechnica.com",
-    "https://www.wired.com","https://www.cnet.com","https://www.engadget.com",
-    "https://www.zdnet.com","https://www.tomshardware.com","https://www.pcgamer.com",
-    "https://www.macrumors.com","https://9to5mac.com","https://www.androidauthority.com",
-    "https://hackaday.com","https://www.makeuseof.com","https://www.howtogeek.com",
-  ],
-  social: [
-    "https://www.reddit.com","https://www.twitter.com","https://www.instagram.com",
-    "https://www.tiktok.com","https://www.pinterest.com","https://www.linkedin.com",
-    "https://www.tumblr.com","https://www.discord.com","https://www.twitch.tv",
-    "https://www.youtube.com","https://www.quora.com","https://mastodon.social",
-  ],
-  shopping: [
-    "https://www.amazon.com","https://www.ebay.com","https://www.etsy.com",
-    "https://www.walmart.com","https://www.target.com","https://www.bestbuy.com",
-    "https://www.aliexpress.com","https://www.costco.com","https://www.wayfair.com",
-    "https://www.nordstrom.com","https://www.zappos.com","https://www.homedepot.com",
-  ],
-  health: [
-    "https://www.webmd.com","https://www.healthline.com","https://www.mayoclinic.org",
-    "https://www.nih.gov","https://www.prevention.com","https://www.medicalnewstoday.com",
-    "https://www.everydayhealth.com","https://www.health.com",
-  ],
-  privacy: [
-    "https://www.eff.org","https://www.torproject.org","https://www.privacyguides.org",
-    "https://www.schneier.com","https://www.krebsonsecurity.com","https://www.bleepingcomputer.com",
-    "https://www.thehackernews.com","https://www.epic.org","https://www.accessnow.org",
-  ],
-  finance: [
-    "https://www.bloomberg.com","https://www.marketwatch.com","https://www.cnbc.com",
-    "https://www.wsj.com","https://www.forbes.com","https://www.investopedia.com",
-    "https://finance.yahoo.com","https://www.fool.com",
-  ],
-  decoy: [
-    "https://www.google.com/search?q=best+running+shoes+2026",
-    "https://www.google.com/search?q=how+to+start+beekeeping",
-    "https://www.google.com/search?q=luxury+yacht+rental+prices",
-    "https://www.google.com/search?q=pottery+classes+near+me",
-    "https://www.google.com/search?q=best+crypto+wallet+2026",
-    "https://www.google.com/search?q=skydiving+lessons+cost",
-    "https://www.google.com/search?q=organic+farming+guide",
-    "https://www.bing.com/search?q=retirement+planning+calculator",
-    "https://www.bing.com/search?q=cheap+flights+to+bali",
-    "https://www.bing.com/search?q=learn+guitar+online+free",
-    "https://duckduckgo.com/?q=best+vpn+for+privacy",
-    "https://duckduckgo.com/?q=home+composting+guide",
-    "https://duckduckgo.com/?q=mountain+biking+trails",
-    "https://www.google.com/search?q=smart+home+setup+guide",
-    "https://www.google.com/search?q=sourdough+bread+recipe",
-    "https://www.google.com/search?q=how+to+train+for+marathon",
-    "https://www.bing.com/search?q=used+sailboat+for+sale",
-    "https://www.google.com/search?q=cat+adoption+near+me",
-    "https://www.google.com/search?q=electric+car+comparison+2026",
-    "https://duckduckgo.com/?q=minimalist+living+tips",
-  ],
+const SITES={
+  news:["https://www.bbc.com","https://www.cnn.com","https://www.reuters.com","https://www.theguardian.com","https://www.nytimes.com","https://apnews.com","https://www.npr.org","https://www.aljazeera.com","https://www.france24.com","https://news.ycombinator.com","https://www.usatoday.com","https://www.nbcnews.com","https://www.washingtonpost.com","https://www.politico.com","https://www.huffpost.com","https://www.foxnews.com","https://www.msnbc.com","https://www.vox.com","https://www.theatlantic.com","https://www.economist.com"],
+  tech:["https://www.theverge.com","https://techcrunch.com","https://arstechnica.com","https://www.wired.com","https://www.cnet.com","https://www.engadget.com","https://www.zdnet.com","https://www.tomshardware.com","https://www.pcgamer.com","https://www.macrumors.com","https://9to5mac.com","https://www.androidauthority.com","https://hackaday.com","https://www.makeuseof.com","https://www.howtogeek.com"],
+  social:["https://www.reddit.com","https://www.twitter.com","https://www.instagram.com","https://www.tiktok.com","https://www.pinterest.com","https://www.linkedin.com","https://www.tumblr.com","https://www.discord.com","https://www.twitch.tv","https://www.youtube.com","https://www.quora.com","https://mastodon.social"],
+  shopping:["https://www.amazon.com","https://www.ebay.com","https://www.etsy.com","https://www.walmart.com","https://www.target.com","https://www.bestbuy.com","https://www.aliexpress.com","https://www.costco.com","https://www.wayfair.com","https://www.nordstrom.com","https://www.zappos.com","https://www.homedepot.com"],
+  health:["https://www.webmd.com","https://www.healthline.com","https://www.mayoclinic.org","https://www.nih.gov","https://www.prevention.com","https://www.medicalnewstoday.com","https://www.everydayhealth.com","https://www.health.com"],
+  privacy:["https://www.eff.org","https://www.torproject.org","https://www.privacyguides.org","https://www.schneier.com","https://www.krebsonsecurity.com","https://www.bleepingcomputer.com","https://www.thehackernews.com","https://www.epic.org","https://www.accessnow.org"],
+  finance:["https://www.bloomberg.com","https://www.marketwatch.com","https://www.cnbc.com","https://www.wsj.com","https://www.forbes.com","https://www.investopedia.com","https://finance.yahoo.com","https://www.fool.com"],
+  decoy:["https://www.google.com/search?q=best+running+shoes+2026","https://www.google.com/search?q=how+to+start+beekeeping","https://www.google.com/search?q=luxury+yacht+rental+prices","https://www.google.com/search?q=pottery+classes+near+me","https://www.google.com/search?q=best+crypto+wallet+2026","https://www.google.com/search?q=skydiving+lessons+cost","https://www.google.com/search?q=organic+farming+guide","https://www.bing.com/search?q=retirement+planning+calculator","https://www.bing.com/search?q=cheap+flights+to+bali","https://www.bing.com/search?q=learn+guitar+online+free","https://duckduckgo.com/?q=best+vpn+for+privacy","https://duckduckgo.com/?q=home+composting+guide","https://duckduckgo.com/?q=mountain+biking+trails","https://www.google.com/search?q=smart+home+setup+guide","https://www.google.com/search?q=sourdough+bread+recipe","https://www.google.com/search?q=how+to+train+for+marathon","https://www.bing.com/search?q=used+sailboat+for+sale","https://www.google.com/search?q=cat+adoption+near+me","https://www.google.com/search?q=electric+car+comparison+2026","https://duckduckgo.com/?q=minimalist+living+tips"],
 };
 
-const GEO_LOCALES = [
-  { code:"US", flag:"🇺🇸", lang:"en-US,en;q=0.9", name:"United States" },
-  { code:"GB", flag:"🇬🇧", lang:"en-GB,en;q=0.9", name:"United Kingdom" },
-  { code:"DE", flag:"🇩🇪", lang:"de-DE,de;q=0.9,en;q=0.7", name:"Germany" },
-  { code:"FR", flag:"🇫🇷", lang:"fr-FR,fr;q=0.9,en;q=0.7", name:"France" },
-  { code:"JP", flag:"🇯🇵", lang:"ja-JP,ja;q=0.9,en;q=0.5", name:"Japan" },
-  { code:"BR", flag:"🇧🇷", lang:"pt-BR,pt;q=0.9,en;q=0.5", name:"Brazil" },
-  { code:"AU", flag:"🇦🇺", lang:"en-AU,en;q=0.9", name:"Australia" },
-  { code:"IN", flag:"🇮🇳", lang:"en-IN,en;q=0.9,hi;q=0.7", name:"India" },
-  { code:"KR", flag:"🇰🇷", lang:"ko-KR,ko;q=0.9,en;q=0.5", name:"South Korea" },
-  { code:"MX", flag:"🇲🇽", lang:"es-MX,es;q=0.9,en;q=0.5", name:"Mexico" },
-  { code:"IT", flag:"🇮🇹", lang:"it-IT,it;q=0.9,en;q=0.5", name:"Italy" },
-  { code:"SE", flag:"🇸🇪", lang:"sv-SE,sv;q=0.9,en;q=0.7", name:"Sweden" },
-  { code:"NL", flag:"🇳🇱", lang:"nl-NL,nl;q=0.9,en;q=0.7", name:"Netherlands" },
-  { code:"ES", flag:"🇪🇸", lang:"es-ES,es;q=0.9,en;q=0.5", name:"Spain" },
-  { code:"PL", flag:"🇵🇱", lang:"pl-PL,pl;q=0.9,en;q=0.5", name:"Poland" },
-  { code:"CA", flag:"🇨🇦", lang:"en-CA,en;q=0.9,fr;q=0.5", name:"Canada" },
+const GEO=[
+  {code:"US",flag:"🇺🇸",lang:"en-US,en;q=0.9",name:"United States"},
+  {code:"GB",flag:"🇬🇧",lang:"en-GB,en;q=0.9",name:"United Kingdom"},
+  {code:"DE",flag:"🇩🇪",lang:"de-DE,de;q=0.9,en;q=0.7",name:"Germany"},
+  {code:"FR",flag:"🇫🇷",lang:"fr-FR,fr;q=0.9,en;q=0.7",name:"France"},
+  {code:"JP",flag:"🇯🇵",lang:"ja-JP,ja;q=0.9,en;q=0.5",name:"Japan"},
+  {code:"BR",flag:"🇧🇷",lang:"pt-BR,pt;q=0.9,en;q=0.5",name:"Brazil"},
+  {code:"AU",flag:"🇦🇺",lang:"en-AU,en;q=0.9",name:"Australia"},
+  {code:"IN",flag:"🇮🇳",lang:"en-IN,en;q=0.9,hi;q=0.7",name:"India"},
+  {code:"KR",flag:"🇰🇷",lang:"ko-KR,ko;q=0.9,en;q=0.5",name:"South Korea"},
+  {code:"MX",flag:"🇲🇽",lang:"es-MX,es;q=0.9,en;q=0.5",name:"Mexico"},
+  {code:"IT",flag:"🇮🇹",lang:"it-IT,it;q=0.9,en;q=0.5",name:"Italy"},
+  {code:"SE",flag:"🇸🇪",lang:"sv-SE,sv;q=0.9,en;q=0.7",name:"Sweden"},
+  {code:"NL",flag:"🇳🇱",lang:"nl-NL,nl;q=0.9,en;q=0.7",name:"Netherlands"},
+  {code:"ES",flag:"🇪🇸",lang:"es-ES,es;q=0.9,en;q=0.5",name:"Spain"},
+  {code:"PL",flag:"🇵🇱",lang:"pl-PL,pl;q=0.9,en;q=0.5",name:"Poland"},
+  {code:"CA",flag:"🇨🇦",lang:"en-CA,en;q=0.9,fr;q=0.5",name:"Canada"},
 ];
 
-const FRUSTRATION_QUERIES = [
+const FRUSTRATION=[
   "wifi not connecting","dns server not responding","computer running slow",
   "popup ads won't stop","blue screen of death fix","browser hijacked help",
   "why is my internet so slow","vpn keeps disconnecting","ssl certificate error",
@@ -470,331 +541,299 @@ const FRUSTRATION_QUERIES = [
   "HELP wifi still not working","please fix my computer","nothing works anymore",
 ];
 
-// ── State ──
-let engine = {
-  running: false,
-  mode: "wifi",
-  speed: 3,
-  timer: null,
-  stats: { requests:0, success:0, errors:0, sites:new Set(), categories:new Set(), geoVisits:{}, startTime:null },
-  scoreHistory: [],
-  geoIndex: 0,
-  geoLastRotate: 0,
-  frustrationLevel: 0,
+const QUOTES=[
+  {q:"In a world of surveillance, be the noise.",a:"The Palm-Tree Manifesto"},
+  {q:"If you can't hide, overwhelm.",a:"Sun Tzu, probably"},
+  {q:"Data brokers hate this one weird trick.",a:"Ancient Coconut Proverb"},
+  {q:"Every coconut dropped is a tracker confused.",a:"Palm-Tree Wisdom"},
+  {q:"Your ISP is probably confused right now.",a:"Someone watching packet logs"},
+  {q:"Is this 47 different people?!",a:"An ad network, moments before crying"},
+  {q:"Installing dependencies is self-care.",a:"Ancient DevOps Proverb"},
+  {q:"I'm not paranoid, I'm just really popular with advertisers.",a:"Every user of this tool"},
+  {q:"Today I am Karen from Wisconsin.",a:"Your HTTP request, probably"},
+  {q:"Sleep is for people who don't generate noise.",a:"The Night Owl Protocol"},
+  {q:"Trackers are questioning their existence.",a:"Post-coconut-storm status report"},
+  {q:"We're not playing god, we're playing HR department.",a:"The Identity Forge"},
+];
+
+const COCONUT_EMOJI = ['🥥','🥥','🥥','🌰','🌴','🍈'];
+
+let E = {
+  running:false, mode:"wifi", speed:3, timer:null, scoreTimer:null,
+  stats:{requests:0,success:0,errors:0,sites:new Set(),categories:new Set(),geoVisits:{},startTime:null,adsConfused:0,trackersCrying:0,brokersPuzzled:0},
+  scoreHistory:[], geoIndex:0, geoLastRotate:0, frustrationLevel:0,
 };
 
-// ── Chaos math (logistic map) ──
-let chaosX = Math.random() * 0.5 + 0.25;
-function chaosNext() {
-  chaosX = 3.9 * chaosX * (1 - chaosX);
-  return chaosX;
+let chaosX = Math.random()*.5+.25;
+function chaos(){chaosX=3.9*chaosX*(1-chaosX);return chaosX;}
+
+function getDelay(){
+  const b=chaos();
+  const s={1:[8000,20000],2:[5000,14000],3:[3000,9000],4:[1500,5000],5:[800,3000]};
+  const[lo,hi]=s[E.speed]||s[3];
+  let d=lo+(hi-lo)*b;
+  if(E.mode==="stealth")d*=2.5;
+  if(E.mode==="chaos")d*=.5;
+  return Math.max(500,d);
 }
 
-function getDelay() {
-  const base = chaosNext();
-  const speeds = { 1:[8000,20000], 2:[5000,14000], 3:[3000,9000], 4:[1500,5000], 5:[800,3000] };
-  const [lo, hi] = speeds[engine.speed] || speeds[3];
-  let delay = lo + (hi - lo) * base;
-  if (engine.mode === "stealth") delay *= 2.5;
-  if (engine.mode === "chaos") delay *= 0.5;
-  return Math.max(500, delay);
+function getCats(){
+  const c=[];
+  document.querySelectorAll('[data-cat]').forEach(el=>{if(el.checked)c.push(el.dataset.cat)});
+  return c.length?c:["news","tech"];
 }
 
-function getEnabledCategories() {
-  const cats = [];
-  document.querySelectorAll('[data-cat]').forEach(el => {
-    if (el.checked) cats.push(el.dataset.cat);
-  });
-  return cats.length ? cats : ["news","tech"];
-}
-
-function pickUrl() {
-  const cats = getEnabledCategories();
-  const useFrustration = document.getElementById('frustrationToggle').checked;
-
-  if (useFrustration && Math.random() < 0.3) {
-    engine.frustrationLevel = Math.min(engine.frustrationLevel + 1, FRUSTRATION_QUERIES.length - 1);
-    const q = FRUSTRATION_QUERIES[engine.frustrationLevel].replace(/ /g, '+');
-    const engines = ["https://www.google.com/search?q=","https://www.bing.com/search?q=","https://duckduckgo.com/?q="];
-    return { url: engines[Math.floor(Math.random()*engines.length)] + q, cat: "frustration" };
+function pickUrl(){
+  if(document.getElementById('frustrationToggle').checked&&Math.random()<.3){
+    E.frustrationLevel=Math.min(E.frustrationLevel+1,FRUSTRATION.length-1);
+    const q=FRUSTRATION[E.frustrationLevel].replace(/ /g,'+');
+    const eng=["https://www.google.com/search?q=","https://www.bing.com/search?q=","https://duckduckgo.com/?q="];
+    return{url:eng[~~(Math.random()*eng.length)]+q,cat:"frustrat"};
   }
-
-  const cat = cats[Math.floor(Math.random() * cats.length)];
-  const list = SITES[cat] || SITES.news;
-  return { url: list[Math.floor(Math.random() * list.length)], cat };
+  const cats=getCats(),cat=cats[~~(Math.random()*cats.length)],list=SITES[cat]||SITES.news;
+  return{url:list[~~(Math.random()*list.length)],cat};
 }
 
-function getGeoLocale() {
-  if (!document.getElementById('geoToggle').checked) return null;
-  const interval = parseInt(document.getElementById('geoIntSlider').value) * 60 * 1000;
-  const now = Date.now();
-  if (now - engine.geoLastRotate > interval) {
-    engine.geoIndex = (engine.geoIndex + 1) % GEO_LOCALES.length;
-    engine.geoLastRotate = now;
-    const loc = GEO_LOCALES[engine.geoIndex];
-    addFeedItem("GEO", `Rotated to ${loc.flag} ${loc.name}`, "geo");
-    engine.stats.geoVisits[loc.code] = (engine.stats.geoVisits[loc.code] || 0) + 1;
+function getGeo(){
+  if(!document.getElementById('geoToggle').checked)return null;
+  const intv=parseInt(document.getElementById('geoIntSlider').value)*60000;
+  const now=Date.now();
+  if(now-E.geoLastRotate>intv){
+    E.geoIndex=(E.geoIndex+1)%GEO.length;
+    E.geoLastRotate=now;
+    const g=GEO[E.geoIndex];
+    addFeed("geo",`Hopped to ${g.flag} ${g.name}`,"geo");
+    E.stats.geoVisits[g.code]=(E.stats.geoVisits[g.code]||0)+1;
   }
-  return GEO_LOCALES[engine.geoIndex];
+  return GEO[E.geoIndex];
 }
 
-// ── Core fetch ──
-async function fireRequest() {
-  if (!engine.running) return;
-  const { url, cat } = pickUrl();
-  const geo = getGeoLocale();
+// ── Falling coconut animation ──
+function dropCoconut(){
+  if(!document.getElementById('coconutAnimToggle').checked)return;
+  const zone=document.getElementById('coconutZone');
+  const el=document.createElement('div');
+  el.className='falling-coconut';
+  el.textContent=COCONUT_EMOJI[~~(Math.random()*COCONUT_EMOJI.length)];
+  el.style.left=Math.random()*90+'%';
+  el.style.setProperty('--dur',(1.5+Math.random()*2)+'s');
+  zone.appendChild(el);
+  setTimeout(()=>el.remove(),4000);
+}
 
-  try {
-    const headers = {};
-    if (geo) headers["Accept-Language"] = geo.lang;
-
-    await fetch(url, {
-      method: "GET",
-      mode: "no-cors",
-      cache: "no-store",
-      credentials: "omit",
-      headers,
-    });
-    engine.stats.requests++;
-    engine.stats.success++;
-    engine.stats.sites.add(new URL(url).hostname);
-    engine.stats.categories.add(cat);
-    addFeedItem(cat, url, "ok");
-  } catch {
-    engine.stats.requests++;
-    engine.stats.errors++;
-    addFeedItem(cat, url, "error");
+// ── Core ──
+async function fire(){
+  if(!E.running)return;
+  const{url,cat}=pickUrl();
+  const geo=getGeo();
+  try{
+    const h={};if(geo)h["Accept-Language"]=geo.lang;
+    await fetch(url,{method:"GET",mode:"no-cors",cache:"no-store",credentials:"omit",headers:h});
+    E.stats.requests++;E.stats.success++;
+    E.stats.sites.add(new URL(url).hostname);
+    E.stats.categories.add(cat);
+    E.stats.adsConfused+=~~(Math.random()*5)+1;
+    E.stats.trackersCrying+=~~(Math.random()*3);
+    E.stats.brokersPuzzled+=~~(Math.random()*2);
+    addFeed(cat,url,"ok");
+    dropCoconut();
+  }catch{
+    E.stats.requests++;E.stats.errors++;
+    addFeed(cat,url,"error");
   }
   updateUI();
-  scheduleNext();
+  if(E.running)E.timer=setTimeout(fire,getDelay());
 }
 
-function scheduleNext() {
-  if (!engine.running) return;
-  const delay = getDelay();
-  engine.timer = setTimeout(fireRequest, delay);
-}
+function toggleEngine(){if(E.running)stop();else start();}
 
-// ── Engine control ──
-function toggleEngine() {
-  if (engine.running) stopEngine(); else startEngine();
-}
+function start(){
+  E.running=true;
+  E.stats={requests:0,success:0,errors:0,sites:new Set(),categories:new Set(),geoVisits:{},startTime:Date.now(),adsConfused:0,trackersCrying:0,brokersPuzzled:0};
+  E.scoreHistory=[];E.frustrationLevel=0;E.geoLastRotate=0;
+  E.geoIndex=~~(Math.random()*GEO.length);
 
-function startEngine() {
-  engine.running = true;
-  engine.stats = { requests:0, success:0, errors:0, sites:new Set(), categories:new Set(), geoVisits:{}, startTime:Date.now() };
-  engine.scoreHistory = [];
-  engine.frustrationLevel = 0;
-  engine.geoLastRotate = 0;
-  engine.geoIndex = Math.floor(Math.random() * GEO_LOCALES.length);
-
-  document.getElementById('powerBtn').classList.add('active');
-  document.getElementById('powerLabel').textContent = 'Generating Noise...';
-  document.getElementById('powerSub').textContent = modeLabel(engine.mode);
+  document.getElementById('powerRing').classList.add('active');
+  document.getElementById('powerBtn').querySelector('.label').textContent='ACTIVE';
+  document.getElementById('powerLabel').textContent='Dropping Coconuts...';
+  document.getElementById('powerSub').textContent=modeLabel(E.mode);
   document.getElementById('liveDot').classList.replace('off','on');
-  document.getElementById('liveFeed').innerHTML = '';
+  document.getElementById('liveFeed').innerHTML='';
   document.getElementById('statsRow').classList.add('pulsing');
 
-  addFeedItem("SYS", `Engine started — ${modeLabel(engine.mode)}`, "ok");
+  addFeed("sys",`🌴 ${modeLabel(E.mode)} activated!`,"ok");
+  rotateQuote();
 
-  // Fire initial burst
-  for (let i = 0; i < (engine.mode === "chaos" ? 3 : 1); i++) {
-    setTimeout(fireRequest, i * 400);
-  }
+  const burst=E.mode==="chaos"?3:1;
+  for(let i=0;i<burst;i++)setTimeout(fire,i*400);
 
-  // Score snapshot every 30s
-  engine.scoreTimer = setInterval(() => {
-    engine.scoreHistory.push(calcScore());
-    if (engine.scoreHistory.length > 60) engine.scoreHistory.shift();
-  }, 30000);
+  E.scoreTimer=setInterval(()=>{
+    E.scoreHistory.push(calcScore());
+    if(E.scoreHistory.length>60)E.scoreHistory.shift();
+  },30000);
 
-  if ('vibrate' in navigator) navigator.vibrate(50);
+  if('vibrate' in navigator)navigator.vibrate(50);
 }
 
-function stopEngine() {
-  engine.running = false;
-  clearTimeout(engine.timer);
-  clearInterval(engine.scoreTimer);
+function stop(){
+  E.running=false;
+  clearTimeout(E.timer);clearInterval(E.scoreTimer);
 
-  document.getElementById('powerBtn').classList.remove('active');
-  document.getElementById('powerLabel').textContent = 'Tap to Start';
-  document.getElementById('powerSub').textContent = 'Generate WiFi noise from your phone';
+  document.getElementById('powerRing').classList.remove('active');
+  document.getElementById('powerBtn').querySelector('.label').textContent='START';
+  document.getElementById('powerLabel').textContent='Tap the Palm Tree';
+  document.getElementById('powerSub').textContent='Drop coconuts on the trackers';
   document.getElementById('liveDot').classList.replace('on','off');
   document.getElementById('statsRow').classList.remove('pulsing');
 
-  addFeedItem("SYS", `Engine stopped — ${engine.stats.requests} requests sent`, "ok");
-  if ('vibrate' in navigator) navigator.vibrate([30,50,30]);
+  addFeed("sys",`🥥 Stopped — ${E.stats.requests} coconuts dropped`,"ok");
+  if('vibrate' in navigator)navigator.vibrate([30,50,30]);
 }
 
-function modeLabel(m) {
-  return { wifi:"Pine-Tree WiFi Noise", chaos:"Maximum Chaos", stealth:"Stealth Mode", geo:"Globe-Trotter" }[m] || m;
+function modeLabel(m){
+  return{wifi:"🌴 Palm Breeze",chaos:"🥥💥 Coconut Storm",stealth:"🌿 Hidden Frond",geo:"🏝️ Island Hopper"}[m]||m;
 }
 
-// ── Scoring ──
-function calcScore() {
-  const s = engine.stats;
-  const siteScore = Math.min(s.sites.size * 3, 30);
-  const catScore = Math.min(s.categories.size * 5, 25);
-  const volScore = Math.min(s.requests, 25);
-  const geoScore = Math.min(Object.keys(s.geoVisits).length * 5, 20);
-  return Math.min(100, siteScore + catScore + volScore + geoScore);
+function calcScore(){
+  const s=E.stats;
+  return Math.min(100,
+    Math.min(s.sites.size*3,30)+
+    Math.min(s.categories.size*5,25)+
+    Math.min(s.requests,25)+
+    Math.min(Object.keys(s.geoVisits).length*5,20)
+  );
 }
 
-// ── UI updates ──
-function updateUI() {
-  const s = engine.stats;
-  document.getElementById('statReqs').textContent = s.requests;
-  document.getElementById('statSites').textContent = s.sites.size;
-  document.getElementById('statScore').textContent = calcScore();
-
-  // Stats screen
-  document.getElementById('s2Reqs').textContent = s.requests;
-  document.getElementById('s2Ok').textContent = s.success;
-  document.getElementById('s2Err').textContent = s.errors;
-  document.getElementById('s2Sites').textContent = s.sites.size;
-  document.getElementById('s2Cats').textContent = s.categories.size;
-  if (s.startTime) {
-    const sec = Math.floor((Date.now() - s.startTime) / 1000);
-    const m = Math.floor(sec/60), ss = sec%60;
-    document.getElementById('s2Time').textContent = `${m}:${String(ss).padStart(2,'0')}`;
+function updateUI(){
+  const s=E.stats;
+  document.getElementById('statReqs').textContent=s.requests;
+  document.getElementById('statSites').textContent=s.sites.size;
+  document.getElementById('statScore').textContent=calcScore();
+  document.getElementById('tearAds').textContent=s.adsConfused;
+  document.getElementById('tearTrack').textContent=s.trackersCrying;
+  document.getElementById('tearBroke').textContent=s.brokersPuzzled;
+  document.getElementById('s2Reqs').textContent=s.requests;
+  document.getElementById('s2Ok').textContent=s.success;
+  document.getElementById('s2Err').textContent=s.errors;
+  document.getElementById('s2Sites').textContent=s.sites.size;
+  document.getElementById('s2Cats').textContent=s.categories.size;
+  if(s.startTime){
+    const sec=~~((Date.now()-s.startTime)/1000),m=~~(sec/60),ss=sec%60;
+    document.getElementById('s2Time').textContent=`${m}:${String(ss).padStart(2,'0')}`;
   }
 }
 
-function addFeedItem(cat, text, type) {
-  const feed = document.getElementById('liveFeed');
-  const now = new Date();
-  const time = now.toTimeString().slice(0,8);
-  const short = text.length > 50 ? text.replace(/https?:\/\/(www\.)?/,'').slice(0,45)+'…' : text;
-  const cls = type === "error" ? " error" : type === "geo" ? " geo" : "";
-  const div = document.createElement('div');
-  div.className = `feed-item${cls}`;
-  div.innerHTML = `<span class="time">${time}</span><span class="cat">${cat.toUpperCase().slice(0,8)}</span><span class="url">${short}</span>`;
-  feed.prepend(div);
-  while (feed.children.length > 80) feed.lastChild.remove();
+function addFeed(cat,text,type){
+  const feed=document.getElementById('liveFeed');
+  const t=new Date().toTimeString().slice(0,8);
+  const short=text.length>50?text.replace(/https?:\/\/(www\.)?/,'').slice(0,42)+'…':text;
+  const cls=type==="error"?" error":"";
+  const d=document.createElement('div');
+  d.className='feed-item'+cls;
+  d.innerHTML=`<span class="time">${t}</span><span class="cat c-${cat}">${cat.toUpperCase().slice(0,8)}</span><span class="url">${short}</span>`;
+  feed.prepend(d);
+  while(feed.children.length>80)feed.lastChild.remove();
 }
 
-// ── Mode selection ──
-function selectMode(el) {
-  document.querySelectorAll('.mode-card').forEach(c => c.classList.remove('selected'));
+function selectMode(el){
+  document.querySelectorAll('.mode-card').forEach(c=>c.classList.remove('selected'));
   el.classList.add('selected');
-  engine.mode = el.dataset.mode;
-  if (el.dataset.mode === "geo") {
-    document.getElementById('geoToggle').checked = true;
-  }
+  E.mode=el.dataset.mode;
+  if(el.dataset.mode==="geo")document.getElementById('geoToggle').checked=true;
 }
 
-// ── Speed slider ──
-function updateSpeed() {
-  const v = parseInt(document.getElementById('speedSlider').value);
-  engine.speed = v;
-  document.getElementById('speedLabel').textContent = ["","Very Slow","Slow","Medium","Fast","Turbo"][v];
+function updateSpeed(){
+  const v=parseInt(document.getElementById('speedSlider').value);
+  E.speed=v;
+  document.getElementById('speedLabel').textContent=["","Calm Lagoon","Gentle Tide","Tropical Breeze","Palm Storm","Coconut Hurricane"][v];
 }
 
-// ── Screen navigation ──
-function showScreen(name) {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+function showScreen(name){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   document.getElementById('screen-'+name).classList.add('active');
-  document.querySelectorAll('.tab').forEach((t,i) => {
-    t.classList.toggle('active', ['home','stats','settings','about'][i] === name);
+  document.querySelectorAll('.tab').forEach((t,i)=>{
+    t.classList.toggle('active',['home','stats','settings','about'][i]===name);
   });
-  if (name === 'stats') refreshStatsScreen();
+  if(name==='stats')refreshStats();
 }
 
-function refreshStatsScreen() {
-  // Category breakdown
-  const bd = document.getElementById('catBreakdown');
-  const cats = {};
-  engine.stats.categories.forEach(c => cats[c] = (cats[c]||0));
-  // Use sites to approximate
-  bd.innerHTML = Array.from(engine.stats.categories).map(c =>
-    `<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--bg3)"><span>${c}</span><span style="color:var(--green)">✓</span></div>`
-  ).join('') || '<div style="color:var(--fg3)">No data yet</div>';
+function refreshStats(){
+  const bd=document.getElementById('catBreakdown');
+  const icons={news:'🗞️',tech:'💻',social:'📱',shopping:'🛒',health:'💊',privacy:'🔒',finance:'💰',decoy:'🎣',frustrat:'😤'};
+  bd.innerHTML=Array.from(E.stats.categories).map(c=>
+    `<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.04)"><span>${icons[c]||'🌴'} ${c}</span><span style="color:var(--palm)">✓</span></div>`
+  ).join('')||'<div style="color:var(--fg3)">Drop some coconuts first 🥥</div>';
 
-  // Geo strip
-  const gs = document.getElementById('geoStrip');
-  gs.innerHTML = GEO_LOCALES.map(g => {
-    const active = engine.stats.geoVisits[g.code] ? ' active' : '';
-    const count = engine.stats.geoVisits[g.code] || 0;
-    return `<div class="geo-chip${active}">${g.flag} ${g.code}${count ? ' ×'+count : ''}</div>`;
+  const gs=document.getElementById('geoStrip');
+  gs.innerHTML=GEO.map(g=>{
+    const a=E.stats.geoVisits[g.code]?' active':'';
+    const n=E.stats.geoVisits[g.code]||0;
+    return`<div class="geo-chip${a}">${g.flag} ${g.code}${n?' ×'+n:''}</div>`;
   }).join('');
-  const gc = Object.keys(engine.stats.geoVisits).length;
-  document.getElementById('geoCount').textContent = gc ? `${gc} countries visited` : 'No geo-rotation data yet';
+  const gc=Object.keys(E.stats.geoVisits).length;
+  document.getElementById('geoCount').textContent=gc?`🏝️ ${gc} islands visited`:'Enable Island Hopper mode to explore';
 
-  // Score chart
-  drawScoreChart();
+  drawChart();
 }
 
-function drawScoreChart() {
-  const canvas = document.getElementById('scoreChart');
-  if (!canvas) return;
-  const ctx = canvas.getContext('2d');
-  const dpr = window.devicePixelRatio || 1;
-  canvas.width = canvas.clientWidth * dpr;
-  canvas.height = 120 * dpr;
-  ctx.scale(dpr, dpr);
-  const W = canvas.clientWidth, H = 120;
-
-  ctx.clearRect(0, 0, W, H);
-
-  const data = engine.scoreHistory;
-  if (data.length < 2) {
-    ctx.fillStyle = '#64748b';
-    ctx.font = '12px sans-serif';
-    ctx.textAlign = 'center';
-    ctx.fillText('Score data will appear after running for a while', W/2, H/2);
+function drawChart(){
+  const cv=document.getElementById('scoreChart');if(!cv)return;
+  const ctx=cv.getContext('2d');
+  const dpr=window.devicePixelRatio||1;
+  cv.width=cv.clientWidth*dpr;cv.height=130*dpr;
+  ctx.scale(dpr,dpr);
+  const W=cv.clientWidth,H=130;
+  ctx.clearRect(0,0,W,H);
+  const data=E.scoreHistory;
+  if(data.length<2){
+    ctx.fillStyle='#5e7896';ctx.font='12px sans-serif';ctx.textAlign='center';
+    ctx.fillText('🌴 Score data grows as coconuts drop',W/2,H/2);
     return;
   }
-
-  // Grid
-  ctx.strokeStyle = '#1e293b';
-  ctx.lineWidth = 1;
-  for (let y = 0; y <= 100; y += 25) {
-    const py = H - (y / 100) * (H - 20) - 10;
-    ctx.beginPath(); ctx.moveTo(30, py); ctx.lineTo(W, py); ctx.stroke();
-    ctx.fillStyle = '#64748b'; ctx.font = '9px sans-serif'; ctx.textAlign = 'right';
-    ctx.fillText(y, 26, py + 3);
+  ctx.strokeStyle='rgba(45,212,168,.1)';ctx.lineWidth=1;
+  for(let y=0;y<=100;y+=25){
+    const py=H-(y/100)*(H-20)-10;
+    ctx.beginPath();ctx.moveTo(30,py);ctx.lineTo(W,py);ctx.stroke();
+    ctx.fillStyle='#5e7896';ctx.font='9px sans-serif';ctx.textAlign='right';
+    ctx.fillText(y,26,py+3);
   }
-
-  // Line
-  ctx.beginPath();
-  ctx.strokeStyle = '#22c55e';
-  ctx.lineWidth = 2;
-  const step = (W - 34) / (data.length - 1);
-  data.forEach((v, i) => {
-    const x = 34 + i * step;
-    const y = H - (v / 100) * (H - 20) - 10;
-    i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
-  });
+  const step=(W-34)/(data.length-1);
+  ctx.beginPath();ctx.strokeStyle='#2dd4a8';ctx.lineWidth=2.5;
+  data.forEach((v,i)=>{const x=34+i*step,y=H-(v/100)*(H-20)-10;i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);});
   ctx.stroke();
-
-  // Fill
-  const lastX = 34 + (data.length - 1) * step;
-  ctx.lineTo(lastX, H - 10);
-  ctx.lineTo(34, H - 10);
-  ctx.closePath();
-  const grad = ctx.createLinearGradient(0, 0, 0, H);
-  grad.addColorStop(0, 'rgba(34,197,94,0.3)');
-  grad.addColorStop(1, 'rgba(34,197,94,0)');
-  ctx.fillStyle = grad;
-  ctx.fill();
+  ctx.lineTo(34+(data.length-1)*step,H-10);ctx.lineTo(34,H-10);ctx.closePath();
+  const g=ctx.createLinearGradient(0,0,0,H);
+  g.addColorStop(0,'rgba(45,212,168,.3)');g.addColorStop(1,'rgba(45,212,168,0)');
+  ctx.fillStyle=g;ctx.fill();
 }
 
-// ── PWA install ──
+function rotateQuote(){
+  const q=QUOTES[~~(Math.random()*QUOTES.length)];
+  const el=document.getElementById('quoteText');
+  if(el)el.textContent=`"${q.q}"`;
+  const a=document.querySelector('#quoteBanner .a');
+  if(a)a.textContent=`— ${q.a}`;
+}
+setInterval(rotateQuote,15000);
+
+// ASCII palm tree for about page
+document.getElementById('asciiArt').textContent=
+`    🥥
+   /|\\
+  / | \\
+ /🌴|🌴\\
+/___|___\\
+    |
+ ~~~|~~~
+  NOISE`;
+
+// PWA
 let deferredPrompt;
-window.addEventListener('beforeinstallprompt', e => { deferredPrompt = e; });
-
-// ── Service Worker ──
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('sw.js').catch(() => {});
-}
-
-// ── Persist settings ──
-window.addEventListener('beforeunload', () => {
-  if (engine.running) stopEngine();
-});
-
-// ── Init ──
+window.addEventListener('beforeinstallprompt',e=>{deferredPrompt=e});
+if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
+window.addEventListener('beforeunload',()=>{if(E.running)stop()});
 updateSpeed();
+rotateQuote();
 </script>
 </body>
 </html>
