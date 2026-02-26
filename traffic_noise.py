@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Traffic Noise Generator v3.3 - Python Version with Dynamic Terminal UI
+Traffic Noise Generator v3.5.0 - Python Version with Dynamic Terminal UI
 
 "I'm not paranoid, I'm just really popular with advertisers."
     - Every user of this tool
@@ -18,7 +18,6 @@ Side effects may include:
 Not responsible for any existential crises caused to tracking scripts.
 """
 
-__version__ = "3.4.0"
 __author__ = "palm-tree"
 
 import asyncio
@@ -41,6 +40,9 @@ from contextlib import suppress
 from pathlib import Path
 
 import httpx
+
+from constants.user_agents import TRAFFIC_NOISE_USER_AGENTS
+from version import __version__
 
 # Import issue traffic generator
 try:
@@ -101,7 +103,6 @@ from rich.text import Text
 from rich.style import Style
 from rich.prompt import Prompt, Confirm, IntPrompt
 from rich import box
-import math
 
 # ============================================================================
 # MARKOV CHAIN & CHAOS MATHEMATICS
@@ -605,34 +606,7 @@ CHAOS_MIN_DELAY, CHAOS_MAX_DELAY = 1, 120
 # USER AGENTS
 # ============================================================================
 
-USER_AGENTS = [
-    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
-    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36",
-    "Mozilla/5.0 (Windows NT 11.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
-    "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:121.0) Gecko/20100101 Firefox/121.0",
-    "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:120.0) Gecko/20100101 Firefox/120.0",
-    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36 Edg/120.0.0.0",
-    "Mozilla/5.0 (Macintosh; Intel Mac OS X 14_2) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2 Safari/605.1.15",
-    "Mozilla/5.0 (Macintosh; Intel Mac OS X 13_6) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.1 Safari/605.1.15",
-    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
-    "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
-    "Mozilla/5.0 (X11; Linux x86_64; rv:121.0) Gecko/20100101 Firefox/121.0",
-    "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:121.0) Gecko/20100101 Firefox/121.0",
-    "Mozilla/5.0 (iPhone; CPU iPhone OS 17_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2 Mobile/15E148 Safari/604.1",
-    "Mozilla/5.0 (iPad; CPU OS 17_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2 Mobile/15E148 Safari/604.1",
-    "Mozilla/5.0 (Linux; Android 14; SM-S918B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.6099.144 Mobile Safari/537.36",
-    "Mozilla/5.0 (Linux; Android 13; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.6099.144 Mobile Safari/537.36",
-    "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)",
-    "Mozilla/5.0 (compatible; Bingbot/2.0; +http://www.bing.com/bingbot.htm)",
-    "facebookexternalhit/1.1 (+http://www.facebook.com/externalhit_uatext.php)",
-    "Twitterbot/1.0",
-    "Mozilla/5.0 (PlayStation; PlayStation 5/1.0) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.0 Safari/605.1.15",
-    "Mozilla/5.0 (Nintendo Switch; WifiWebAuthApplet) AppleWebKit/609.4 (KHTML, like Gecko) NF/6.0.2.21.3 NintendoBrowser/5.1.0.22474",
-    "Mozilla/5.0 (SMART-TV; Linux; Tizen 6.5) AppleWebKit/537.36 (KHTML, like Gecko) SamsungBrowser/5.0 Chrome/85.0.4183.93 TV Safari/537.36",
-    "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Tesla/2021.44.25.2",
-    "Mozilla/5.0 (SmartFridge; Linux) AppleWebKit/537.36 LG/1.0",
-    "Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.1; Trident/4.0)",
-]
+USER_AGENTS = TRAFFIC_NOISE_USER_AGENTS
 
 DNS_SERVERS = [
     "8.8.8.8", "8.8.4.4", "1.1.1.1", "1.0.0.1",
@@ -942,6 +916,83 @@ ACCEPT_HEADERS = [
 
 BROWSING_PATTERNS = ["normal", "bursty", "slow", "erratic", "scanner"]
 
+DEFAULT_CATEGORIES = ["Lifestyle", "World", "Technology", "Health", "Trending", "SocialNetworkAds"]
+
+ISSUE_CATEGORY_MAP = {
+    "networking": ["NetworkingIssues", "DNSIssues", "WiFiProblems", "VPNIssues", "SSLErrors"],
+    "hardware": ["HardwareIssues", "HighCPU", "BSOD", "DriverIssues"],
+    "software": ["SoftwareIssues", "UpdateFailures", "DLLErrors", "SlowComputer"],
+    "malware": ["MalwareIssues", "AdwareInfection", "BrowserHijack", "PopupAds", "Trojan", "Spyware"],
+    "adware": ["AdwareInfection", "BrowserHijack", "PopupAds", "Cryptominer"],
+    "ransomware": ["Ransomware", "Trojan", "MalwareIssues"],
+    "system": ["SlowComputer", "HighCPU", "BSOD", "DriverIssues", "UpdateFailures"],
+    "misconfigured": ["MisconfiguredSettings", "DNSIssues", "SSLErrors"],
+    "dns": ["DNSIssues", "NetworkingIssues"],
+    "ssl": ["SSLErrors", "NetworkingIssues"],
+    "wifi": ["WiFiProblems", "NetworkingIssues"],
+    "vpn": ["VPNIssues", "NetworkingIssues", "SSLErrors"],
+    "bsod": ["BSOD", "DriverIssues", "HardwareIssues"],
+    "cryptominer": ["Cryptominer", "HighCPU", "SlowComputer"],
+    "mixed": [
+        "NetworkingIssues", "HardwareIssues", "SoftwareIssues", "MalwareIssues",
+        "MisconfiguredSettings", "DNSIssues", "SSLErrors", "WiFiProblems",
+        "SlowComputer", "HighCPU", "AdwareInfection", "BrowserHijack",
+        "PopupAds", "Cryptominer", "BSOD", "DriverIssues", "UpdateFailures",
+    ],
+}
+
+PERSONA_CATEGORY_MAP = {
+    "tech_enthusiast": ["Technology", "Privacy", "Hobbies"],
+    "news_junkie": ["World", "Trending", "LeftLeaning", "RightLeaning"],
+    "privacy_advocate": ["Privacy", "Technology"],
+    "social_butterfly": ["SocialMedia", "Lifestyle", "Trending"],
+    "entertainment_seeker": ["Tabloids", "SocialMedia", "Lifestyle"],
+    "health_conscious": ["Health", "Lifestyle", "Hobbies"],
+    "political_observer": ["LeftLeaning", "RightLeaning", "World"],
+    "hobbyist": ["Hobbies", "Technology", "Lifestyle"],
+    "troubleshooter": ["NetworkingIssues", "HardwareIssues", "SoftwareIssues", "MalwareIssues"],
+}
+
+PERSONA_DESCRIPTIONS = {
+    "tech_enthusiast": "Technology, privacy, and hobby sites",
+    "news_junkie": "World news across political spectrum",
+    "privacy_advocate": "Privacy tools and security resources",
+    "social_butterfly": "Social media and trending content",
+    "entertainment_seeker": "Tabloids and entertainment",
+    "health_conscious": "Health, wellness, and lifestyle",
+    "political_observer": "Political news from all sides",
+    "hobbyist": "DIY, crafts, and projects",
+    "troubleshooter": "Tech support searches",
+}
+
+ISSUE_CATEGORY_DESCRIPTIONS = {
+    "Network Issues": {
+        "networking": "General network connectivity problems",
+        "dns": "DNS resolution failures, server not responding",
+        "ssl": "SSL/TLS certificate errors, HTTPS issues",
+        "wifi": "WiFi disconnecting, no internet",
+        "vpn": "VPN connection failures, slow speeds",
+    },
+    "System Issues": {
+        "hardware": "Hardware problems, device errors",
+        "system": "Slow computer, performance issues",
+        "bsod": "Blue Screen of Death, system crashes",
+        "software": "Application crashes, missing files",
+    },
+    "Malware/Adware": {
+        "malware": "General malware infections",
+        "adware": "Popup ads, browser infections",
+        "ransomware": "Encrypted files, ransom demands",
+        "cryptominer": "Hidden cryptocurrency mining",
+    },
+    "Configuration": {
+        "misconfigured": "Wrong settings, configuration errors",
+    },
+    "Combined": {
+        "mixed": "Random mix of all issue types",
+    },
+}
+
 # ============================================================================
 # GLOBAL STATE
 # ============================================================================
@@ -967,95 +1018,97 @@ state = AppState()
 def generate_session_id() -> str:
     return ''.join(random.choices(string.hexdigits.lower(), k=32))
 
+
+def _build_base_categories(config: Optional[Config]) -> List[str]:
+    available = list(DEFAULT_CATEGORIES)
+    if not config:
+        return available
+
+    if config.include_political:
+        available.extend(["LeftLeaning", "RightLeaning"])
+    if config.include_tabloids:
+        available.append("Tabloids")
+    if config.include_social:
+        available.append("SocialMedia")
+    if config.include_privacy:
+        available.append("Privacy")
+    if config.include_hobbies:
+        available.append("Hobbies")
+    return available
+
+
+def _apply_daily_routine_categories(available: List[str]) -> List[str]:
+    global active_daily_routine
+    if active_daily_routine and DAILY_ROUTINES_AVAILABLE:
+        routine_categories = [c for c in active_daily_routine.get_active_categories() if c in NEWS_SITES]
+        if routine_categories:
+            return routine_categories
+    return available
+
+
+def _maybe_get_geo_locale_url() -> Optional[tuple]:
+    global geo_rotator
+    if geo_rotator and GEO_ROTATE_AVAILABLE and random.random() < 0.2:
+        return "GeoLocale", geo_rotator.get_locale_url()
+    return None
+
+
+def _maybe_get_issue_url(config: Optional[Config]) -> Optional[tuple]:
+    if not config or not config.simulate_issues or random.random() >= 0.4:
+        return None
+
+    categories = ISSUE_CATEGORY_MAP.get(config.simulate_issues)
+    if not categories:
+        return None
+
+    category = random.choice(categories)
+    if category in NEWS_SITES:
+        return category, random.choice(NEWS_SITES[category])
+    return None
+
+
+def _apply_persona_categories(config: Optional[Config], available: List[str]) -> List[str]:
+    if not config or not config.persona:
+        return available
+    return PERSONA_CATEGORY_MAP.get(config.persona, available)
+
+
+def _apply_scheduled_profile(config: Optional[Config], available: List[str]) -> List[str]:
+    if not config or not config.scheduled_profile:
+        return available
+    profile = ScheduledProfile.get_current_profile()
+    return [c for c in profile["categories"] if c in NEWS_SITES]
+
+
+def _pick_category(available: List[str], config: Optional[Config], use_markov: bool) -> str:
+    if use_markov and config and config.chaos_mode:
+        category = markov_chain.next_category()
+        if category not in available:
+            return random.choice(available)
+        return category
+    return random.choice(available)
+
+
 def get_random_news_url(config: Config = None, use_markov: bool = False) -> tuple:
-    global geo_rotator, active_daily_routine
+    available = _build_base_categories(config)
+    available = _apply_daily_routine_categories(available)
 
-    available = ["Lifestyle", "World", "Technology", "Health", "Trending", "SocialNetworkAds"]
+    geo_locale = _maybe_get_geo_locale_url()
+    if geo_locale:
+        return geo_locale
 
-    if config:
-        if config.include_political:
-            available.extend(["LeftLeaning", "RightLeaning"])
-        if config.include_tabloids:
-            available.append("Tabloids")
-        if config.include_social:
-            available.append("SocialMedia")
-        if config.include_privacy:
-            available.append("Privacy")
-        if config.include_hobbies:
-            available.append("Hobbies")
+    issue_url = _maybe_get_issue_url(config)
+    if issue_url:
+        return issue_url
 
-        # v3.4.0 - Daily routine categories override
-        if active_daily_routine and DAILY_ROUTINES_AVAILABLE:
-            routine_cats = active_daily_routine.get_active_categories()
-            if routine_cats:
-                valid_routine_cats = [c for c in routine_cats if c in NEWS_SITES]
-                if valid_routine_cats:
-                    available = valid_routine_cats
-
-        # v3.4.0 - Geo-rotation: occasionally inject locale-specific URLs
-        if geo_rotator and GEO_ROTATE_AVAILABLE and random.random() < 0.2:
-            locale_url = geo_rotator.get_locale_url()
-            return "GeoLocale", locale_url
-
-        if config.simulate_issues:
-            # v3.3.2 - Extended issue categories (spicy-cat style)
-            issue_map = {
-                "networking": ["NetworkingIssues", "DNSIssues", "WiFiProblems", "VPNIssues", "SSLErrors"],
-                "hardware": ["HardwareIssues", "HighCPU", "BSOD", "DriverIssues"],
-                "software": ["SoftwareIssues", "UpdateFailures", "DLLErrors", "SlowComputer"],
-                "malware": ["MalwareIssues", "AdwareInfection", "BrowserHijack", "PopupAds", "Trojan", "Spyware"],
-                "adware": ["AdwareInfection", "BrowserHijack", "PopupAds", "Cryptominer"],
-                "ransomware": ["Ransomware", "Trojan", "MalwareIssues"],
-                "system": ["SlowComputer", "HighCPU", "BSOD", "DriverIssues", "UpdateFailures"],
-                "misconfigured": ["MisconfiguredSettings", "DNSIssues", "SSLErrors"],
-                "dns": ["DNSIssues", "NetworkingIssues"],
-                "ssl": ["SSLErrors", "NetworkingIssues"],
-                "wifi": ["WiFiProblems", "NetworkingIssues"],
-                "vpn": ["VPNIssues", "NetworkingIssues", "SSLErrors"],
-                "bsod": ["BSOD", "DriverIssues", "HardwareIssues"],
-                "cryptominer": ["Cryptominer", "HighCPU", "SlowComputer"],
-                "mixed": [
-                    "NetworkingIssues", "HardwareIssues", "SoftwareIssues", "MalwareIssues",
-                    "MisconfiguredSettings", "DNSIssues", "SSLErrors", "WiFiProblems",
-                    "SlowComputer", "HighCPU", "AdwareInfection", "BrowserHijack",
-                    "PopupAds", "Cryptominer", "BSOD", "DriverIssues", "UpdateFailures",
-                ],
-            }
-            if config.simulate_issues in issue_map and random.random() < 0.4:
-                cat = random.choice(issue_map[config.simulate_issues])
-                if cat in NEWS_SITES:
-                    return cat, random.choice(NEWS_SITES[cat])
-
-        if config.persona:
-            persona_map = {
-                "tech_enthusiast": ["Technology", "Privacy", "Hobbies"],
-                "news_junkie": ["World", "Trending", "LeftLeaning", "RightLeaning"],
-                "privacy_advocate": ["Privacy", "Technology"],
-                "social_butterfly": ["SocialMedia", "Lifestyle", "Trending"],
-                "entertainment_seeker": ["Tabloids", "SocialMedia", "Lifestyle"],
-                "health_conscious": ["Health", "Lifestyle", "Hobbies"],
-                "political_observer": ["LeftLeaning", "RightLeaning", "World"],
-                "hobbyist": ["Hobbies", "Technology", "Lifestyle"],
-                "troubleshooter": ["NetworkingIssues", "HardwareIssues", "SoftwareIssues", "MalwareIssues"],
-            }
-            if config.persona in persona_map:
-                available = persona_map[config.persona]
-
-        if config.scheduled_profile:
-            profile = ScheduledProfile.get_current_profile()
-            available = [c for c in profile["categories"] if c in NEWS_SITES]
+    available = _apply_persona_categories(config, available)
+    available = _apply_scheduled_profile(config, available)
 
     available = [c for c in available if c in NEWS_SITES]
     if not available:
         available = list(NEWS_SITES.keys())
 
-    if use_markov and config and config.chaos_mode:
-        category = markov_chain.next_category()
-        if category not in available:
-            category = random.choice(available)
-    else:
-        category = random.choice(available)
-
+    category = _pick_category(available, config, use_markov)
     url = random.choice(NEWS_SITES[category])
 
     # Inject decoy searches occasionally
@@ -1444,7 +1497,7 @@ def interactive_setup() -> Config:
     decoys = Confirm.ask("  Enable [yellow]Decoy Injection[/] (misleading data)?", default=True)
     scheduled = Confirm.ask("  Enable [blue]Scheduled Profiles[/] (time-based)?", default=False)
 
-    console.print("\n[bold]v3.4.0 Features:[/]")
+    console.print("\n[bold]Enhanced Features:[/]")
     geo = Confirm.ask("  Enable [blue]Geo-Rotation[/] (rotate browsing locations)?", default=False)
     bw_profile = None
     if Confirm.ask("  Enable [cyan]Bandwidth Control[/] (limit traffic speed)?", default=False):
@@ -1525,7 +1578,7 @@ def print_setup_help():
     ))
 
 
-def main():
+def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         description=f"Traffic Noise Generator v{__version__} - Network obfuscation with live headlines",
         formatter_class=argparse.RawDescriptionHelpFormatter,
@@ -1536,7 +1589,7 @@ Examples:
   %(prog)s -c --stealth          # Chaos + fingerprint randomization
   %(prog)s --simulate-issues mixed -c  # Simulate tech issues
   %(prog)s --include-all -c      # All content categories
-        """
+        """,
     )
 
     parser.add_argument("--version", action="version", version=f"%(prog)s {__version__}")
@@ -1556,17 +1609,17 @@ Examples:
     parser.add_argument("--max-headlines", type=int, default=10)
     parser.add_argument("--no-markov", action="store_true")
 
-    # v3.3 Features
     parser.add_argument("--stealth", action="store_true", help="Enable stealth mode (fingerprint randomization)")
     parser.add_argument("--scheduled", action="store_true", help="Use time-based browsing profiles")
     parser.add_argument("--decoys", action="store_true", help="Inject decoy/misleading data")
     parser.add_argument("--no-privacy-score", action="store_true", help="Hide privacy score")
 
     issue = parser.add_argument_group("Issue Simulation (v3.3.2 - spicy-cat style)")
-    issue.add_argument("--simulate-issues", choices=[
-        "networking", "hardware", "software", "malware", "misconfigured", "mixed",
-        "adware", "ransomware", "system", "dns", "ssl", "wifi", "vpn", "bsod", "cryptominer"
-    ], help="Simulate troubleshooting specific issue types")
+    issue.add_argument(
+        "--simulate-issues",
+        choices=list(ISSUE_CATEGORY_MAP.keys()),
+        help="Simulate troubleshooting specific issue types",
+    )
     issue.add_argument("--list-issues", action="store_true", help="List all available issue types")
 
     content = parser.add_argument_group("Content Categories")
@@ -1578,174 +1631,150 @@ Examples:
     content.add_argument("--include-all", action="store_true")
 
     persona = parser.add_argument_group("Persona Mode")
-    persona.add_argument("--persona", choices=["tech_enthusiast", "news_junkie", "privacy_advocate", "social_butterfly", "entertainment_seeker", "health_conscious", "political_observer", "hobbyist", "troubleshooter"])
+    persona.add_argument("--persona", choices=list(PERSONA_CATEGORY_MAP.keys()))
     persona.add_argument("--list-personas", action="store_true")
 
-    # v3.4.0 features
-    v34 = parser.add_argument_group("v3.4.0 Features")
-    v34.add_argument("--geo-rotate", action="store_true", help="Enable geo-location rotation")
-    v34.add_argument("--geo-countries", type=str, help="Comma-separated country codes to rotate (e.g., US,GB,DE,JP)")
-    v34.add_argument("--geo-interval", type=int, default=300, help="Seconds between geo rotations (default: 300)")
-    v34.add_argument("--list-geo", action="store_true", help="List available geo locations")
-    v34.add_argument("--bandwidth", type=str, choices=["unlimited", "conservative", "moderate", "aggressive", "stealth"],
-                     help="Bandwidth control profile")
-    v34.add_argument("--bandwidth-max-kbps", type=int, help="Max bandwidth in KB/s (overrides profile)")
-    v34.add_argument("--no-adaptive", action="store_true", help="Disable adaptive bandwidth throttling")
-    v34.add_argument("--list-bandwidth", action="store_true", help="List bandwidth profiles")
-    v34.add_argument("--proxy", type=str, action="append", help="Proxy URL (can specify multiple: --proxy socks5://host:port)")
-    v34.add_argument("--proxy-file", type=str, help="File with proxy URLs (one per line)")
-    v34.add_argument("--proxy-rotation", choices=["round_robin", "random", "least_used", "fastest"], default="round_robin",
-                     help="Proxy rotation strategy")
-    v34.add_argument("--export", action="store_true", help="Export session analytics as JSON")
-    v34.add_argument("--export-path", type=str, help="Custom path for session export file")
-    v34.add_argument("--daily-routine", type=str, choices=list(DAILY_ROUTINES.keys()) if DAILY_ROUTINES_AVAILABLE else [],
-                     help="Use a pre-built daily browsing routine")
-    v34.add_argument("--list-routines", action="store_true", help="List available daily routines")
+    enhanced = parser.add_argument_group("Enhanced Features")
+    enhanced.add_argument("--geo-rotate", action="store_true", help="Enable geo-location rotation")
+    enhanced.add_argument("--geo-countries", type=str, help="Comma-separated country codes to rotate (e.g., US,GB,DE,JP)")
+    enhanced.add_argument("--geo-interval", type=int, default=300, help="Seconds between geo rotations (default: 300)")
+    enhanced.add_argument("--list-geo", action="store_true", help="List available geo locations")
+    enhanced.add_argument(
+        "--bandwidth",
+        type=str,
+        choices=["unlimited", "conservative", "moderate", "aggressive", "stealth"],
+        help="Bandwidth control profile",
+    )
+    enhanced.add_argument("--bandwidth-max-kbps", type=int, help="Max bandwidth in KB/s (overrides profile)")
+    enhanced.add_argument("--no-adaptive", action="store_true", help="Disable adaptive bandwidth throttling")
+    enhanced.add_argument("--list-bandwidth", action="store_true", help="List bandwidth profiles")
+    enhanced.add_argument("--proxy", type=str, action="append", help="Proxy URL (repeatable)")
+    enhanced.add_argument("--proxy-file", type=str, help="File with proxy URLs (one per line)")
+    enhanced.add_argument(
+        "--proxy-rotation",
+        choices=["round_robin", "random", "least_used", "fastest"],
+        default="round_robin",
+        help="Proxy rotation strategy",
+    )
+    enhanced.add_argument("--export", action="store_true", help="Export session analytics as JSON")
+    enhanced.add_argument("--export-path", type=str, help="Custom path for session export file")
+    enhanced.add_argument(
+        "--daily-routine",
+        type=str,
+        choices=list(DAILY_ROUTINES.keys()) if DAILY_ROUTINES_AVAILABLE else [],
+        help="Use a pre-built daily browsing routine",
+    )
+    enhanced.add_argument("--list-routines", action="store_true", help="List available daily routines")
 
-    args = parser.parse_args()
+    return parser
 
-    if args.setup:
-        print_setup_help()
-        return
 
-    if args.list_personas:
-        personas = {
-            "tech_enthusiast": "Technology, privacy, and hobby sites",
-            "news_junkie": "World news across political spectrum",
-            "privacy_advocate": "Privacy tools and security resources",
-            "social_butterfly": "Social media and trending content",
-            "entertainment_seeker": "Tabloids and entertainment",
-            "health_conscious": "Health, wellness, and lifestyle",
-            "political_observer": "Political news from all sides",
-            "hobbyist": "DIY, crafts, and projects",
-            "troubleshooter": "Tech support searches",
-        }
-        console.print("\n[bold]Available Personas:[/]\n")
-        for name, desc in personas.items():
-            console.print(f"  [cyan]{name:22}[/] - {desc}")
+def _print_personas() -> None:
+    console.print("\n[bold]Available Personas:[/]\n")
+    for name, desc in PERSONA_DESCRIPTIONS.items():
+        console.print(f"  [cyan]{name:22}[/] - {desc}")
+    console.print()
+
+
+def _print_issue_types() -> None:
+    console.print("\n[bold]Available Issue Types (v3.3.2 - spicy-cat style):[/]\n")
+    for category, issues in ISSUE_CATEGORY_DESCRIPTIONS.items():
+        console.print(f"[bold magenta]{category}:[/]")
+        for name, desc in issues.items():
+            console.print(f"  [cyan]{name:15}[/] - {desc}")
         console.print()
-        return
+    console.print("[dim]Usage: python traffic_noise.py --simulate-issues [type] -c[/]")
+    console.print("[dim]Example: python traffic_noise.py --simulate-issues adware -c -w 5[/]\n")
+
+
+def _handle_list_commands(args: argparse.Namespace) -> bool:
+    if args.list_personas:
+        _print_personas()
+        return True
 
     if args.list_issues:
-        console.print("\n[bold]Available Issue Types (v3.3.2 - spicy-cat style):[/]\n")
-        issue_categories = {
-            "Network Issues": {
-                "networking": "General network connectivity problems",
-                "dns": "DNS resolution failures, server not responding",
-                "ssl": "SSL/TLS certificate errors, HTTPS issues",
-                "wifi": "WiFi disconnecting, no internet",
-                "vpn": "VPN connection failures, slow speeds",
-            },
-            "System Issues": {
-                "hardware": "Hardware problems, device errors",
-                "system": "Slow computer, performance issues",
-                "bsod": "Blue Screen of Death, system crashes",
-                "software": "Application crashes, missing files",
-            },
-            "Malware/Adware": {
-                "malware": "General malware infections",
-                "adware": "Popup ads, browser infections",
-                "ransomware": "Encrypted files, ransom demands",
-                "cryptominer": "Hidden cryptocurrency mining",
-            },
-            "Configuration": {
-                "misconfigured": "Wrong settings, configuration errors",
-            },
-            "Combined": {
-                "mixed": "Random mix of all issue types",
-            },
-        }
-        for category, issues in issue_categories.items():
-            console.print(f"[bold magenta]{category}:[/]")
-            for name, desc in issues.items():
-                console.print(f"  [cyan]{name:15}[/] - {desc}")
-            console.print()
+        _print_issue_types()
+        return True
 
-        console.print("[dim]Usage: python traffic_noise.py --simulate-issues [type] -c[/]")
-        console.print("[dim]Example: python traffic_noise.py --simulate-issues adware -c -w 5[/]\n")
-        return
-
-    # v3.4.0 list commands
     if args.list_geo:
         if GEO_ROTATE_AVAILABLE:
             _list_geo_locations()
         else:
             console.print("[red]Geo-rotation module not available.[/]")
-        return
+        return True
 
     if args.list_bandwidth:
         if BANDWIDTH_CONTROL_AVAILABLE:
             _list_bw_profiles()
         else:
             console.print("[red]Bandwidth control module not available.[/]")
-        return
+        return True
 
     if args.list_routines:
         if DAILY_ROUTINES_AVAILABLE:
             _list_daily_routines()
         else:
             console.print("[red]Daily routines module not available.[/]")
-        return
+        return True
 
-    if args.interactive:
-        config = interactive_setup()
-    else:
-        if args.include_all:
-            args.include_political = args.include_tabloids = args.include_social = True
-            args.include_privacy = args.include_hobbies = True
+    return False
 
-        config = Config(
-            mode="vps" if args.vps else "news",
-            vps_target=args.vps,
-            show_headlines=not args.no_headlines,
-            randomize_identity=args.randomize_id,
-            chaos_mode=args.chaos,
-            parallel_workers=min(max(args.workers, 1), 30),
-            duration=args.duration,
-            interface=args.interface,
-            quiet=args.quiet,
-            max_headlines=args.max_headlines,
-            simulate_issues=args.simulate_issues,
-            use_markov=not args.no_markov,
-            include_political=args.include_political,
-            include_tabloids=args.include_tabloids,
-            include_social=args.include_social,
-            include_privacy=args.include_privacy,
-            include_hobbies=args.include_hobbies,
-            persona=args.persona,
-            stealth_mode=args.stealth,
-            scheduled_profile=args.scheduled,
-            inject_decoys=args.decoys,
-            show_privacy_score=not args.no_privacy_score,
-            # v3.4.0
-            geo_rotate=args.geo_rotate,
-            geo_countries=args.geo_countries,
-            geo_interval=args.geo_interval,
-            bandwidth_profile=args.bandwidth,
-            bandwidth_max_kbps=args.bandwidth_max_kbps,
-            bandwidth_adaptive=not args.no_adaptive,
-            proxy_list=args.proxy,
-            proxy_file=args.proxy_file,
-            proxy_rotation=args.proxy_rotation,
-            export_session=args.export,
-            export_path=args.export_path,
-            daily_routine=args.daily_routine,
-        )
 
-    signal.signal(signal.SIGINT, signal_handler)
-    signal.signal(signal.SIGTERM, signal_handler)
+def _build_config_from_args(args: argparse.Namespace) -> Config:
+    if args.include_all:
+        args.include_political = args.include_tabloids = args.include_social = True
+        args.include_privacy = args.include_hobbies = True
 
-    # ========================================================================
-    # v3.4.0 - Initialize new feature modules
-    # ========================================================================
+    return Config(
+        mode="vps" if args.vps else "news",
+        vps_target=args.vps,
+        show_headlines=not args.no_headlines,
+        randomize_identity=args.randomize_id,
+        chaos_mode=args.chaos,
+        parallel_workers=min(max(args.workers, 1), 30),
+        duration=args.duration,
+        interface=args.interface,
+        quiet=args.quiet,
+        max_headlines=args.max_headlines,
+        simulate_issues=args.simulate_issues,
+        use_markov=not args.no_markov,
+        include_political=args.include_political,
+        include_tabloids=args.include_tabloids,
+        include_social=args.include_social,
+        include_privacy=args.include_privacy,
+        include_hobbies=args.include_hobbies,
+        persona=args.persona,
+        stealth_mode=args.stealth,
+        scheduled_profile=args.scheduled,
+        inject_decoys=args.decoys,
+        show_privacy_score=not args.no_privacy_score,
+        geo_rotate=args.geo_rotate,
+        geo_countries=args.geo_countries,
+        geo_interval=args.geo_interval,
+        bandwidth_profile=args.bandwidth,
+        bandwidth_max_kbps=args.bandwidth_max_kbps,
+        bandwidth_adaptive=not args.no_adaptive,
+        proxy_list=args.proxy,
+        proxy_file=args.proxy_file,
+        proxy_rotation=args.proxy_rotation,
+        export_session=args.export,
+        export_path=args.export_path,
+        daily_routine=args.daily_routine,
+    )
+
+
+def _initialize_feature_modules(config: Config) -> None:
     global geo_rotator, bandwidth_controller, proxy_chain_manager, session_tracker, active_daily_routine
 
+    geo_rotator = None
+    bandwidth_controller = None
+    proxy_chain_manager = None
+    session_tracker = None
+    active_daily_routine = None
+
     if config.geo_rotate and GEO_ROTATE_AVAILABLE:
-        countries = config.geo_countries.split(",") if config.geo_countries else None
-        geo_rotator = GeoRotator(
-            rotation_interval=config.geo_interval,
-            locations=countries,
-        )
+        countries = [c.strip() for c in config.geo_countries.split(",") if c.strip()] if config.geo_countries else None
+        geo_rotator = GeoRotator(rotation_interval=config.geo_interval, locations=countries)
 
     if config.bandwidth_profile and BANDWIDTH_CONTROL_AVAILABLE:
         bandwidth_controller = BandwidthController(
@@ -1767,59 +1796,96 @@ Examples:
     if config.daily_routine and DAILY_ROUTINES_AVAILABLE:
         active_daily_routine = get_routine(config.daily_routine)
 
-    if not config.quiet:
-        features = []
-        if config.chaos_mode: features.append("Chaos")
-        if config.stealth_mode: features.append("Stealth")
-        if config.inject_decoys: features.append("Decoys")
-        if config.scheduled_profile: features.append("Scheduled")
-        if config.geo_rotate: features.append("GeoRotate")
-        if config.bandwidth_profile: features.append(f"BW:{config.bandwidth_profile}")
-        if proxy_chain_manager and proxy_chain_manager.has_proxies:
-            features.append(f"Proxy:{proxy_chain_manager.get_stats()['total_proxies']}")
-        if config.export_session: features.append("Export")
-        if config.daily_routine: features.append(f"Routine:{config.daily_routine}")
 
-        console.print(Panel.fit(
+def _print_startup_banner(config: Config) -> None:
+    if config.quiet:
+        return
+
+    features = []
+    if config.chaos_mode:
+        features.append("Chaos")
+    if config.stealth_mode:
+        features.append("Stealth")
+    if config.inject_decoys:
+        features.append("Decoys")
+    if config.scheduled_profile:
+        features.append("Scheduled")
+    if config.geo_rotate:
+        features.append("GeoRotate")
+    if config.bandwidth_profile:
+        features.append(f"BW:{config.bandwidth_profile}")
+    if proxy_chain_manager and proxy_chain_manager.has_proxies:
+        features.append(f"Proxy:{proxy_chain_manager.get_stats()['total_proxies']}")
+    if config.export_session:
+        features.append("Export")
+    if config.daily_routine:
+        features.append(f"Routine:{config.daily_routine}")
+
+    console.print(
+        Panel.fit(
             f"[bold green]Traffic Noise Generator v{__version__}[/]\n"
             f"[dim]Workers: {config.parallel_workers} | Features: {', '.join(features) or 'Standard'}[/]",
             border_style="green",
-        ))
-        console.print("[dim]Starting... Press Ctrl+C to stop[/]\n")
+        )
+    )
+    console.print("[dim]Starting... Press Ctrl+C to stop[/]\n")
+
+
+def _finalize_run(config: Config) -> None:
+    if config.show_privacy_score:
+        report = privacy_metrics.get_report()
+        console.print(
+            f"\n[bold]Session Report:[/] Score: {report['confusion_score']}/100 | "
+            f"Fingerprints: {report['unique_fingerprints']} | Requests: {report['requests']}"
+        )
+
+    if session_tracker and SESSION_EXPORT_AVAILABLE:
+        session_tracker.take_privacy_snapshot(
+            confusion_score=privacy_metrics.get_confusion_score(),
+            unique_fingerprints=len(privacy_metrics.unique_user_agents),
+            categories_visited=len(privacy_metrics.unique_categories),
+            identity_changes=privacy_metrics.identity_changes,
+        )
+        export_path = session_tracker.export_json(config.export_path)
+        session_tracker.print_summary()
+        console.print(f"[green]Session report saved to: {export_path}[/]")
+
+    if geo_rotator and GEO_ROTATE_AVAILABLE:
+        geo_stats = geo_rotator.get_stats()
+        console.print(f"[blue]Geo rotations: {geo_stats['rotation_count']} across {geo_stats['locations_available']} locations[/]")
+
+    if bandwidth_controller and BANDWIDTH_CONTROL_AVAILABLE:
+        bw_stats = bandwidth_controller.get_stats()
+        console.print(f"[cyan]Bandwidth: {bw_stats['total_mb']} MB transferred, {bw_stats['throttle_events']} throttle events[/]")
+
+    console.print("[green]Cleanup complete.[/]")
+
+
+def main():
+    parser = build_parser()
+    args = parser.parse_args()
+
+    if args.setup:
+        print_setup_help()
+        return
+
+    if _handle_list_commands(args):
+        return
+
+    config = interactive_setup() if args.interactive else _build_config_from_args(args)
+
+    signal.signal(signal.SIGINT, signal_handler)
+    signal.signal(signal.SIGTERM, signal_handler)
+
+    _initialize_feature_modules(config)
+    _print_startup_banner(config)
 
     try:
         asyncio.run(main_async(config))
     except KeyboardInterrupt:
         pass
     finally:
-        if config.show_privacy_score:
-            report = privacy_metrics.get_report()
-            console.print(f"\n[bold]Session Report:[/] Score: {report['confusion_score']}/100 | "
-                         f"Fingerprints: {report['unique_fingerprints']} | Requests: {report['requests']}")
-
-        # v3.4.0 - Export session report
-        if session_tracker and SESSION_EXPORT_AVAILABLE:
-            session_tracker.take_privacy_snapshot(
-                confusion_score=privacy_metrics.get_confusion_score(),
-                unique_fingerprints=len(privacy_metrics.unique_user_agents),
-                categories_visited=len(privacy_metrics.unique_categories),
-                identity_changes=privacy_metrics.identity_changes,
-            )
-            export_path = session_tracker.export_json(config.export_path)
-            session_tracker.print_summary()
-            console.print(f"[green]Session report saved to: {export_path}[/]")
-
-        # v3.4.0 - Print geo-rotation stats
-        if geo_rotator and GEO_ROTATE_AVAILABLE:
-            geo_stats = geo_rotator.get_stats()
-            console.print(f"[blue]Geo rotations: {geo_stats['rotation_count']} across {geo_stats['locations_available']} locations[/]")
-
-        # v3.4.0 - Print bandwidth stats
-        if bandwidth_controller and BANDWIDTH_CONTROL_AVAILABLE:
-            bw_stats = bandwidth_controller.get_stats()
-            console.print(f"[cyan]Bandwidth: {bw_stats['total_mb']} MB transferred, {bw_stats['throttle_events']} throttle events[/]")
-
-        console.print("[green]Cleanup complete.[/]")
+        _finalize_run(config)
 
 
 if __name__ == "__main__":

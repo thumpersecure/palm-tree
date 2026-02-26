@@ -18,8 +18,6 @@ Features:
 - Summary statistics
 """
 
-__version__ = "1.0.0"
-
 import json
 import time
 import os
@@ -28,6 +26,8 @@ from typing import List, Dict, Optional, Any
 from datetime import datetime
 from pathlib import Path
 from collections import Counter, defaultdict
+
+from version import __version__
 
 
 @dataclass
@@ -241,8 +241,8 @@ class SessionTracker:
             filepath = str(export_dir / f"session_{timestamp}.json")
 
         report = {
-            "report_version": "1.0",
-            "generator": "Traffic Noise Generator v3.4.0",
+            "report_version": __version__,
+            "generator": f"Traffic Noise Generator v{__version__}",
             "summary": self.get_summary(),
             "category_distribution": self.get_category_distribution(),
             "top_sites": self.get_top_sites(),

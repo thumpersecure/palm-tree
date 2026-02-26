@@ -15,12 +15,14 @@ daily routines define complete behavioral arcs with transitions,
 breaks, and natural pauses.
 """
 
-__version__ = "1.0.0"
-
 import random
 from dataclasses import dataclass, field
 from typing import List, Dict, Optional, Tuple
 from datetime import datetime, time
+
+from version import __version__ as APP_VERSION
+
+__version__ = APP_VERSION
 
 
 @dataclass

@@ -25,6 +25,11 @@ from datetime import datetime, timedelta
 from collections import deque
 from contextlib import asynccontextmanager
 
+from constants.user_agents import (
+    OPTIMIZED_CLIENT_EXOTIC_USER_AGENTS,
+    OPTIMIZED_CLIENT_USER_AGENTS,
+)
+
 try:
     import httpx
     HTTPX_AVAILABLE = True
@@ -78,37 +83,8 @@ class ClientConfig:
     rotate_user_agent: bool = True
 
 
-# User agents for rotation
-USER_AGENTS = [
-    # Chrome on Windows
-    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
-    # Chrome on Mac
-    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
-    # Firefox on Windows
-    "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:121.0) Gecko/20100101 Firefox/121.0",
-    # Safari on Mac
-    "Mozilla/5.0 (Macintosh; Intel Mac OS X 14_2) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2 Safari/605.1.15",
-    # Chrome on Linux
-    "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
-    # Edge on Windows
-    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36 Edg/120.0.0.0",
-    # Mobile Chrome
-    "Mozilla/5.0 (Linux; Android 14; Pixel 8) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36",
-    # Mobile Safari
-    "Mozilla/5.0 (iPhone; CPU iPhone OS 17_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2 Mobile/15E148 Safari/604.1",
-]
-
-# Exotic user agents for extra chaos
-EXOTIC_USER_AGENTS = [
-    "Mozilla/5.0 (PlayStation 5; WebKit) AppleWebKit/605.1.15",
-    "Mozilla/5.0 (Nintendo Switch; WebKit) NintendoBrowser/1.0.0.0",
-    "Mozilla/5.0 (Smart TV; Linux) AppleWebKit/537.36 SmartTV/2.0",
-    "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)",
-    "Mozilla/5.0 (compatible; Bingbot/2.0; +http://www.bing.com/bingbot.htm)",
-    "curl/8.4.0",
-    "Wget/1.21.4",
-    "Python-httpx/0.25.0",
-]
+USER_AGENTS = OPTIMIZED_CLIENT_USER_AGENTS
+EXOTIC_USER_AGENTS = OPTIMIZED_CLIENT_EXOTIC_USER_AGENTS
 
 
 class TokenBucket:

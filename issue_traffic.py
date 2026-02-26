@@ -13,7 +13,6 @@ fighting with technology.
 Inspired by spicy-cat's approach to issue simulation.
 """
 
-__version__ = "1.0.0"
 __author__ = "palm-tree"
 
 import asyncio
@@ -24,6 +23,10 @@ from dataclasses import dataclass, field
 from typing import List, Dict, Optional, Callable, Tuple
 from datetime import datetime
 from enum import Enum
+
+from version import __version__ as APP_VERSION
+
+__version__ = APP_VERSION
 
 
 class IssueType(Enum):

@@ -15,8 +15,6 @@ Features:
 - Load proxies from file or environment
 """
 
-__version__ = "1.0.0"
-
 import random
 import time
 import asyncio
@@ -27,6 +25,10 @@ from pathlib import Path
 from urllib.parse import urlparse
 
 import httpx
+
+from version import __version__ as APP_VERSION
+
+__version__ = APP_VERSION
 
 
 @dataclass

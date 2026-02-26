@@ -4,6 +4,65 @@
 
 ---
 
+## Version 3.5.0 - "The Refactor & Harmony Update"
+
+**Release Date:** February 2026
+
+**Codename:** "One Version to Rule Them All"
+
+---
+
+### What's New (A.K.A. "Same Chaos, Cleaner Engine")
+
+This release focuses on internal quality, maintainability, and consistency across the codebase. No feature removals, no surprise behavior shifts - just a cleaner architecture and synchronized versioning.
+
+---
+
+### Major Refactors
+
+#### 1) Centralized Version Management
+
+- Added a single source of truth in `version.py`
+- Unified version usage across core modules and CLI output
+- Session export now stamps reports with the live runtime version
+
+#### 2) Shared User-Agent Constants
+
+- Added `constants/user_agents.py` for shared user-agent pools
+- Removed duplicated user-agent definitions across:
+  - `traffic_noise.py`
+  - `optimized_client.py`
+  - `identity/forge.py`
+- Keeps behavior consistent while reducing maintenance overhead
+
+#### 3) Main CLI Flow Decomposition
+
+`traffic_noise.py` startup flow was split into focused helpers:
+- `build_parser()`
+- `_handle_list_commands(...)`
+- `_build_config_from_args(...)`
+- `_initialize_feature_modules(...)`
+- `_print_startup_banner(...)`
+- `_finalize_run(...)`
+
+This makes extension safer and future feature work less error-prone.
+
+#### 4) Category Selection Cleanup
+
+- Extracted reusable issue/persona/category maps
+- Reworked category selection into helper functions
+- Preserved runtime behavior while reducing nested branching
+
+---
+
+### Compatibility & Breaking Changes
+
+- **Breaking changes:** None
+- Existing CLI flags and workflows remain valid
+- Existing v3.4.0 capabilities remain fully supported
+
+---
+
 ## Version 3.4.0 - "The Globe-Trotter Update"
 
 **Release Date:** February 2026
