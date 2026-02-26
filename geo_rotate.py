@@ -13,13 +13,15 @@ Trackers that build location profiles will see someone teleporting
 around the world at impossible speeds. As they should.
 """
 
-__version__ = "1.0.0"
-
 import random
 import time
 from dataclasses import dataclass, field
 from typing import List, Dict, Optional, Tuple
 from datetime import datetime
+
+from version import __version__ as APP_VERSION
+
+__version__ = APP_VERSION
 
 
 @dataclass

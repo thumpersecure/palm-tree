@@ -16,8 +16,6 @@ Features:
 - Burst allowance with token bucket algorithm
 """
 
-__version__ = "1.0.0"
-
 import time
 import asyncio
 import math
@@ -26,6 +24,10 @@ from typing import Optional, Dict, List
 from datetime import datetime
 from collections import deque
 from threading import Lock
+
+from version import __version__ as APP_VERSION
+
+__version__ = APP_VERSION
 
 
 @dataclass

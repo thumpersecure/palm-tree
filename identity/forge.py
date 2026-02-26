@@ -18,6 +18,8 @@ from dataclasses import dataclass, field
 from typing import Optional, List, Dict, Tuple
 from datetime import datetime, timedelta
 
+from constants.user_agents import IDENTITY_FORGE_USER_AGENTS
+
 # Try to import faker, fall back to built-in generation if not available
 try:
     from faker import Faker
@@ -123,44 +125,7 @@ class IdentityForge:
     a unique, real person.
     """
 
-    # User agents by platform (expanded with humor)
-    USER_AGENTS = {
-        "Windows": [
-            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
-            "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:121.0) Gecko/20100101 Firefox/121.0",
-            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36 Edg/120.0.0.0",
-            # The classics
-            "Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.1; Trident/4.0)",  # Grandma's computer
-        ],
-        "macOS": [
-            "Mozilla/5.0 (Macintosh; Intel Mac OS X 14_2) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2 Safari/605.1.15",
-            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
-        ],
-        "Linux": [
-            "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
-            "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:121.0) Gecko/20100101 Firefox/121.0",
-        ],
-        "iOS": [
-            "Mozilla/5.0 (iPhone; CPU iPhone OS 17_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2 Mobile/15E148 Safari/604.1",
-            "Mozilla/5.0 (iPad; CPU OS 17_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2 Mobile/15E148 Safari/604.1",
-        ],
-        "Android": [
-            "Mozilla/5.0 (Linux; Android 14; SM-S918B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.6099.144 Mobile Safari/537.36",
-            "Mozilla/5.0 (Linux; Android 13; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.6099.144 Mobile Safari/537.36",
-        ],
-        # The fun ones
-        "Exotic": [
-            "Mozilla/5.0 (PlayStation; PlayStation 5/1.0) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.0 Safari/605.1.15",  # Gamer
-            "Mozilla/5.0 (Nintendo Switch; WifiWebAuthApplet) AppleWebKit/609.4 (KHTML, like Gecko) NF/6.0.2.21.3 NintendoBrowser/5.1.0.22474",  # Nintendo fan
-            "Mozilla/5.0 (SMART-TV; Linux; Tizen 6.5) AppleWebKit/537.36 (KHTML, like Gecko) SamsungBrowser/5.0 Chrome/85.0.4183.93 TV Safari/537.36",  # Couch potato
-            "Mozilla/5.0 (Linux; Android 10; SM-R800) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.159 Safari/537.36",  # Smart Watch (because why not)
-            "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.45 Safari/537.36 Tesla/2021.44.25.2",  # Tesla browser (stuck in traffic)
-            "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)",  # You ARE the crawler now
-            "facebookexternalhit/1.1 (+http://www.facebook.com/externalhit_uatext.php)",  # Meta's finest
-            "Twitterbot/1.0",  # Elon's creation
-            "Mozilla/5.0 (SmartFridge; Linux) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.93 Safari/537.36 LG/1.0",  # Your fridge, browsing recipes
-        ],
-    }
+    USER_AGENTS = IDENTITY_FORGE_USER_AGENTS
 
     # Screen resolutions with their platforms
     SCREEN_RESOLUTIONS = {

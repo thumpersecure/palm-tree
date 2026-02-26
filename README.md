@@ -1,4 +1,4 @@
-# Traffic Noise Generator v3.4.0
+# Traffic Noise Generator v3.5.0
 
 <div align="center">
 
@@ -11,11 +11,11 @@
 [![GitHub stars](https://img.shields.io/github/stars/thumpersecure/palm-tree?style=for-the-badge&logo=github)](https://github.com/thumpersecure/palm-tree/stargazers)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/downloads/)
-[![Version](https://img.shields.io/badge/version-3.4.0-green.svg?style=for-the-badge)](https://github.com/thumpersecure/palm-tree)
+[![Version](https://img.shields.io/badge/version-3.5.0-green.svg?style=for-the-badge)](https://github.com/thumpersecure/palm-tree)
 
 **Make advertisers cry. Make data brokers confused. Make tracking algorithms question their existence.**
 
-[Quick Start](#-quick-start) | [Features](#-features) | [v3.4.0 Upgrades](#-v340-upgrades) | [Issue Simulation](#-issue-simulation-mode) | [Usage](#-usage)
+[Quick Start](#-quick-start) | [Features](#-features) | [v3.5.0 Refactor Update](#-v350-refactor-update) | [Issue Simulation](#-issue-simulation-mode) | [Usage](#-usage)
 
 </div>
 
@@ -63,20 +63,22 @@ python traffic_noise.py --setup
 
 ---
 
-## v3.4.0 Upgrades
+## v3.5.0 Refactor Update
 
 <details open>
-<summary><b>What's New in v3.4.0</b></summary>
+<summary><b>What's New in v3.5.0</b></summary>
 
-| Feature | What It Does | Why It's Better |
-|---------|--------------|-----------------|
-| **Geo-Rotation** | Rotates through 16 countries with matching language/timezone headers | Trackers see you teleporting across the globe |
-| **Bandwidth Control** | 5 preset profiles (stealth to aggressive) with adaptive throttling | Won't nuke your Netflix anymore |
-| **Proxy Chain Support** | Route through SOCKS5/HTTP proxies with rotation strategies | Even your ISP doesn't know what you're doing |
-| **Session Export** | Full JSON analytics with privacy score trends and category breakdown | Measure exactly how confused the trackers are |
-| **Daily Routines** | 6 pre-built realistic daily patterns (office worker, student, etc.) | Traffic looks like an actual human's day |
+| Refactor | What Changed | Impact |
+|----------|--------------|--------|
+| **Centralized versioning** | One shared `version.py` now drives all module and CLI version output | No more version drift between modules/reports/docs |
+| **Shared user-agent constants** | UA pools moved to `constants/user_agents.py` and reused by CLI/client/identity forge | Eliminates duplication and keeps behavior consistent |
+| **Main CLI decomposition** | `traffic_noise.py` startup flow split into parser/list/config/init/finalize helpers | Easier maintenance, smaller logical units, lower regression risk |
+| **Category selection cleanup** | Issue/persona/category logic extracted into reusable helpers/maps | Cleaner control flow and simpler extension path |
+| **Session export metadata sync** | Export report now uses runtime version dynamically | Reports always match the running generator version |
 
-**New Commands:**
+**No breaking changes:** Existing commands and flags continue to work.
+
+**Core Commands:**
 ```bash
 # Browse as if traveling the world
 python traffic_noise.py -c --geo-rotate --geo-countries US,GB,DE,JP
@@ -472,7 +474,7 @@ python traffic_noise.py --list-personas
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                    Traffic Noise Generator v3.4.0           │
+│                    Traffic Noise Generator v3.5.0           │
 ├─────────────────────────────────────────────────────────────┤
 │                                                             │
 │  ┌─────────┐  ┌─────────┐  ┌─────────┐  ┌─────────┐       │
